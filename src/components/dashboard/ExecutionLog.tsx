@@ -38,10 +38,11 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
           {/* Tooltip Portal-like behavior (Fixed position) */}
           {showTooltip && (
               <div 
-                className="fixed z-50 p-3 bg-card border border-primary/20 rounded shadow-xl text-xs min-w-[200px]"
+                className="fixed z-50 p-3 bg-black/70 backdrop-blur-sm border border-primary/20 rounded shadow-xl text-xs min-w-[200px]"
                 style={{ 
-                    top: tooltipPos.y + 10, 
-                    left: tooltipPos.x + 10,
+                    top: tooltipPos.y - 10, 
+                    left: tooltipPos.x - 10,
+                    transform: 'translate(-100%, -100%)',
                     pointerEvents: 'none'
                 }}
               >

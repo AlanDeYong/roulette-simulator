@@ -321,7 +321,8 @@ export const useSimulationStore = create<SimulationStore>()(
       name: 'roulette-simulation-storage',
       partialize: (state) => ({ 
         savedStrategies: state.savedStrategies,
-        config: state.config 
+        config: state.config,
+        fsNodes: state.fsNodes // Persist File System
       }),
     }
   )

@@ -19,7 +19,7 @@ export const BankrollChart: React.FC = () => {
       </CardHeader>
       <CardContent className="flex-1 min-h-0 pb-4 pr-4">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
+          <LineChart data={data} margin={{ top: 40, right: 10, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#333" />
             <XAxis 
                 dataKey="spin" 
@@ -38,9 +38,9 @@ export const BankrollChart: React.FC = () => {
                 itemStyle={{ color: '#d4af37' }}
                 formatter={(value: number) => [`$${value}`, 'Bankroll']}
                 labelFormatter={(label) => `Spin ${label}`}
-                position={{ y: 0 }} // Fixes tooltip to top to avoid blocking view, or remove to follow point
-                // To follow mouse height strictly is complex in Recharts without custom overlay.
-                // Standard behavior + Brush is best for UX.
+                position={{ y: 0 }} 
+                wrapperStyle={{ top: -40, zIndex: 100 }}
+                allowEscapeViewBox={{ y: true }}
             />
             <Legend verticalAlign="top" height={36}/>
             <Brush 

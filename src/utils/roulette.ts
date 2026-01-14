@@ -72,6 +72,13 @@ export const calculatePayout = (bet: StrategyBet, winningNumber: number): number
       if (value === 3) return (winningNumber % 3 === 0) ? amount * 2 : -amount;
       return -amount;
 
+    case 'street': // 3 numbers. Payout 11:1. value should be the start number of the street (1, 4, 7, etc.)
+      if (isZero) return -amount;
+      // Ensure value is a number
+      const streetStart = Number(value);
+      if (winningNumber >= streetStart && winningNumber < streetStart + 3) return amount * 11;
+      return -amount;
+
     default:
       console.warn(`Unknown bet type: ${type}`);
       return -amount;

@@ -91,8 +91,12 @@ export const useSimulationRunner = () => {
 
     try {
         // Prepare Strategy Function
-        const strategyBody = strategy.code + '\nreturn bet(spinHistory, bankroll, config);';
-        const executeStrategy = new Function('spinHistory', 'bankroll', 'config', strategyBody);
+        // We inject a 'state' object that persists across spins for the simulation run
+        const strategyBody = strategy.code + '\nreturn bet(spinHistory, bankroll, config, state);';
+        const executeStrategy = new Function('spinHistory', 'bankroll', 'config', 'state', strategyBody);
+
+        // Persistent state for the strategy
+        const strategyState: Record<string, any> = {};
 
         for (let i = 0; i < totalSpinsToRun; i++) {
             if (currentBankroll <= 0 || stopRef.current) break;
@@ -101,7 +105,7 @@ export const useSimulationRunner = () => {
             // We pass the *current* spinResults array as history
             let rawBets: StrategyBet[] = [];
             try {
-                const result = executeStrategy(spinResults, currentBankroll, config);
+                const result = executeStrategy(spinResults, currentBankroll, config, strategyState);
                 if (Array.isArray(result)) {
                     rawBets = result;
                 } else if (result) {
@@ -123,7 +127,11 @@ export const useSimulationRunner = () => {
                     const isOutside = ['red', 'black', 'even', 'odd', 'low', 'high', 'dozen', 'column'].includes(bet.type);
                     const minLimit = isOutside ? config.betLimits.minOutside : config.betLimits.min;
                     
-                    if (bet.amount < minLimit) continue; // Skip bets below min
+                    if (bet.amount < minLimit) {
+                         // Debug warning for rejected bets
+                         console.warn(`Bet rejected: ${bet.type} amount ${bet.amount} is below minimum ${minLimit}`);
+                         continue; 
+                    }
                     
                     let amount = Math.min(bet.amount, config.betLimits.max); // Clamp to max
                     
