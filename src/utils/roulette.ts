@@ -79,6 +79,55 @@ export const calculatePayout = (bet: StrategyBet, winningNumber: number): number
       if (winningNumber >= streetStart && winningNumber < streetStart + 3) return amount * 11;
       return -amount;
 
+    case 'corner': // 4 numbers. Payout 8:1. value should be the top-left number of the corner
+      if (isZero) return -amount;
+      const cornerStart = Number(value);
+      // A corner covers: n, n+1, n+3, n+4 (on a standard layout)
+      // e.g. Corner 1 covers 1, 2, 4, 5
+      // Valid corners usually start on 1, 2, 4, 5, etc.
+      // We will assume standard layout logic:
+      const c1 = cornerStart;
+      const c2 = cornerStart + 1;
+      const c3 = cornerStart + 3;
+      const c4 = cornerStart + 4;
+      
+      if ([c1, c2, c3, c4].includes(winningNumber)) return amount * 8;
+      return -amount;
+
+    case 'split': // 2 numbers. Payout 17:1. value should be an array of 2 numbers OR we can assume horizontal/vertical if passed a single "start"
+      // Let's support explicit array of 2 numbers for maximum flexibility: value: [1, 2]
+      if (isZero) return -amount;
+      if (Array.isArray(value) && value.length === 2) {
+          if (value.includes(winningNumber)) return amount * 17;
+      }
+      // If single value passed, assume horizontal split (n, n+1) - simple fallback
+      else {
+          const splitStart = Number(value);
+          if (winningNumber === splitStart || winningNumber === splitStart + 1) return amount * 17;
+      }
+      return -amount;
+
+    case 'line': // 6 numbers (Double Street). Payout 5:1. value is start of first street
+      if (isZero) return -amount;
+      const lineStart = Number(value);
+      if (winningNumber >= lineStart && winningNumber < lineStart + 6) return amount * 5;
+      return -amount;
+
+    case 'basket': // 5 numbers (0, 00, 1, 2, 3) - US only typically. Payout 6:1
+      // Or 4 numbers (0, 1, 2, 3) - EU (First Four). Payout 8:1
+      // Let's implement the standard 5-number basket for US (0, 00, 1, 2, 3) and 4-number for EU
+      // Since we don't have tableType here, we'll support the specific list if passed, or standard 0,1,2,3
+      
+      const basketNums = [0, 1, 2, 3];
+      if (winningNumber === 37) { // 00
+          if (type === 'basket') return amount * 6; // Assume US basket pays on 00
+      }
+      if (basketNums.includes(winningNumber)) {
+           // Simple Basket/First Four
+           return amount * 8; // EU payout (more common default)
+      }
+      return -amount;
+
     default:
       console.warn(`Unknown bet type: ${type}`);
       return -amount;

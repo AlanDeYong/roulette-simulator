@@ -38,9 +38,18 @@ config = {
 };
 
 // Valid Bet Types
-// - Inside: 'number' (value: 0-36), 'street' (value: start num), 'corner' (value: start num), 'line' (value: start num)
-// - Outside: 'red', 'black', 'even', 'odd', 'low', 'high' (no value needed)
-// - Multipliers: 'dozen' (value: 1, 2, or 3), 'column' (value: 1, 2, or 3)
+// - Inside: 
+//   - 'number' (value: 0-36)
+//   - 'street' (value: start num of row, e.g. 1, 4, 7...)
+//   - 'corner' (value: top-left num, e.g. 1 covers 1,2,4,5)
+//   - 'split' (value: array [n1, n2] OR single number for horizontal split)
+//   - 'line' (value: start num of first row, e.g. 1 covers 1-6)
+//   - 'basket' (value: 0 for 0,1,2,3 EU or 0,00,1,2,3 US)
+// - Outside: 
+//   - 'red', 'black', 'even', 'odd', 'low', 'high' (no value needed)
+// - Multipliers: 
+//   - 'dozen' (value: 1, 2, or 3)
+//   - 'column' (value: 1, 2, or 3)
 ```
 
 **Example of correctly respecting limits:**
