@@ -7,7 +7,7 @@ import { Settings, Upload, FileText } from 'lucide-react';
 import { Button } from './ui/Button';
 
 export const ConfigurationPanel: React.FC = () => {
-  const { config, setConfig, status, setImportedData, importedData } = useSimulationStore();
+  const { config, setConfig, status, setImportedData, importedData, importedFileName, setImportedFileName } = useSimulationStore();
   const isRunning = status === 'running' || status === 'paused';
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -26,6 +26,8 @@ export const ConfigurationPanel: React.FC = () => {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+    
+    setImportedFileName(file.name);
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -60,26 +62,26 @@ export const ConfigurationPanel: React.FC = () => {
       </CardHeader>
       <CardContent className="space-y-5">
         {/* Bankroll & Spins */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 items-start">
             <div className="space-y-2">
-            <Label>Starting Bankroll ($)</Label>
-            <Input
-                type="number"
-                value={config.startingBankroll}
-                onChange={(e) => handleChange('startingBankroll', Number(e.target.value))}
-                disabled={isRunning}
-                min={1}
-            />
+                <Label className="h-5 block">Starting Bankroll ($)</Label>
+                <Input
+                    type="number"
+                    value={config.startingBankroll}
+                    onChange={(e) => handleChange('startingBankroll', Number(e.target.value))}
+                    disabled={isRunning}
+                    min={1}
+                />
             </div>
             <div className="space-y-2">
-            <Label>Max Spins</Label>
-            <Input
-                type="number"
-                value={config.maxSpins}
-                onChange={(e) => handleChange('maxSpins', Number(e.target.value))}
-                disabled={isRunning}
-                min={1}
-            />
+                <Label className="h-5 block">Max Spins</Label>
+                <Input
+                    type="number"
+                    value={config.maxSpins}
+                    onChange={(e) => handleChange('maxSpins', Number(e.target.value))}
+                    disabled={isRunning}
+                    min={1}
+                />
             </div>
         </div>
 
@@ -99,7 +101,7 @@ export const ConfigurationPanel: React.FC = () => {
 
         {/* Bet Limits */}
         <div className="space-y-2">
-            <Label>Bet Limits</Label>
+            <Label>Bets Size</Label>
             <div className="grid grid-cols-2 gap-2">
                 <div>
                     <span className="text-xs text-muted-foreground block mb-1">Min (Inside)</span>
@@ -172,8 +174,9 @@ export const ConfigurationPanel: React.FC = () => {
                     onChange={handleBulkDataChange}
                     disabled={isRunning}
                 />
-                <div className="text-xs text-muted-foreground">
-                    Loaded: {importedData.length} spins
+                <div className="text-xs text-muted-foreground flex justify-between">
+                    <span>Loaded: {importedData.length} spins</span>
+                    {importedFileName && <span className="text-primary truncate max-w-[150px]" title={importedFileName}>{importedFileName}</span>}
                 </div>
             </div>
 

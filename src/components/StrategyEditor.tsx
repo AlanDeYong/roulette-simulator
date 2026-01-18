@@ -7,6 +7,7 @@ import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { FileManager } from './FileManager';
 import { VirtualFileSystem } from '../lib/FileSystem';
+import { ConfirmationDialog } from './ui/ConfirmationDialog';
 
 const THE_ONE_STRATEGY = `function bet(spinHistory, bankroll, config) {
   // "The One" Strategy: Progressive betting on Red
@@ -54,6 +55,19 @@ export const StrategyEditor: React.FC = () => {
   const [isDirty, setIsDirty] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
+  // Dialog State
+  const [dialog, setDialog] = useState<{
+      isOpen: boolean;
+      title: string;
+      message: string;
+      onConfirm: () => void;
+  }>({
+      isOpen: false,
+      title: '',
+      message: '',
+      onConfirm: () => {},
+  });
+
   // Check dirty state
   useEffect(() => {
     if (currentFileId) {
@@ -82,35 +96,62 @@ export const StrategyEditor: React.FC = () => {
   };
 
   const loadPreset = () => {
-    if (window.confirm('This will overwrite your current code. Continue?')) {
-        setStrategyCode(THE_ONE_STRATEGY);
-        setCurrentFileId(null); // Detach from file since it's a preset
-    }
+      setDialog({
+          isOpen: true,
+          title: "Load Preset",
+          message: "This will overwrite your current code. Continue?",
+          onConfirm: () => {
+              setStrategyCode(THE_ONE_STRATEGY);
+              setCurrentFileId(null);
+              setDialog(prev => ({ ...prev, isOpen: false }));
+          }
+      });
   };
 
   const handleOpenFile = (fileId: string, content: string) => {
       if (isDirty) {
-          if (!window.confirm("You have unsaved changes. Discard them?")) return;
+          setDialog({
+              isOpen: true,
+              title: "Unsaved Changes",
+              message: "You have unsaved changes. Discard them?",
+              onConfirm: () => {
+                  setStrategyCode(content);
+                  setCurrentFileId(fileId);
+                  setDialog(prev => ({ ...prev, isOpen: false }));
+              }
+          });
+          return;
       }
       setStrategyCode(content);
       setCurrentFileId(fileId);
   };
 
   const handleSave = () => {
-      const fs = new VirtualFileSystem(fsNodes);
-      
-      if (currentFileId) {
-          // Direct Overwrite
-          try {
-              fs.writeFile(currentFileId, strategy.code);
-              setFSNodes(fs.serialize());
-              showFeedback('success', 'File saved successfully');
-          } catch (e: any) {
-              showFeedback('error', e.message);
+      // Re-initialize FS with current nodes to ensure latest state
+      try {
+          const fs = new VirtualFileSystem(fsNodes);
+          
+          if (currentFileId) {
+              // Direct Overwrite
+              try {
+                  fs.getNode(currentFileId); 
+                  
+                  fs.writeFile(currentFileId, strategy.code);
+                  const newNodes = fs.serialize();
+                  setFSNodes(newNodes);
+                  showFeedback('success', 'File saved successfully');
+                  setIsDirty(false);
+              } catch (e: any) {
+                  console.error("Save Error (Overwrite):", e);
+                  showFeedback('error', `Save failed: ${e.message}`);
+              }
+          } else {
+              // Save As
+              setIsSaving(true);
           }
-      } else {
-          // Save As
-          setIsSaving(true);
+      } catch (e: any) {
+          console.error("Save Error (FS Init):", e);
+          showFeedback('error', "System Error: Could not initialize file system.");
       }
   };
 
@@ -121,7 +162,8 @@ export const StrategyEditor: React.FC = () => {
           const fs = new VirtualFileSystem(fsNodes);
           const rootId = fs.getRootId();
           const newFile = fs.createFile(rootId, saveName, strategy.code);
-          setFSNodes(fs.serialize());
+          const newNodes = fs.serialize();
+          setFSNodes(newNodes);
           setCurrentFileId(newFile.id);
           setIsSaving(false);
           setSaveName('');
@@ -134,14 +176,24 @@ export const StrategyEditor: React.FC = () => {
   const currentFileName = currentFileId ? new VirtualFileSystem(fsNodes).getNode(currentFileId).name : 'Untitled';
 
   return (
-    <Card className="h-full flex flex-col border-t-4 border-t-primary">
+    <Card className="h-full flex flex-col border-t-4 border-t-primary relative">
+      <ConfirmationDialog 
+          isOpen={dialog.isOpen}
+          title={dialog.title}
+          message={dialog.message}
+          onConfirm={dialog.onConfirm}
+          onCancel={() => setDialog(prev => ({ ...prev, isOpen: false }))}
+      />
+      
       <CardHeader className="py-3 border-b border-white/10">
         <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
                 <Code className="w-5 h-5 text-primary" />
                 <CardTitle className="flex items-center gap-2">
-                    {currentFileName}
-                    {isDirty && <span className="text-yellow-500 text-xs font-normal">● Modified</span>}
+                    <span className="font-bold">Strategy Editor</span>
+                    <span className="text-muted-foreground font-normal mx-1">|</span>
+                    <span className="text-sm font-normal text-muted-foreground">{currentFileName}</span>
+                    {isDirty && <span className="text-yellow-500 text-xs font-normal ml-2">● Modified</span>}
                 </CardTitle>
             </div>
             

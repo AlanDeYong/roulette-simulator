@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { SimulationState, SimulationConfig, Strategy, SpinResult, SimulationMetrics, SavedStrategy } from '../types';
+import { FSNode, VirtualFileSystem } from '../lib/FileSystem';
 
 interface SimulationStore extends SimulationState {
   setConfig: (config: Partial<SimulationConfig>) => void;
@@ -16,9 +17,17 @@ interface SimulationStore extends SimulationState {
   loadStrategy: (id: string) => void;
   deleteStrategy: (id: string) => void;
   duplicateStrategy: (id: string) => void;
+
+  // File System
+  fsNodes: Record<string, FSNode>;
+  currentFileId: string | null;
+  setFSNodes: (nodes: Record<string, FSNode>) => void;
+  setCurrentFileId: (id: string | null) => void;
   
   // Data Import
   setImportedData: (data: number[]) => void;
+  importedFileName: string | null;
+  setImportedFileName: (name: string | null) => void;
 }
 
 const DEFAULT_CONFIG: SimulationConfig = {
@@ -77,11 +86,18 @@ export const useSimulationStore = create<SimulationStore>()(
   strategy: DEFAULT_STRATEGY,
   savedStrategies: [],
   importedData: [],
+  importedFileName: null,
   results: {
     spins: [],
     metrics: DEFAULT_METRICS,
   },
   status: 'idle',
+
+  // File System
+  fsNodes: {},
+  currentFileId: null,
+  setFSNodes: (nodes) => set({ fsNodes: nodes }),
+  setCurrentFileId: (id) => set({ currentFileId: id }),
 
   setConfig: (newConfig) =>
     set((state) => ({
@@ -99,6 +115,8 @@ export const useSimulationStore = create<SimulationStore>()(
     })),
 
   setStatus: (status) => set({ status }),
+
+  setImportedFileName: (name) => set({ importedFileName: name }),
 
   resetSimulation: () =>
     set((state) => ({

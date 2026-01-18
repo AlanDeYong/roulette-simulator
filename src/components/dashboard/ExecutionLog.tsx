@@ -106,7 +106,7 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
 
 export const ExecutionLog: React.FC = () => {
   const { results } = useSimulationStore();
-  const spins = [...results.spins].reverse(); // Show newest first
+  const spins = [...results.spins]; // Show oldest first (ascending order)
 
   return (
     <Card className="h-[400px] flex flex-col border-t-4 border-t-primary">

@@ -6,6 +6,7 @@ import { Folder, FileText, ChevronRight, ChevronDown, Plus, Trash2, Edit2, Folde
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { cn } from '../utils/cn';
+import { ConfirmationDialog } from './ui/ConfirmationDialog';
 
 interface FileManagerProps {
     onOpenFile: (fileId: string, content: string) => void;
@@ -19,6 +20,21 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [renameValue, setRenameValue] = useState('');
     const [error, setError] = useState<string | null>(null);
+    const [creatingType, setCreatingType] = useState<'file' | 'directory' | null>(null);
+    const [newItemName, setNewItemName] = useState('');
+
+    // Dialog State
+    const [dialog, setDialog] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => void;
+    }>({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: () => {},
+    });
 
     // Sync FS instance when store updates
     useEffect(() => {
@@ -64,47 +80,60 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     };
 
     const handleCreateFile = () => {
+        setCreatingType('file');
+        setNewItemName('');
+    };
+
+    const handleCreateDir = () => {
+        setCreatingType('directory');
+        setNewItemName('');
+    };
+
+    const handleConfirmCreate = () => {
+        if (!newItemName.trim() || !creatingType) return;
         try {
             const parentId = (selectedId && fs.getNode(selectedId).type === 'directory') ? selectedId : fs.getRootId();
-            const name = prompt("Enter file name:");
-            if (name) {
-                fs.createFile(parentId, name, "// New Strategy");
-                saveFS();
+            if (creatingType === 'file') {
+                fs.createFile(parentId, newItemName, "// New Strategy");
+            } else {
+                fs.createDirectory(parentId, newItemName);
             }
+            saveFS();
+            setCreatingType(null);
+            setNewItemName('');
         } catch (e: any) {
             setError(e.message);
             setTimeout(() => setError(null), 3000);
         }
     };
-
-    const handleCreateDir = () => {
-        try {
-            const parentId = (selectedId && fs.getNode(selectedId).type === 'directory') ? selectedId : fs.getRootId();
-            const name = prompt("Enter directory name:");
-            if (name) {
-                fs.createDirectory(parentId, name);
-                saveFS();
-            }
-        } catch (e: any) {
-            setError(e.message);
-            setTimeout(() => setError(null), 3000);
-        }
+    
+    const handleCancelCreate = () => {
+        setCreatingType(null);
+        setNewItemName('');
     };
 
     const handleDelete = () => {
         if (!selectedId) return;
-        if (!confirm("Are you sure you want to delete this item?")) return;
-        try {
-            fs.delete(selectedId);
-            saveFS();
-            if (selectedId === currentFileId) {
-                setCurrentFileId(null);
+        
+        setDialog({
+            isOpen: true,
+            title: "Delete Item",
+            message: "Are you sure you want to delete this item? This action cannot be undone.",
+            onConfirm: () => {
+                try {
+                    fs.delete(selectedId);
+                    saveFS();
+                    if (selectedId === currentFileId) {
+                        setCurrentFileId(null);
+                    }
+                    setSelectedId(null);
+                    setDialog(prev => ({ ...prev, isOpen: false }));
+                } catch (e: any) {
+                    setError(e.message);
+                    setTimeout(() => setError(null), 3000);
+                }
             }
-            setSelectedId(null);
-        } catch (e: any) {
-            setError(e.message);
-            setTimeout(() => setError(null), 3000);
-        }
+        });
     };
 
     const handleStartRename = () => {
@@ -126,6 +155,103 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
             setTimeout(() => setError(null), 3000);
             setEditingId(null);
         }
+    };
+
+    const handleDragStart = (e: React.DragEvent, id: string) => {
+        e.dataTransfer.setData('application/fs-node', id);
+        e.dataTransfer.effectAllowed = 'move';
+    };
+
+    const handleDragOver = (e: React.DragEvent, id: string) => {
+        e.preventDefault();
+        const node = fs.getNode(id);
+        // Only allow dropping on directories
+        if (node.type === 'directory') {
+            e.dataTransfer.dropEffect = 'move';
+            e.currentTarget.classList.add('bg-primary/10');
+        } else {
+             // For files, we could technically drop "into parent", but let's keep it simple: drop ON folder.
+             e.dataTransfer.dropEffect = 'none';
+        }
+    };
+
+    const handleDragLeave = (e: React.DragEvent) => {
+        e.currentTarget.classList.remove('bg-primary/10');
+    };
+
+    const handleDrop = (e: React.DragEvent, targetId: string) => {
+        e.preventDefault();
+        e.currentTarget.classList.remove('bg-primary/10');
+        
+        const draggedId = e.dataTransfer.getData('application/fs-node');
+        if (!draggedId || draggedId === targetId) return;
+
+        try {
+            // Check if we are dropping on a file or folder to reorder/move
+            const targetNode = fs.getNode(targetId);
+            const draggedNode = fs.getNode(draggedId);
+            
+            // Reordering logic
+            // If target is NOT a directory we are dropping INTO, but a sibling we are dropping NEAR
+            // OR if it IS a directory but we want to drop INTO it (handled by standard drop)
+            
+            // Simplified Reorder:
+            // If dropping on a node (targetId), we move draggedId to targetId's parent, 
+            // inserted BEFORE targetId.
+            
+            if (targetId !== fs.getRootId() && targetId !== draggedNode.parentId) {
+                // Moving to a different folder (handled by dropping on folder)
+                 if (targetNode.type === 'directory') {
+                     fs.move(draggedId, targetId);
+                 } else {
+                     // Dropping on a file -> Move to that file's parent?
+                     // Let's assume reorder is intended if dropping on a sibling
+                     // Complex without specific drop zones.
+                     // Fallback: Move to parent of target
+                     if (targetNode.parentId) {
+                         fs.move(draggedId, targetNode.parentId);
+                     }
+                 }
+            } else if (targetId !== fs.getRootId() && targetNode.parentId) {
+                // Same parent -> Reorder
+                // Find index of target
+                const parent = fs.getNode(targetNode.parentId) as DirectoryNode;
+                const targetIndex = parent.children.indexOf(targetId);
+                if (targetIndex !== -1) {
+                     fs.move(draggedId, targetNode.parentId, targetIndex);
+                }
+            } else {
+                 // Fallback
+                 if (targetNode.type === 'directory') {
+                    fs.move(draggedId, targetId);
+                 }
+            }
+
+            saveFS();
+        } catch (err: any) {
+            setError(err.message);
+            setTimeout(() => setError(null), 3000);
+        }
+    };
+
+    const handleRootDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        const draggedId = e.dataTransfer.getData('application/fs-node');
+        if (!draggedId) return;
+        
+        try {
+            // Move to Root
+            fs.move(draggedId, fs.getRootId());
+            saveFS();
+        } catch (err: any) {
+             setError(err.message);
+             setTimeout(() => setError(null), 3000);
+        }
+    };
+
+    const handleRootDragOver = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
     };
 
     const renderTree = (nodeId: string, depth: number = 0) => {
@@ -154,6 +280,28 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                     )}
                     style={{ paddingLeft: `${depth * 12 + 4}px` }}
                     onClick={() => handleSelect(nodeId)}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, nodeId)}
+                    onDragOver={(e) => {
+                         // If directory, handle nest (original behavior)
+                         // BUT we also want to allow reordering if hovering edges?
+                         // For simplicity, let's allow 'handleDrop' to decide based on logic
+                         // We just need to preventDefault to allow drop
+                         e.preventDefault();
+                         e.stopPropagation(); // Stop root from handling it
+                         if (isDir) {
+                             e.dataTransfer.dropEffect = 'move';
+                             e.currentTarget.classList.add('bg-primary/10');
+                         } else {
+                             // Allow drop on files for reordering
+                             e.dataTransfer.dropEffect = 'move';
+                         }
+                    }}
+                    onDragLeave={(e) => isDir ? handleDragLeave(e) : undefined}
+                    onDrop={(e) => {
+                        e.stopPropagation(); // Stop root from handling it
+                        handleDrop(e, nodeId);
+                    }}
                 >
                     {isDir && (
                         <div 
@@ -194,7 +342,19 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-black/20 rounded-lg overflow-hidden border border-white/5">
+        <div 
+            className="flex flex-col h-full bg-black/20 rounded-lg overflow-hidden border border-white/5 relative"
+            onDragOver={handleRootDragOver}
+            onDrop={handleRootDrop}
+        >
+             <ConfirmationDialog 
+                isOpen={dialog.isOpen}
+                title={dialog.title}
+                message={dialog.message}
+                onConfirm={dialog.onConfirm}
+                onCancel={() => setDialog(prev => ({ ...prev, isOpen: false }))}
+            />
+
             {/* Toolbar */}
             <div className="flex items-center justify-between p-2 border-b border-white/5 bg-white/5">
                 <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Explorer</span>
@@ -213,6 +373,30 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                     </Button>
                 </div>
             </div>
+
+            {/* Creation Input */}
+            {creatingType && (
+                <div className="p-2 border-b border-white/5 bg-white/5 flex gap-1 items-center animate-in fade-in slide-in-from-top-2">
+                    <span className="text-muted-foreground">
+                        {creatingType === 'directory' ? <FolderPlus className="w-4 h-4" /> : <FilePlus className="w-4 h-4" />}
+                    </span>
+                    <Input 
+                        value={newItemName}
+                        onChange={(e) => setNewItemName(e.target.value)}
+                        placeholder={creatingType === 'directory' ? "Folder name..." : "File name..."}
+                        className="h-6 text-xs py-0 px-1 flex-1"
+                        autoFocus
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleConfirmCreate();
+                            if (e.key === 'Escape') handleCancelCreate();
+                        }}
+                    />
+                    <div className="flex gap-1">
+                        <Button size="sm" className="h-6 px-2 text-[10px]" onClick={handleConfirmCreate}>OK</Button>
+                        <Button size="sm" variant="ghost" className="h-6 px-2 text-[10px]" onClick={handleCancelCreate}>X</Button>
+                    </div>
+                </div>
+            )}
 
             {/* Error Toast */}
             {error && (

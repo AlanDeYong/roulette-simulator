@@ -217,12 +217,11 @@ export class VirtualFileSystem {
 
     // --- File Manipulation Primitives ---
 
-    public move(id: string, newParentId: string): void {
+    public move(id: string, newParentId: string, index?: number): void {
         const node = this.getNode(id);
         const newParent = this.getNode(newParentId);
         
         if (newParent.type !== 'directory') throw new FileSystemError('Destination is not a directory', 'ENOTDIR');
-        if (node.parentId === newParentId) return; // No op
         
         // Cycle detection
         let current = newParent;
@@ -231,7 +230,10 @@ export class VirtualFileSystem {
             current = this.nodes.get(current.parentId)!;
         }
 
-        this.checkExists(newParentId, node.name);
+        // Check exists only if moving to a different parent
+        if (node.parentId !== newParentId) {
+            this.checkExists(newParentId, node.name);
+        }
 
         // Remove from old parent
         if (node.parentId) {
@@ -242,7 +244,14 @@ export class VirtualFileSystem {
 
         // Add to new parent
         node.parentId = newParentId;
-        (newParent as DirectoryNode).children.push(id);
+        const parentDir = newParent as DirectoryNode;
+        
+        if (typeof index === 'number' && index >= 0 && index <= parentDir.children.length) {
+             parentDir.children.splice(index, 0, id);
+        } else {
+             parentDir.children.push(id);
+        }
+        
         this.updateMetadata(newParentId);
         
         this.nodes.set(id, node);

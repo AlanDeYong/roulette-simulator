@@ -60,6 +60,18 @@ export const BankrollChart: React.FC = () => {
                 activeDot={{ r: 6, fill: '#d4af37' }}
                 animationDuration={300}
             />
+            {/* Starting Bankroll Reference Line */}
+            <Line 
+                type="monotone" 
+                dataKey={() => config.startingBankroll}
+                name="Start"
+                stroke="#666" 
+                strokeWidth={1}
+                strokeDasharray="5 5"
+                dot={false}
+                activeDot={false}
+                isAnimationActive={false}
+            />
           </LineChart>
         </ResponsiveContainer>
       </CardContent>
