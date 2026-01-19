@@ -126,7 +126,7 @@ export const StrategyEditor: React.FC = () => {
       setCurrentFileId(fileId);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
       // Re-initialize FS with current nodes to ensure latest state
       try {
           const fs = new VirtualFileSystem(fsNodes);
@@ -141,6 +141,14 @@ export const StrategyEditor: React.FC = () => {
                   setFSNodes(newNodes);
                   showFeedback('success', 'File saved successfully');
                   setIsDirty(false);
+
+                  // Server Sync
+                  await fetch('http://localhost:3001/api/save', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ id: currentFileId, content: strategy.code })
+                  });
+
               } catch (e: any) {
                   console.error("Save Error (Overwrite):", e);
                   showFeedback('error', `Save failed: ${e.message}`);
@@ -155,25 +163,49 @@ export const StrategyEditor: React.FC = () => {
       }
   };
 
-  const handleConfirmSaveAs = () => {
+  const handleConfirmSaveAs = async () => {
       if (!saveName.trim()) return;
       
       try {
           const fs = new VirtualFileSystem(fsNodes);
           const rootId = fs.getRootId();
-          const newFile = fs.createFile(rootId, saveName, strategy.code);
+          
+          // Append .js if missing
+          const fileName = saveName.endsWith('.js') ? saveName : `${saveName}.js`;
+          
+          const newFile = fs.createFile(rootId, fileName, strategy.code);
           const newNodes = fs.serialize();
           setFSNodes(newNodes);
           setCurrentFileId(newFile.id);
           setIsSaving(false);
           setSaveName('');
           showFeedback('success', 'File saved successfully');
+          
+          // Server Sync
+          await fetch('http://localhost:3001/api/save', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              // For Save As, we assume root level for now, or we need to prompt for folder
+              // We'll use the filename as ID since we are in root
+              body: JSON.stringify({ id: fileName, content: strategy.code })
+          });
+          
+          // Re-sync to ensure IDs align
+          useSimulationStore.getState().syncWithServer();
+
       } catch (e: any) {
           showFeedback('error', e.message);
       }
   };
 
-  const currentFileName = currentFileId ? new VirtualFileSystem(fsNodes).getNode(currentFileId).name : 'Untitled';
+  const currentFileName = (() => {
+      if (!currentFileId) return 'Untitled';
+      try {
+          return new VirtualFileSystem(fsNodes).getNode(currentFileId).name;
+      } catch {
+          return 'Untitled (Missing)';
+      }
+  })();
 
   return (
     <Card className="h-full flex flex-col border-t-4 border-t-primary relative">

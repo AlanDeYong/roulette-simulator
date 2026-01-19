@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSimulationStore } from '../store/useSimulationStore';
 import { VirtualFileSystem, FSNode, DirectoryNode, FileNode } from '../lib/FileSystem';
-import { Folder, FileText, ChevronRight, ChevronDown, Plus, Trash2, Edit2, FolderPlus, FilePlus } from 'lucide-react';
+import { Folder, FileText, ChevronRight, ChevronDown, Plus, Trash2, Edit2, FolderPlus, FilePlus, Copy } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { cn } from '../utils/cn';
@@ -38,7 +38,20 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
 
     // Sync FS instance when store updates
     useEffect(() => {
-        setFs(new VirtualFileSystem(fsNodes));
+        // When FS nodes change (e.g. from sync), we rebuild the virtual FS
+        const newFs = new VirtualFileSystem(fsNodes);
+        setFs(newFs);
+        
+        // IMPORTANT: If the root ID changed (local -> server sync), we need to update expanded state
+        // Otherwise we are trying to expand a root that doesn't exist
+        const rootId = newFs.getRootId();
+        setExpanded(prev => {
+             // If we already have this root, keep state
+             if (prev[rootId]) return prev;
+             // Otherwise, reset or add root
+             return { ...prev, [rootId]: true };
+        });
+        
     }, [fsNodes]);
 
     // Update selection when current file changes externally
@@ -75,8 +88,29 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
         }
     };
 
-    const saveFS = () => {
+    // Helper to get relative path for API
+    const getRelativePath = (id: string): string => {
+        // This assumes ID is the path, which is true for our new server logic
+        // But for local state creation, we need to build it or use the ID if we switch to path-based IDs
+        // For now, let's assume the server will handle the flat ID structure mapping if we stick to local IDs,
+        // OR we switch entirely to server-side IDs.
+        
+        // Simpler approach: Just send the content and let server save by ID if it matches path
+        // For Create, we need to construct path.
+        
+        // Actually, to fully switch to server-sync, we should probably rely on the server to tell us the IDs
+        // But for "Hybrid" mode where we want instant feedback, we keep local optimistic updates.
+        
+        // Let's implement basic "save on change" for file content in StrategyEditor, 
+        // and here we handle Create/Delete/Rename/Move sync.
+        return id; 
+    };
+
+    const saveFS = async () => {
         setFSNodes(fs.serialize());
+        // We don't save the whole tree to server, we assume individual ops handled it
+        // But if we want to "Save All Structure", we might need an endpoint.
+        // For now, let's just trigger individual API calls in the handlers below.
     };
 
     const handleCreateFile = () => {
@@ -89,29 +123,77 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
         setNewItemName('');
     };
 
-    const handleConfirmCreate = () => {
+    const handleCancelCreate = () => {
+        setCreatingType(null);
+        setNewItemName('');
+    };
+
+    const handleConfirmCreate = async () => {
         if (!newItemName.trim() || !creatingType) return;
         try {
             const parentId = (selectedId && fs.getNode(selectedId).type === 'directory') ? selectedId : fs.getRootId();
+            
+            // Optimistic Update
+            let newId;
             if (creatingType === 'file') {
-                fs.createFile(parentId, newItemName, "// New Strategy");
+                const file = fs.createFile(parentId, newItemName + (newItemName.endsWith('.js') ? '' : '.js'), "// New Strategy");
+                newId = file.id;
+                
+                // Server Sync
+                // We need to construct the full path for the server
+                // This is tricky if IDs are UUIDs locally but Paths remotely.
+                // ideally we switch to using Paths as IDs everywhere.
+                
+                // For this iteration, let's just create the file with the relative path from root
+                // We need to traverse up from parentId to build path
+                let current = parentId;
+                let pathParts = [];
+                while (current !== fs.getRootId()) {
+                    const node = fs.getNode(current);
+                    pathParts.unshift(node.name);
+                    current = node.parentId!;
+                }
+                const fullPath = [...pathParts, newItemName + (newItemName.endsWith('.js') ? '' : '.js')].join('/');
+                
+                await fetch('http://localhost:3001/api/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: fullPath, content: "// New Strategy" })
+                });
+
             } else {
-                fs.createDirectory(parentId, newItemName);
+                const dir = fs.createDirectory(parentId, newItemName);
+                newId = dir.id;
+                
+                let current = parentId;
+                let pathParts = [];
+                while (current !== fs.getRootId()) {
+                    const node = fs.getNode(current);
+                    pathParts.unshift(node.name);
+                    current = node.parentId!;
+                }
+                const fullPath = [...pathParts, newItemName].join('/');
+                
+                await fetch('http://localhost:3001/api/create-dir', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: fullPath })
+                });
             }
+            
             saveFS();
             setCreatingType(null);
             setNewItemName('');
+            
+            // Refresh from server to get canonical IDs (Paths)
+            useSimulationStore.getState().syncWithServer();
+            
         } catch (e: any) {
             setError(e.message);
             setTimeout(() => setError(null), 3000);
         }
     };
     
-    const handleCancelCreate = () => {
-        setCreatingType(null);
-        setNewItemName('');
-    };
-
     const handleDelete = () => {
         if (!selectedId) return;
         
@@ -119,8 +201,18 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
             isOpen: true,
             title: "Delete Item",
             message: "Are you sure you want to delete this item? This action cannot be undone.",
-            onConfirm: () => {
+            onConfirm: async () => {
                 try {
+                    // Get Path
+                    // If we synced with server, ID is the path
+                    // If local UUID, we might fail.
+                    // Let's try sending ID as path
+                    await fetch('http://localhost:3001/api/delete', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: selectedId })
+                    });
+                    
                     fs.delete(selectedId);
                     saveFS();
                     if (selectedId === currentFileId) {
@@ -128,6 +220,8 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                     }
                     setSelectedId(null);
                     setDialog(prev => ({ ...prev, isOpen: false }));
+                    
+                    useSimulationStore.getState().syncWithServer();
                 } catch (e: any) {
                     setError(e.message);
                     setTimeout(() => setError(null), 3000);
@@ -136,20 +230,91 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
         });
     };
 
+    const handleDuplicate = async () => {
+        if (!selectedId) return;
+        try {
+            const res = await fetch('http://localhost:3001/api/duplicate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: selectedId })
+            });
+            const data = await res.json();
+            
+            if (data.success) {
+                // Refresh list
+                useSimulationStore.getState().syncWithServer();
+                // We could optimistically update local FS but duplication logic is complex (recursive),
+                // simpler to just wait for sync.
+            } else {
+                setError(data.error);
+                setTimeout(() => setError(null), 3000);
+            }
+        } catch (e: any) {
+            setError(e.message);
+            setTimeout(() => setError(null), 3000);
+        }
+    };
+
     const handleStartRename = () => {
         if (!selectedId) return;
         setEditingId(selectedId);
         setRenameValue(fs.getNode(selectedId).name);
     };
 
-    const handleFinishRename = () => {
+    const handleFinishRename = async () => {
         if (!editingId) return;
         try {
             if (renameValue !== fs.getNode(editingId).name) {
-                fs.rename(editingId, renameValue);
+                // Determine old and new paths
+                // Since ID is the path (in sync mode), or ID is UUID (local mode).
+                // If we are renaming, we are effectively moving.
+                
+                // Construct new path
+                // We need to know parent path to construct new path
+                // This logic is getting complex with mixed ID types.
+                // Assuming ID = Path for now as per sync logic
+                
+                // Wait, if ID = Path, then renaming changes the ID.
+                // The backend expects { oldId, newId }
+                
+                // Let's assume editingId is the OLD path (or ID)
+                // We need to construct NEW path.
+                const node = fs.getNode(editingId);
+                const parentId = node.parentId;
+                
+                // Construct parent path
+                let pathParts = [];
+                let current = parentId;
+                while (current && current !== fs.getRootId()) {
+                    const pNode = fs.getNode(current);
+                    pathParts.unshift(pNode.name);
+                    current = pNode.parentId;
+                }
+                
+                const newName = renameValue + (node.type === 'file' && !renameValue.endsWith('.js') ? '.js' : '');
+                const newPath = [...pathParts, newName].join('/');
+                
+                // Call API
+                await fetch('http://localhost:3001/api/rename', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ oldId: editingId, newId: newPath })
+                });
+
+                fs.rename(editingId, newName);
                 saveFS();
+                
+                // Clear editing/selected state BEFORE sync to prevent trying to render deleted ID
+                setEditingId(null);
+                if (selectedId === editingId) {
+                     setSelectedId(newPath); // Optimistically select new path (assuming ID=Path)
+                     setCurrentFileId(newPath); 
+                }
+                
+                useSimulationStore.getState().syncWithServer();
+            } else {
+                setEditingId(null);
             }
-            setEditingId(null);
         } catch (e: any) {
             setError(e.message);
             setTimeout(() => setError(null), 3000);
@@ -255,7 +420,13 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     };
 
     const renderTree = (nodeId: string, depth: number = 0) => {
-        const node = fs.getNode(nodeId);
+        let node;
+        try {
+            node = fs.getNode(nodeId);
+        } catch {
+            return null;
+        }
+        
         const isDir = node.type === 'directory';
         const isExpanded = expanded[nodeId];
         const isSelected = selectedId === nodeId;
@@ -341,6 +512,18 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
         );
     };
 
+    // Safe node getter for render logic
+    const getSafeNode = (id: string | null) => {
+        if (!id) return null;
+        try {
+            return fs.getNode(id);
+        } catch {
+            return null;
+        }
+    };
+
+    const selectedNode = getSafeNode(selectedId);
+
     return (
         <div 
             className="flex flex-col h-full bg-black/20 rounded-lg overflow-hidden border border-white/5 relative"
@@ -364,6 +547,9 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                     </Button>
                     <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={handleCreateDir} title="New Folder">
                         <FolderPlus className="w-3 h-3" />
+                    </Button>
+                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={handleDuplicate} disabled={!selectedId} title="Duplicate">
+                        <Copy className="w-3 h-3" />
                     </Button>
                     <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={handleStartRename} disabled={!selectedId} title="Rename">
                         <Edit2 className="w-3 h-3" />
@@ -412,8 +598,8 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
 
             {/* Status Bar */}
             <div className="p-1 border-t border-white/5 bg-white/5 text-[10px] text-muted-foreground flex justify-between px-2">
-                <span>{selectedId ? fs.getNode(selectedId).name : 'No selection'}</span>
-                <span>{selectedId && fs.getNode(selectedId).type === 'file' ? `${(fs.getNode(selectedId) as FileNode).content.length} B` : ''}</span>
+                <span>{selectedNode ? selectedNode.name : 'No selection'}</span>
+                <span>{selectedNode && selectedNode.type === 'file' ? `${(selectedNode as FileNode).content.length} B` : ''}</span>
             </div>
         </div>
     );

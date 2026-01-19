@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Layout } from './components/Layout';
 import { ConfigurationPanel } from './components/ConfigurationPanel';
 import { StrategyEditor } from './components/StrategyEditor';
@@ -9,9 +10,14 @@ import { Play, Square, RotateCcw } from 'lucide-react';
 
 function App() {
   const { runSimulation, stopSimulation } = useSimulationRunner();
-  const { status, resetSimulation } = useSimulationStore();
+  const { status, resetSimulation, syncWithServer } = useSimulationStore();
   
   const isRunning = status === 'running';
+
+  // Sync with server on mount
+  useEffect(() => {
+      syncWithServer();
+  }, [syncWithServer]);
 
   const handleStart = () => {
      runSimulation();

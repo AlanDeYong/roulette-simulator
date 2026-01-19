@@ -10,6 +10,7 @@ I need you to write a Javascript strategy function for a custom Roulette Simulat
 
 **Requirements:**
 1.  **Documentation (Crucial)**: You **MUST** include a block comment at the very top of the function explaining the strategy logic in natural language. Include:
+    *   **Source**: URL of source video and YouTube channel name.
     *   **The Logic**: What triggers a bet? What are the conditions?
     *   **The Progression**: How does the bet size change after wins/losses? (e.g., "Martingale: Double after loss, reset after win").
     *   **The Goal**: What is the target profit or stop-loss condition?

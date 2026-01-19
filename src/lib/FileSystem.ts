@@ -57,10 +57,12 @@ export class VirtualFileSystem {
     }
 
     private createRoot(): string {
+        // Use a constant ID for root to match server sync
+        const ROOT_ID = 'root-node-id';
         const root: DirectoryNode = {
-            id: uuidv4(),
+            id: ROOT_ID,
             parentId: null,
-            name: 'root',
+            name: 'Strategies', // Match server name
             type: 'directory',
             children: [],
             metadata: {

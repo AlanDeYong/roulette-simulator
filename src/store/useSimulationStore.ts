@@ -23,6 +23,7 @@ interface SimulationStore extends SimulationState {
   currentFileId: string | null;
   setFSNodes: (nodes: Record<string, FSNode>) => void;
   setCurrentFileId: (id: string | null) => void;
+  syncWithServer: () => Promise<void>;
   
   // Data Import
   setImportedData: (data: number[]) => void;
@@ -96,8 +97,26 @@ export const useSimulationStore = create<SimulationStore>()(
   // File System
   fsNodes: {},
   currentFileId: null,
-  setFSNodes: (nodes) => set({ fsNodes: nodes }),
+  
+  // Sync with API when updating nodes
+  setFSNodes: (nodes) => {
+      set({ fsNodes: nodes });
+  },
+  
   setCurrentFileId: (id) => set({ currentFileId: id }),
+
+  // Initialize from API (Call this in App.tsx or similar)
+  syncWithServer: async () => {
+      try {
+          const res = await fetch('http://localhost:3001/api/files');
+          if (res.ok) {
+              const nodes = await res.json();
+              set({ fsNodes: nodes });
+          }
+      } catch (e) {
+          console.warn("Could not sync with server, using local state", e);
+      }
+  },
 
   setConfig: (newConfig) =>
     set((state) => ({
