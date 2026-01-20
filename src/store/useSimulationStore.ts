@@ -108,7 +108,8 @@ export const useSimulationStore = create<SimulationStore>()(
   // Initialize from API (Call this in App.tsx or similar)
   syncWithServer: async () => {
       try {
-          const res = await fetch('http://localhost:3001/api/files');
+          // Use relative path to leverage Vite proxy
+          const res = await fetch('/api/files');
           if (res.ok) {
               const nodes = await res.json();
               set({ fsNodes: nodes });

@@ -143,7 +143,7 @@ export const StrategyEditor: React.FC = () => {
                   setIsDirty(false);
 
                   // Server Sync
-                  await fetch('http://localhost:3001/api/save', {
+                  await fetch('/api/save', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({ id: currentFileId, content: strategy.code })
@@ -182,7 +182,7 @@ export const StrategyEditor: React.FC = () => {
           showFeedback('success', 'File saved successfully');
           
           // Server Sync
-          await fetch('http://localhost:3001/api/save', {
+          await fetch('/api/save', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               // For Save As, we assume root level for now, or we need to prompt for folder

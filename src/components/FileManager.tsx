@@ -155,7 +155,7 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                 }
                 const fullPath = [...pathParts, newItemName + (newItemName.endsWith('.js') ? '' : '.js')].join('/');
                 
-                await fetch('http://localhost:3001/api/save', {
+                await fetch('/api/save', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id: fullPath, content: "// New Strategy" })
@@ -174,7 +174,7 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                 }
                 const fullPath = [...pathParts, newItemName].join('/');
                 
-                await fetch('http://localhost:3001/api/create-dir', {
+                await fetch('/api/create-dir', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id: fullPath })
@@ -207,7 +207,7 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                     // If we synced with server, ID is the path
                     // If local UUID, we might fail.
                     // Let's try sending ID as path
-                    await fetch('http://localhost:3001/api/delete', {
+                    await fetch('/api/delete', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id: selectedId })
@@ -233,7 +233,7 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     const handleDuplicate = async () => {
         if (!selectedId) return;
         try {
-            const res = await fetch('http://localhost:3001/api/duplicate', {
+            const res = await fetch('/api/duplicate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: selectedId })
@@ -295,7 +295,7 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                 const newPath = [...pathParts, newName].join('/');
                 
                 // Call API
-                await fetch('http://localhost:3001/api/rename', {
+                await fetch('/api/rename', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ oldId: editingId, newId: newPath })

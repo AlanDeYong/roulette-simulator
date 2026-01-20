@@ -8,8 +8,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+console.log("Starting server script...");
+
 const app = express();
-const PORT = 3001;
+// Allow port to be set via environment variable, default to 3001 if not provided
+const PORT = process.env.API_PORT || 3001;
 const STRATEGIES_DIR = path.join(__dirname, '../strategies');
 
 app.use(cors());
@@ -251,7 +254,11 @@ app.post('/api/duplicate', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
     console.log(`Strategies directory: ${STRATEGIES_DIR}`);
+});
+
+server.on('error', (e) => {
+    console.error('Server error:', e);
 });
