@@ -1,5 +1,13 @@
 import { spawn } from 'child_process';
 import net from 'net';
+import fs from 'fs';
+
+const logFile = fs.createWriteStream('dev-runner-debug.log', { flags: 'a' });
+const log = (msg) => {
+    const line = `[Dev Runner] ${msg}\n`;
+    process.stdout.write(line);
+    logFile.write(line);
+};
 
 // Helper to find a free port
 const findFreePort = (startPort) => {
@@ -20,39 +28,62 @@ const findFreePort = (startPort) => {
 
 const start = async () => {
     try {
+        log("Starting...");
         const apiPort = await findFreePort(3001);
-        console.log(`[Dev Runner] Found free port for API: ${apiPort}`);
+        log(`Found free port for API: ${apiPort}`);
 
-        process.env.API_PORT = apiPort.toString();
+        const env = { ...process.env, API_PORT: apiPort.toString() };
 
         // Start Backend
+        log("Spawning Backend...");
         const backend = spawn('node', ['server/server.js'], {
-            stdio: 'inherit',
-            env: process.env,
-            shell: true
+            stdio: 'pipe',
+            env: env
         });
+
+        backend.stdout.on('data', d => log(`[Backend] ${d.toString().trim()}`));
+        backend.stderr.on('data', d => log(`[Backend ERR] ${d.toString().trim()}`));
+        backend.on('exit', code => log(`Backend exited with code ${code}`));
+        backend.on('error', err => log(`Backend failed to start: ${err}`));
 
         // Start Frontend (Vite)
-        // Vite will read process.env.API_PORT from the environment we passed
-        const frontend = spawn('npx', ['vite', '--host'], {
-            stdio: 'inherit',
-            env: process.env,
-            shell: true
+        log("Spawning Frontend...");
+        // On Windows, use npx.cmd
+        const npxCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+        const frontend = spawn(npxCmd, ['vite', '--host'], {
+            stdio: 'pipe',
+            env: env
         });
 
+        frontend.stdout.on('data', d => log(`[Frontend] ${d.toString().trim()}`));
+        frontend.stderr.on('data', d => log(`[Frontend ERR] ${d.toString().trim()}`));
+        frontend.on('exit', code => log(`Frontend exited with code ${code}`));
+        frontend.on('error', err => log(`Frontend failed to start: ${err}`));
+
         // Handle cleanup
-        const cleanup = () => {
-            backend.kill();
-            frontend.kill();
-            process.exit();
+        const cleanup = (signal) => {
+            log(`Cleanup triggered by ${signal}`);
+            try {
+                backend.kill();
+                frontend.kill();
+            } catch (e) {
+                log(`Error during kill: ${e}`);
+            }
+            if (signal !== 'exit') {
+                process.exit();
+            }
         };
 
-        process.on('SIGINT', cleanup);
-        process.on('SIGTERM', cleanup);
-        process.on('exit', cleanup);
+        process.on('SIGINT', () => cleanup('SIGINT'));
+        process.on('SIGTERM', () => cleanup('SIGTERM'));
+        process.on('exit', () => cleanup('exit'));
+
+        // Keep the process alive
+        log("Setup complete, keeping alive...");
+        setInterval(() => {}, 1000);
 
     } catch (e) {
-        console.error("Failed to start dev environment:", e);
+        log(`Failed to start dev environment: ${e}`);
         process.exit(1);
     }
 };
