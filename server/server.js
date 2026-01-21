@@ -12,7 +12,7 @@ console.log("Starting server script...");
 
 const app = express();
 // Allow port to be set via environment variable, default to 3001 if not provided
-const PORT = process.env.API_PORT || 3001;
+const PORT = process.env.API_PORT || 3002;
 const STRATEGIES_DIR = path.join(__dirname, '../strategies');
 
 app.use(cors());

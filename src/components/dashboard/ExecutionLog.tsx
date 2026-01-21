@@ -12,6 +12,19 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
+  const getBetDisplay = (bet: any) => {
+      if (bet.type === 'corner') {
+          const n = bet.value;
+          // Calculate numbers: n, n+1, n+3, n+4
+          const numbers = [n, n+1, n+3, n+4].join(', ');
+          return `corner (${numbers})`;
+      }
+      if (bet.type === 'split' && Array.isArray(bet.value)) {
+          return `split (${bet.value.join(', ')})`;
+      }
+      return `${bet.type} ${bet.value !== undefined ? `(${bet.value})` : ''}`;
+  };
+
   const handleMouseMove = (e: React.MouseEvent) => {
     setTooltipPos({ x: e.clientX, y: e.clientY });
   };
@@ -54,7 +67,7 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
                           {spin.bets.map((bet: any, idx: number) => (
                               <div key={idx} className="flex justify-between gap-4">
                                   <span className="text-text-muted">
-                                      {bet.type} {bet.value !== undefined ? `(${bet.value})` : ''}
+                                      {getBetDisplay(bet)}
                                   </span>
                                   <span className="font-mono">${bet.amount}</span>
                               </div>

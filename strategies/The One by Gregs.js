@@ -29,7 +29,7 @@ function bet(spinHistory, bankroll, config, state) {
         { value: 17, numbers: [17, 18, 20, 21] }, // Overlaps 17 & 20
         { value: 19, numbers: [19, 20, 22, 23] }, // Overlaps 20
         { value: 26, numbers: [26, 27, 29, 30] },
-        { value: 32, numbers: [32, 33, 35, 36] }
+        { value: 32, numbers: [31, 32, 34, 35] }
     ];
 
     const ALL_CORNER_VALUES = CORNERS.map(c => c.value);
