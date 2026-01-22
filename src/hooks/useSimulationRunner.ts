@@ -121,28 +121,34 @@ export const useSimulationRunner = () => {
             const validBets: StrategyBet[] = [];
             let totalBetAmount = 0;
             
-            for (const bet of rawBets) {
-                if (bet && bet.amount > 0 && bet.type) {
-                    // Check Limits
-                    const isOutside = ['red', 'black', 'even', 'odd', 'low', 'high', 'dozen', 'column'].includes(bet.type);
-                    const minLimit = isOutside ? config.betLimits.minOutside : config.betLimits.min;
-                    
-                    if (bet.amount < minLimit) {
-                         // Debug warning for rejected bets
-                         console.warn(`Bet rejected: ${bet.type} amount ${bet.amount} is below minimum ${minLimit}`);
-                         continue; 
+            // Check if rawBets is valid array
+            if (Array.isArray(rawBets)) {
+                for (const bet of rawBets) {
+                    if (bet && bet.amount > 0 && bet.type) {
+                        // Check Limits
+                        const isOutside = ['red', 'black', 'even', 'odd', 'low', 'high', 'dozen', 'column'].includes(bet.type);
+                        const minLimit = isOutside ? config.betLimits.minOutside : config.betLimits.min;
+                        
+                        if (bet.amount < minLimit) {
+                             // Debug warning for rejected bets
+                             console.warn(`Bet rejected: ${bet.type} amount ${bet.amount} is below minimum ${minLimit}`);
+                             continue; 
+                        }
+                        
+                        let amount = Math.min(bet.amount, config.betLimits.max); // Clamp to max
+                        
+                        if (totalBetAmount + amount > currentBankroll) {
+                             amount = currentBankroll - totalBetAmount;
+                             if (amount <= 0) break;
+                        }
+                        
+                        validBets.push({ ...bet, amount });
+                        totalBetAmount += amount;
                     }
-                    
-                    let amount = Math.min(bet.amount, config.betLimits.max); // Clamp to max
-                    
-                    if (totalBetAmount + amount > currentBankroll) {
-                         amount = currentBankroll - totalBetAmount;
-                         if (amount <= 0) break;
-                    }
-                    
-                    validBets.push({ ...bet, amount });
-                    totalBetAmount += amount;
                 }
+            } else if (rawBets) {
+                // If strategy returned non-array but truthy, log warning
+                console.warn("Strategy returned invalid bet structure (not an array):", rawBets);
             }
 
             if (validBets.length === 0 && currentBankroll < config.betLimits.min) {

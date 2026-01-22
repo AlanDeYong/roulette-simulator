@@ -131,7 +131,21 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     const handleConfirmCreate = async () => {
         if (!newItemName.trim() || !creatingType) return;
         try {
-            const parentId = (selectedId && fs.getNode(selectedId).type === 'directory') ? selectedId : fs.getRootId();
+            // Safe parent resolution
+            let parentId = fs.getRootId();
+            if (selectedId) {
+                try {
+                    const node = fs.getNode(selectedId);
+                    if (node.type === 'directory') {
+                        parentId = selectedId;
+                    } else if (node.parentId) {
+                         parentId = node.parentId;
+                    }
+                } catch {
+                    // Selected ID no longer exists, default to root
+                    parentId = fs.getRootId();
+                }
+            }
             
             // Optimistic Update
             let newId;
@@ -344,7 +358,38 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
         e.currentTarget.classList.remove('bg-primary/10');
     };
 
-    const handleDrop = (e: React.DragEvent, targetId: string) => {
+    // Helper to perform move on server
+    const performMove = async (draggedId: string, newParentId: string) => {
+        try {
+            const draggedNode = fs.getNode(draggedId);
+            // If moving to same parent, do nothing (server doesn't support manual reordering yet)
+            if (draggedNode.parentId === newParentId) return;
+
+            const isRoot = newParentId === fs.getRootId();
+            
+            // Construct new path
+            // We assume ID of folder is its path (e.g. "Folder")
+            // New path = "Folder/File.js"
+            let newPath = draggedNode.name;
+            if (!isRoot) {
+                newPath = `${newParentId}/${draggedNode.name}`;
+            }
+            
+            await fetch('/api/rename', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ oldId: draggedId, newId: newPath })
+            });
+            
+            useSimulationStore.getState().syncWithServer();
+            
+        } catch (e: any) {
+            setError(e.message);
+            setTimeout(() => setError(null), 3000);
+        }
+    };
+
+    const handleDrop = async (e: React.DragEvent, targetId: string) => {
         e.preventDefault();
         e.currentTarget.classList.remove('bg-primary/10');
         
@@ -352,62 +397,30 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
         if (!draggedId || draggedId === targetId) return;
 
         try {
-            // Check if we are dropping on a file or folder to reorder/move
             const targetNode = fs.getNode(targetId);
-            const draggedNode = fs.getNode(draggedId);
             
-            // Reordering logic
-            // If target is NOT a directory we are dropping INTO, but a sibling we are dropping NEAR
-            // OR if it IS a directory but we want to drop INTO it (handled by standard drop)
-            
-            // Simplified Reorder:
-            // If dropping on a node (targetId), we move draggedId to targetId's parent, 
-            // inserted BEFORE targetId.
-            
-            if (targetId !== fs.getRootId() && targetId !== draggedNode.parentId) {
-                // Moving to a different folder (handled by dropping on folder)
-                 if (targetNode.type === 'directory') {
-                     fs.move(draggedId, targetId);
-                 } else {
-                     // Dropping on a file -> Move to that file's parent?
-                     // Let's assume reorder is intended if dropping on a sibling
-                     // Complex without specific drop zones.
-                     // Fallback: Move to parent of target
-                     if (targetNode.parentId) {
-                         fs.move(draggedId, targetNode.parentId);
-                     }
-                 }
-            } else if (targetId !== fs.getRootId() && targetNode.parentId) {
-                // Same parent -> Reorder
-                // Find index of target
-                const parent = fs.getNode(targetNode.parentId) as DirectoryNode;
-                const targetIndex = parent.children.indexOf(targetId);
-                if (targetIndex !== -1) {
-                     fs.move(draggedId, targetNode.parentId, targetIndex);
-                }
-            } else {
-                 // Fallback
-                 if (targetNode.type === 'directory') {
-                    fs.move(draggedId, targetId);
-                 }
+            // Determine destination parent
+            let destParentId = targetId;
+            if (targetNode.type === 'file') {
+                // If dropping on a file, move to its parent
+                destParentId = targetNode.parentId!;
             }
+            
+            await performMove(draggedId, destParentId);
 
-            saveFS();
         } catch (err: any) {
             setError(err.message);
             setTimeout(() => setError(null), 3000);
         }
     };
 
-    const handleRootDrop = (e: React.DragEvent) => {
+    const handleRootDrop = async (e: React.DragEvent) => {
         e.preventDefault();
         const draggedId = e.dataTransfer.getData('application/fs-node');
         if (!draggedId) return;
         
         try {
-            // Move to Root
-            fs.move(draggedId, fs.getRootId());
-            saveFS();
+            await performMove(draggedId, fs.getRootId());
         } catch (err: any) {
              setError(err.message);
              setTimeout(() => setError(null), 3000);

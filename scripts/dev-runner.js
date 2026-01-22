@@ -38,7 +38,8 @@ const start = async () => {
         log("Spawning Backend...");
         const backend = spawn('node', ['server/server.js'], {
             stdio: 'pipe',
-            env: env
+            env: env,
+            shell: true
         });
 
         backend.stdout.on('data', d => log(`[Backend] ${d.toString().trim()}`));
@@ -48,11 +49,10 @@ const start = async () => {
 
         // Start Frontend (Vite)
         log("Spawning Frontend...");
-        // On Windows, use npx.cmd
-        const npxCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
-        const frontend = spawn(npxCmd, ['vite', '--host'], {
+        const frontend = spawn('npx', ['vite', '--host'], {
             stdio: 'pipe',
-            env: env
+            env: env,
+            shell: true
         });
 
         frontend.stdout.on('data', d => log(`[Frontend] ${d.toString().trim()}`));
