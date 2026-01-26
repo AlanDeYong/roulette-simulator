@@ -144,41 +144,41 @@ export const ConfigurationPanel: React.FC = () => {
             </div>
             
             <div className="space-y-2">
-                <Label>Import File (.txt, .csv)</Label>
-                <div className="flex gap-2">
-                    <input 
-                        type="file" 
-                        accept=".txt,.csv" 
-                        ref={fileInputRef}
-                        className="hidden"
-                        onChange={handleFileUpload}
-                    />
-                    <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="w-full"
-                        onClick={() => fileInputRef.current?.click()}
-                        disabled={isRunning}
-                    >
-                        <Upload className="w-4 h-4 mr-2" />
-                        Upload File
-                    </Button>
+                    <Label>Import File (.txt, .csv)</Label>
+                    <div className="flex gap-2">
+                        <input 
+                            type="file" 
+                            accept=".txt,.csv" 
+                            ref={fileInputRef}
+                            className="hidden"
+                            onChange={handleFileUpload}
+                        />
+                        <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="w-full"
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={isRunning}
+                        >
+                            <Upload className="w-4 h-4 mr-2" />
+                            Upload File
+                        </Button>
+                    </div>
+                    <div className="text-xs text-muted-foreground flex justify-between">
+                        <span>Loaded: {importedData.length} spins</span>
+                        {importedFileName && <span className="text-primary truncate max-w-[150px]" title={importedFileName}>{importedFileName}</span>}
+                    </div>
                 </div>
-                <div className="text-xs text-muted-foreground flex justify-between">
-                    <span>Loaded: {importedData.length} spins</span>
-                    {importedFileName && <span className="text-primary truncate max-w-[150px]" title={importedFileName}>{importedFileName}</span>}
-                </div>
-            </div>
 
-            <div className="space-y-2">
-                <Label>Bulk Data Entry</Label>
-                <textarea 
-                    className="flex min-h-[80px] w-full rounded-md border border-primary/20 bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 text-text resize-none"
-                    placeholder="Paste numbers (comma, space, or newline separated)"
-                    onChange={handleBulkDataChange}
-                    disabled={isRunning}
-                />
-            </div>
+                <div className="space-y-2">
+                    <Label>Bulk Data Entry</Label>
+                    <textarea 
+                        className="flex min-h-[80px] w-full rounded-md border border-primary/20 bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 text-text resize-none"
+                        placeholder="Paste numbers (comma, space, or newline separated)"
+                        onChange={handleBulkDataChange}
+                        disabled={isRunning}
+                    />
+                </div>
 
             {/* Data Range */}
             <div className="space-y-2">
