@@ -92,11 +92,32 @@ export const useSimulationRunner = () => {
     try {
         // Prepare Strategy Function
         // We inject a 'state' object that persists across spins for the simulation run
-        const strategyBody = strategy.code + '\nreturn bet(spinHistory, bankroll, config, state);';
-        const executeStrategy = new Function('spinHistory', 'bankroll', 'config', 'state', strategyBody);
+        const strategyBody = strategy.code + '\nreturn bet(spinHistory, bankroll, config, state, utils);';
+        const executeStrategy = new Function('spinHistory', 'bankroll', 'config', 'state', 'utils', strategyBody);
 
         // Persistent state for the strategy
         const strategyState: Record<string, any> = {};
+
+        // Utils for strategy
+        const utils = {
+            saveFile: (filename: string, content: string) => {
+                // Ensure filename is safe-ish and within strategies folder logic
+                // The API expects 'id' which is relative path.
+                // We'll trust the user's filename but ensure it's a string.
+                if (typeof filename !== 'string' || !filename) {
+                    console.error("utils.saveFile: Invalid filename");
+                    return;
+                }
+                
+                // Fire and forget save request
+                fetch('/api/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: filename, content: String(content) })
+                }).catch(err => console.error("utils.saveFile error:", err));
+            },
+            log: (msg: any) => console.log("[Strategy Log]:", msg)
+        };
 
         for (let i = 0; i < totalSpinsToRun; i++) {
             if (currentBankroll <= 0 || stopRef.current) break;
@@ -105,7 +126,7 @@ export const useSimulationRunner = () => {
             // We pass the *current* spinResults array as history
             let rawBets: StrategyBet[] = [];
             try {
-                const result = executeStrategy(spinResults, currentBankroll, config, strategyState);
+                const result = executeStrategy(spinResults, currentBankroll, config, strategyState, utils);
                 if (Array.isArray(result)) {
                     rawBets = result;
                 } else if (result) {
