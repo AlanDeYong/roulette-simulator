@@ -164,6 +164,10 @@ export const ConfigurationPanel: React.FC = () => {
                         Upload File
                     </Button>
                 </div>
+                <div className="text-xs text-muted-foreground flex justify-between">
+                    <span>Loaded: {importedData.length} spins</span>
+                    {importedFileName && <span className="text-primary truncate max-w-[150px]" title={importedFileName}>{importedFileName}</span>}
+                </div>
             </div>
 
             <div className="space-y-2">
@@ -174,10 +178,6 @@ export const ConfigurationPanel: React.FC = () => {
                     onChange={handleBulkDataChange}
                     disabled={isRunning}
                 />
-                <div className="text-xs text-muted-foreground flex justify-between">
-                    <span>Loaded: {importedData.length} spins</span>
-                    {importedFileName && <span className="text-primary truncate max-w-[150px]" title={importedFileName}>{importedFileName}</span>}
-                </div>
             </div>
 
             {/* Data Range */}
