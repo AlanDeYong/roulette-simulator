@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSimulationStore } from '../store/useSimulationStore';
 import { VirtualFileSystem, FSNode, DirectoryNode, FileNode } from '../lib/FileSystem';
 import { Folder, FileText, ChevronRight, ChevronDown, Plus, Trash2, Edit2, FolderPlus, FilePlus, Copy } from 'lucide-react';
@@ -7,6 +7,7 @@ import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { cn } from '../utils/cn';
 import { ConfirmationDialog } from './ui/ConfirmationDialog';
+import { Tooltip } from './ui/Tooltip';
 
 interface FileManagerProps {
     onOpenFile: (fileId: string, content: string) => void;
@@ -22,6 +23,7 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     const [error, setError] = useState<string | null>(null);
     const [creatingType, setCreatingType] = useState<'file' | 'directory' | null>(null);
     const [newItemName, setNewItemName] = useState('');
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     // Dialog State
     const [dialog, setDialog] = useState<{
@@ -72,6 +74,21 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     const handleToggle = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
         setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
+    };
+
+    const handleAutoScroll = (e: React.DragEvent) => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        const { top, bottom } = container.getBoundingClientRect();
+        const mouseY = e.clientY;
+        const threshold = 50; 
+
+        if (mouseY < top + threshold) {
+            container.scrollTop -= 5;
+        } else if (mouseY > bottom - threshold) {
+            container.scrollTop += 5;
+        }
     };
 
     const handleSelect = (id: string) => {
@@ -472,6 +489,7 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                          // For simplicity, let's allow 'handleDrop' to decide based on logic
                          // We just need to preventDefault to allow drop
                          e.preventDefault();
+                         handleAutoScroll(e);
                          e.stopPropagation(); // Stop root from handling it
                          if (isDir) {
                              e.dataTransfer.dropEffect = 'move';
@@ -512,7 +530,9 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                             onClick={(e) => e.stopPropagation()}
                         />
                     ) : (
-                        <span className="truncate flex-1 select-none">{node.name}</span>
+                        <Tooltip content={node.name} className="truncate flex-1 select-none">
+                            <span className="truncate">{node.name}</span>
+                        </Tooltip>
                     )}
                 </div>
                 
@@ -605,7 +625,7 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
             )}
 
             {/* Tree */}
-            <div className="flex-1 overflow-auto p-2 custom-scrollbar relative">
+            <div className="flex-1 overflow-auto p-2 custom-scrollbar relative" ref={scrollContainerRef}>
                 {renderTree(fs.getRootId())}
             </div>
 

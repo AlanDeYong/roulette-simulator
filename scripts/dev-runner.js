@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+console.log("SCRIPT LOADED");
 import net from 'net';
 import fs from 'fs';
 
@@ -49,7 +50,7 @@ const start = async () => {
 
         // Start Frontend (Vite)
         log("Spawning Frontend...");
-        const frontend = spawn('npx', ['vite', '--host'], {
+        const frontend = spawn('node', ['./node_modules/vite/bin/vite.js', '--host'], {
             stdio: 'pipe',
             env: env,
             shell: true
