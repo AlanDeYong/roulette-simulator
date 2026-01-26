@@ -106,11 +106,11 @@ export const useSimulationRunner = () => {
                 // We'll trust the user's filename but ensure it's a string.
                 if (typeof filename !== 'string' || !filename) {
                     console.error("utils.saveFile: Invalid filename");
-                    return;
+                    return Promise.resolve();
                 }
                 
-                // Fire and forget save request
-                fetch('/api/save', {
+                // Return promise so we can await it if needed
+                return fetch('/api/save', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id: filename, content: String(content) })
@@ -225,6 +225,15 @@ export const useSimulationRunner = () => {
                  await new Promise(r => setTimeout(r, 0));
             }
         }
+        
+        // Final Strategy Cleanup / Save (MOVED INSIDE TRY BLOCK)
+        // If the strategy has a "cleanup" or we just want to force a save of any logs
+        if (strategyState.logHistory && utils.saveFile) {
+             // Force save the final log
+             console.log("Saving final log...");
+             await utils.saveFile("rankings_log.txt", strategyState.logHistory);
+        }
+
     } catch (e) {
         console.error("Simulation failed:", e);
     }
@@ -232,6 +241,8 @@ export const useSimulationRunner = () => {
     // Bulk update store
     store.setBulkResults(spinResults);
     store.setStatus('completed');
+    
+    // Removed old cleanup block that was out of scope
 
   }, [config, strategy, store]);
 

@@ -16,7 +16,8 @@ const PORT = process.env.API_PORT || 3002;
 const STRATEGIES_DIR = path.join(__dirname, '../strategies');
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 // Helper to ensure directory exists
 async function ensureDir() {
