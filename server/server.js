@@ -120,6 +120,28 @@ app.get('/api/files', async (req, res) => {
             }
         });
 
+        // Sort root children: Directories first, then Files, alphabetically
+        rootNode.children.sort((a, b) => {
+            const nodeA = fileNodes[a];
+            const nodeB = fileNodes[b];
+            if (nodeA.type !== nodeB.type) return nodeA.type === 'directory' ? -1 : 1;
+            return nodeA.name.localeCompare(nodeB.name);
+        });
+
+        // Sort children of all other directories
+        Object.values(fileNodes).forEach(node => {
+            if (node.type === 'directory' && node.children.length > 0) {
+                node.children.sort((a, b) => {
+                    const childA = fileNodes[a];
+                    const childB = fileNodes[b];
+                    // Safety check if child exists (it should)
+                    if (!childA || !childB) return 0;
+                    if (childA.type !== childB.type) return childA.type === 'directory' ? -1 : 1;
+                    return childA.name.localeCompare(childB.name);
+                });
+            }
+        });
+
         const allNodes = { [rootId]: rootNode, ...fileNodes };
         res.json(allNodes);
     } catch (err) {
