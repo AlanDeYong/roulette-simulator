@@ -4,13 +4,74 @@ import { useSimulationStore } from '../../store/useSimulationStore';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 
 export const BankrollChart: React.FC = () => {
-  const { results, config } = useSimulationStore();
+  const { results, config, setChartZoom } = useSimulationStore();
   
   // Prepare data: Add initial point
   const data = [
     { spin: 0, bankroll: config.startingBankroll },
     ...results.spins.map(s => ({ spin: s.spinNumber, bankroll: s.bankrollAfter }))
   ];
+
+  const handleBrushChange = (e: any) => {
+      // Recharts Brush onChange fires on every pixel move.
+      // We only want to save to store (which triggers re-render/storage) when user stops dragging.
+      // However, Recharts Brush doesn't have explicit onDragEnd.
+      // But it passes the current index.
+      
+      // If we update store immediately, it causes lag.
+      // We should rely on local state or debounce?
+      // Actually, Brush is controlled if we pass startIndex/endIndex.
+      // If we pass them, we MUST update them on change, or it won't move.
+      // BUT updating store is expensive (persist middleware).
+      
+      // Solution: Debounce the save, OR allow Brush to be uncontrolled for interaction
+      // but sync to store on "settle". 
+      // Recharts Brush documentation says: "If startIndex or endIndex is specified, the brush will be a controlled component"
+      
+      // If we want smooth dragging, we might need local state for the chart's view,
+      // and only sync to global store (and persistence) via a debounce.
+      
+      // Let's implement debounce here.
+      debouncedSetZoom(e.startIndex, e.endIndex);
+  };
+
+  // Debounce helper
+  const debounce = (func: Function, wait: number) => {
+      let timeout: any;
+      return (...args: any[]) => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func(...args), wait);
+      };
+  };
+
+  const debouncedSetZoom = React.useMemo(
+      () => debounce((start: number, end: number) => setChartZoom(start, end), 500),
+      [setChartZoom]
+  );
+
+  // We need to keep local state for immediate feedback if we want controlled component?
+  // If we debounce the store update, the props startIndex/endIndex won't update immediately,
+  // making the brush "stuck" until debounce fires.
+  // So we need local state that updates immediately, and then syncs to store.
+  
+  const [localZoom, setLocalZoom] = React.useState<{start?: number, end?: number}>({
+      start: results.zoomState?.startIndex,
+      end: results.zoomState?.endIndex
+  });
+
+  // Sync local state when store changes (e.g. loaded from cache)
+  React.useEffect(() => {
+      setLocalZoom({
+          start: results.zoomState?.startIndex,
+          end: results.zoomState?.endIndex
+      });
+  }, [results.zoomState]);
+
+  const onBrushChange = (e: any) => {
+      if (!e) return;
+      setLocalZoom({ start: e.startIndex, end: e.endIndex });
+      debouncedSetZoom(e.startIndex, e.endIndex);
+  };
 
   return (
     <Card className="h-[400px] flex flex-col border-t-4 border-t-primary">
@@ -49,6 +110,9 @@ export const BankrollChart: React.FC = () => {
                 stroke="#d4af37" 
                 fill="#1a1a1a"
                 tickFormatter={(value) => `Spin ${value}`}
+                startIndex={localZoom.start}
+                endIndex={localZoom.end}
+                onChange={onBrushChange}
             />
             <Line 
                 type="monotone" 

@@ -29,6 +29,10 @@ interface SimulationStore extends SimulationState {
   setImportedData: (data: number[]) => void;
   importedFileName: string | null;
   setImportedFileName: (name: string | null) => void;
+
+  // Result Caching
+  cachedResults: Record<string, { spins: SpinResult[], metrics: SimulationMetrics, zoomState?: { startIndex?: number, endIndex?: number } }>;
+  setChartZoom: (startIndex?: number, endIndex?: number) => void;
 }
 
 const DEFAULT_CONFIG: SimulationConfig = {
@@ -91,19 +95,31 @@ export const useSimulationStore = create<SimulationStore>()(
   results: {
     spins: [],
     metrics: DEFAULT_METRICS,
+    zoomState: undefined,
   },
   status: 'idle',
 
   // File System
   fsNodes: {},
   currentFileId: null,
+  cachedResults: {},
   
   // Sync with API when updating nodes
   setFSNodes: (nodes) => {
       set({ fsNodes: nodes });
   },
   
-  setCurrentFileId: (id) => set({ currentFileId: id }),
+  setCurrentFileId: (id) => set((state) => {
+      // Try to restore cached results for this file
+      const cacheKey = id || 'custom';
+      const cached = state.cachedResults[cacheKey];
+      
+      return { 
+          currentFileId: id,
+          results: cached ? { spins: cached.spins, metrics: cached.metrics, zoomState: cached.zoomState } : { spins: [], metrics: { ...DEFAULT_METRICS, finalBankroll: state.config.startingBankroll }, zoomState: undefined },
+          status: 'idle' // Always reset status to idle on switch
+      };
+  }),
 
   // Initialize from API (Call this in App.tsx or similar)
   syncWithServer: async () => {
@@ -280,24 +296,39 @@ export const useSimulationStore = create<SimulationStore>()(
           return spinTotalBet > max ? spinTotalBet : max;
       }, 0);
 
+      const newResults = {
+        spins: newSpins,
+        metrics: {
+          totalProfit,
+          winRate,
+          maxDrawdown,
+          averageBet,
+          maxBet,
+          finalBankroll: currentBankroll,
+          peakBankroll,
+          spinsToPeak,
+          lowestBankroll,
+          spinsToLowest,
+          winningSpins,
+          losingSpins
+        },
+      };
+
+      // Cache the results
+      const cacheKey = state.currentFileId || 'custom';
+      
       return {
         results: {
-          spins: newSpins,
-          metrics: {
-            totalProfit,
-            winRate,
-            maxDrawdown,
-            averageBet,
-            maxBet,
-            finalBankroll: currentBankroll,
-            peakBankroll,
-            spinsToPeak,
-            lowestBankroll,
-            spinsToLowest,
-            winningSpins,
-            losingSpins
-          },
+            ...newResults,
+            zoomState: undefined // Reset zoom on new run
         },
+        cachedResults: {
+            ...state.cachedResults,
+            [cacheKey]: {
+                ...newResults,
+                zoomState: undefined
+            }
+        }
       };
     }),
 
@@ -354,13 +385,36 @@ export const useSimulationStore = create<SimulationStore>()(
               useImportedData: data.length > 0
           }
       })),
+
+  setChartZoom: (startIndex, endIndex) => 
+      set((state) => {
+          const cacheKey = state.currentFileId || 'custom';
+          const newResults = {
+              ...state.results,
+              zoomState: { startIndex, endIndex }
+          };
+          
+          return {
+              results: newResults,
+              cachedResults: {
+                  ...state.cachedResults,
+                  [cacheKey]: {
+                      ...state.cachedResults[cacheKey], // Preserve spins/metrics
+                      spins: state.results.spins, // Ensure we have latest spins (should match cache)
+                      metrics: state.results.metrics,
+                      zoomState: { startIndex, endIndex }
+                  }
+              }
+          };
+      }),
     }),
     {
       name: 'roulette-simulation-storage',
       partialize: (state) => ({ 
         savedStrategies: state.savedStrategies,
         config: state.config,
-        fsNodes: state.fsNodes // Persist File System
+        fsNodes: state.fsNodes, // Persist File System
+        cachedResults: state.cachedResults // Persist Results Cache
       }),
     }
   )
