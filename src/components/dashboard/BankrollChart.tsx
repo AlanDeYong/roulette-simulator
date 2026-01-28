@@ -7,10 +7,14 @@ export const BankrollChart: React.FC = () => {
   const { results, config, setChartZoom } = useSimulationStore();
   
   // Prepare data: Add initial point
-  const data = [
-    { spin: 0, bankroll: config.startingBankroll },
-    ...results.spins.map(s => ({ spin: s.spinNumber, bankroll: s.bankrollAfter }))
-  ];
+  const data = React.useMemo(() => [
+    { spin: 0, bankroll: config.startingBankroll, virtualBankroll: undefined },
+    ...results.spins.map(s => ({ 
+        spin: s.spinNumber, 
+        bankroll: s.bankrollAfter,
+        virtualBankroll: s.virtualBankroll 
+    }))
+  ], [results.spins, config.startingBankroll]);
 
   const handleBrushChange = (e: any) => {
       // Recharts Brush onChange fires on every pixel move.
@@ -69,8 +73,10 @@ export const BankrollChart: React.FC = () => {
 
   const onBrushChange = (e: any) => {
       if (!e) return;
-      setLocalZoom({ start: e.startIndex, end: e.endIndex });
-      debouncedSetZoom(e.startIndex, e.endIndex);
+      if (e.startIndex !== localZoom.start || e.endIndex !== localZoom.end) {
+          setLocalZoom({ start: e.startIndex, end: e.endIndex });
+          debouncedSetZoom(e.startIndex, e.endIndex);
+      }
   };
 
   return (
@@ -97,7 +103,10 @@ export const BankrollChart: React.FC = () => {
             <Tooltip 
                 contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333', color: '#fff' }}
                 itemStyle={{ color: '#d4af37' }}
-                formatter={(value: number) => [`$${value}`, 'Bankroll']}
+                formatter={(value: number, name: string) => {
+                    if (name === 'virtualBankroll') return [`$${value}`, 'Virtual Bankroll'];
+                    return [`$${value}`, 'Bankroll'];
+                }}
                 labelFormatter={(label) => `Spin ${label}`}
                 position={{ y: 0 }} 
                 wrapperStyle={{ top: -40, zIndex: 100 }}
@@ -122,6 +131,19 @@ export const BankrollChart: React.FC = () => {
                 strokeWidth={2}
                 dot={false}
                 activeDot={{ r: 6, fill: '#d4af37' }}
+                animationDuration={300}
+            />
+            {/* Virtual Bankroll Line */}
+            <Line 
+                type="monotone" 
+                dataKey="virtualBankroll" 
+                name="Virtual Bankroll"
+                stroke="#00ffff" 
+                strokeWidth={2}
+                strokeDasharray="3 3"
+                dot={false}
+                activeDot={{ r: 6, fill: '#00ffff' }}
+                connectNulls={true}
                 animationDuration={300}
             />
             {/* Starting Bankroll Reference Line */}

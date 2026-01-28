@@ -1,23 +1,25 @@
 /**
- * STRATEGY: Innovate 2 (Final: Continuous Virtual Sliding Window)
+ * STRATEGY: Innovate 2 (Final: Weighted Rolling + Incremental + Continuous Virtual Window)
  * SOURCE: YouTube Channel "Bet With Mo" - Video: https://www.youtube.com/watch?v=2lNPusqEMMk
  *
  * LOGIC:
- * 1. Ranking: Rolling Window (Last X=111 spins). Freq > Recency.
+ * 1. Ranking: Rolling Window (Last X=90 spins this can be manually adjusted by the user). Freq > Recency.
  * 2. Incremental Selection: Locks streets/bets based on progression needs using fresh stats.
  * 3. Progression: Levels 1-11.
  * 4. VIRTUAL BETTING RULE:
- * - If Level 5 bet does NOT hit a straight number (Loss or Split Hit), STOP REAL BETTING.
- * - Enter Virtual Mode.
- * - Continue Virtual Progression indefinitely.
- * - SLIDING CHECK: After every virtual spin, check the last 7 spins window.
- * - Condition: Is (Current Virtual Bankroll) > (Virtual Bankroll 6 spins ago)?
- * - If YES: RESUME Real Betting immediately from current virtual state.
- * - If NO: Continue virtual betting.
+ * - Trigger: If Level 5 bet does NOT hit a straight number (Loss or Split Hit).
+ * - Action: STOP REAL BETTING. Enter Virtual Mode.
+ * - Cycle: 
+ * - Spin 1: Record result.
+ * - ...
+ * - Spin 7: Compare Current Bankroll vs Bankroll at Spin #1.
+ * - Condition: Is Current > Spin #1?
+ * - YES: RESUME Real Betting immediately (Import Level & Locks).
+ * - NO: Continue to Spin 8 (Compare Spin 8 vs Spin 2), etc.
  */
 function bet(spinHistory, bankroll, config, state, utils) {
     // 0. CONFIGURATION
-    const X = 300;
+    const X = 90; // Adjusted to match strategy header
     const DOUBLE_STREETS = [
         [1, 2, 3, 4, 5, 6],
         [7, 8, 9, 10, 11, 12],
@@ -41,7 +43,8 @@ function bet(spinHistory, bankroll, config, state, utils) {
     if (!state.virtualLockedStreets) state.virtualLockedStreets = [];
 
     // 2. CHECK PREVIOUS SPIN RESULT
-    if (spinHistory.length > X) {
+    console.log("Innovate SL Running. X=" + X + ", History=" + spinHistory.length);
+    if (spinHistory.length >= X) {
         const lastSpin = spinHistory[spinHistory.length - 1];
         const winningNum = lastSpin.winningNumber;
         
@@ -53,10 +56,10 @@ function bet(spinHistory, bankroll, config, state, utils) {
             if (state.level === 5 && !hitStraight) {
                 // TRIGGER VIRTUAL MODE
                 state.virtualActive = true;
-                // Start Virtual at Level 1
-                state.virtualLevel = 1;
-                state.virtualBankroll = 0;
-                state.virtualHistory = [0]; // Index 0: Start point
+                state.virtualLevel = Math.min(state.level + 1, 11); // Continue Progression (Next Level)
+                state.virtualBankroll = bankroll; // Inherit Real Bankroll
+                // Index 0 = Start Bankroll (Real Bankroll at trigger)
+                state.virtualHistory = [bankroll]; 
                 state.virtualLockedStreets = []; 
                 
                 // Clear real targets
@@ -101,19 +104,26 @@ function bet(spinHistory, bankroll, config, state, utils) {
                     state.virtualLevel = Math.min(state.virtualLevel + 1, 11);
                 }
                 
+                // Record result at end of spin
+                // Spin 1 result goes to Index 1. Spin 7 result goes to Index 7.
                 state.virtualHistory.push(state.virtualBankroll);
 
                 // --- SLIDING WINDOW CHECK ---
-                // We need at least 7 data points (Start + 6 spins) to compare spin X vs spin X-6
-                // virtualHistory: [Start(0), Spin1, Spin2 ... Spin6, Spin7] -> Length 8
-                if (state.virtualHistory.length >= 8) {
+                // We compare Current vs 6 Spins Ago (End of Spin 1).
+                // At End of Spin 7 (Index 7), we compare vs Spin 1 (Index 1).
+                // 7 - 6 = 1.
+                if (state.virtualHistory.length >= 8) { // Length 8 means indices 0..7 exist
                     const currentIndex = state.virtualHistory.length - 1;
-                    const referenceIndex = currentIndex - 6; // 6 spins back
+                    const referenceIndex = currentIndex - 6; 
                     
                     const currentBankroll = state.virtualHistory[currentIndex];
                     const referenceBankroll = state.virtualHistory[referenceIndex];
                     
-                    if (currentBankroll > referenceBankroll) {
+                    // DEBUG LOG
+                    state.logHistory += `   [DEBUG] Check Resume: V-Spin ${state.virtualHistory.length-1} (Spin ${spinHistory.length}) | Curr: ${currentBankroll} vs Ref (Spin ${spinHistory.length-6}): ${referenceBankroll} | ${currentBankroll >= referenceBankroll ? "PASS" : "FAIL"}\n`;
+
+                    // Changed to >= to ensure we resume on break-even or profit
+                    if (currentBankroll >= referenceBankroll) {
                         // SUCCESS: Resume Real Betting
                         state.virtualActive = false;
                         
@@ -121,10 +131,10 @@ function bet(spinHistory, bankroll, config, state, utils) {
                         state.level = state.virtualLevel;
                         state.lockedStreets = JSON.parse(JSON.stringify(state.virtualLockedStreets));
                         
-                        // Clear virtual history to save memory/reset for next time
+                        // Reset virtual history for next time
                         state.virtualHistory = [];
                     }
-                    // If NO: Do nothing. The cycle continues to the next spin.
+                    // If NO: Continue virtual cycle (Next spin will compare Index 8 vs Index 2)
                 }
             }
         }
@@ -133,34 +143,43 @@ function bet(spinHistory, bankroll, config, state, utils) {
     // 3. DATA SUFFICIENCY
     if (spinHistory.length < X) return [];
 
-    // 4. STATISTICAL ANALYSIS (Simple Freq + Recency)
+    // 4. STATISTICAL ANALYSIS (Weighted Rolling)
     const stats = [];
     const analysisWindow = spinHistory.slice(-X);
 
     for (let num = 0; num <= 36; num++) {
         let frequency = 0;
         let lastHitIndex = -1;       
+        let secondLastHitIndex = -1; 
         
         for (let i = analysisWindow.length - 1; i >= 0; i--) {
             if (analysisWindow[i].winningNumber === num) {
                 frequency++;
-                if (lastHitIndex === -1) lastHitIndex = i; 
+                if (lastHitIndex === -1) lastHitIndex = i;
+                else if (secondLastHitIndex === -1) secondLastHitIndex = i;
             }
         }
 
         const recency = lastHitIndex !== -1 ? (analysisWindow.length - 1 - lastHitIndex) : 999;
-        
+        const currentGap = recency;
+        const previousGap = secondLastHitIndex !== -1 ? (lastHitIndex - secondLastHitIndex) : 999;
+        const gapGettingSmaller = (currentGap < previousGap);
+
         stats.push({
             number: num,
             frequency: frequency,
-            recency: recency
+            recency: recency,      
+            currentGap: currentGap, 
+            trendBonus: gapGettingSmaller ? 1 : 0
         });
     }
 
-    // Sort: Freq (Desc) > Recency (Asc)
+    // Sort: Freq > Recency > Gap > Trend
     stats.sort((a, b) => {
         if (a.frequency !== b.frequency) return b.frequency - a.frequency;
-        return a.recency - b.recency;
+        if (a.recency !== b.recency) return a.recency - b.recency;
+        if (a.currentGap !== b.currentGap) return a.currentGap - b.currentGap;
+        return b.trendBonus - a.trendBonus;
     });
 
     const rankMap = new Map();
@@ -172,15 +191,15 @@ function bet(spinHistory, bankroll, config, state, utils) {
     let logLine = "";
     
     if (state.virtualActive) {
-        // Calculate how many spins deep we are in virtual mode
-        const vSpins = state.virtualHistory.length - 1; 
-        logLine = `Spin ${currentSpinNum} | [VIRTUAL] Spin ${vSpins} | V-Lvl: ${state.virtualLevel} | V-Bal: ${state.virtualBankroll}\n`;
+        // Virtual Spin Count = History Length - 1 (because Index 0 is start)
+        const vSpinCount = state.virtualHistory.length - 1;
+        logLine = `Spin ${currentSpinNum} | [VIRTUAL] Spin #${vSpinCount} | V-Lvl: ${state.virtualLevel} | V-Bal: ${state.virtualBankroll}\n`;
     } else {
         const lockedCount = state.lockedStreets.length;
         logLine = `Spin ${currentSpinNum} | [REAL] Level: ${state.level} | Locked: ${lockedCount}/5\n`;
     }
     
-    logLine += `   > Freq/Recency Rank Top 15: [${rankedNumbersList.split(', ').slice(0, 15).join(', ')}...]\n` +
+    logLine += `   > Top 15: [${rankedNumbersList.split(', ').slice(0, 15).join(', ')}...]\n` +
                `   --------------------------------------------------\n`;
 
     state.logHistory += logLine;
@@ -218,7 +237,6 @@ function bet(spinHistory, bankroll, config, state, utils) {
 
     // INCREMENTAL LOCKING LOGIC
     if (activeLockedStreets.length < targetStreetCount) {
-        // Score streets based on CURRENT stats
         const streetScores = DOUBLE_STREETS.map((streetNumbers, index) => {
             let score = 0;
             streetNumbers.forEach(num => score += rankMap.get(num));
@@ -282,9 +300,10 @@ function bet(spinHistory, bankroll, config, state, utils) {
     // 7. RETURN LOGIC
     if (state.virtualActive) {
         state.lastVirtualTargets = nextTargets;
-        return []; // Stop real betting
+        // Return bets for UI display (Runner will handle isVirtual flag to skip real bankroll update)
+        return bets; 
     } else {
         state.lastTargets = nextTargets;
-        return bets; // Place real bets
+        return bets; 
     }
 }

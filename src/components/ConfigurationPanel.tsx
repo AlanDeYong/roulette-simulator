@@ -143,7 +143,19 @@ export const ConfigurationPanel: React.FC = () => {
                 <h3 className="font-semibold text-sm">Data Import</h3>
             </div>
             
-            <div className="space-y-2">
+            <div className="flex items-center gap-2 mt-2">
+                    <input 
+                        type="checkbox"
+                        id="useImportedData"
+                        checked={config.useImportedData}
+                        onChange={(e) => handleChange('useImportedData', e.target.checked)}
+                        disabled={isRunning || importedData.length === 0}
+                        className="accent-primary"
+                    />
+                    <Label htmlFor="useImportedData" className="text-xs font-normal cursor-pointer">Use Imported Data</Label>
+                </div>
+
+                <div className="space-y-2">
                     <Label>Import File (.txt, .csv)</Label>
                     <div className="flex gap-2">
                         <input 

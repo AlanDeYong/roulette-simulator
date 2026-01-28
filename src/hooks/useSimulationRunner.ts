@@ -139,6 +139,7 @@ export const useSimulationRunner = () => {
             }
 
             // 2. Validate Bets
+            const isVirtual = !!strategyState.virtualActive;
             const validBets: StrategyBet[] = [];
             let totalBetAmount = 0;
             
@@ -158,7 +159,8 @@ export const useSimulationRunner = () => {
                         
                         let amount = Math.min(bet.amount, config.betLimits.max); // Clamp to max
                         
-                        if (totalBetAmount + amount > currentBankroll) {
+                        // Only check bankroll limit if NOT virtual
+                        if (!isVirtual && totalBetAmount + amount > currentBankroll) {
                              amount = currentBankroll - totalBetAmount;
                              if (amount <= 0) break;
                         }
@@ -172,7 +174,7 @@ export const useSimulationRunner = () => {
                 console.warn("Strategy returned invalid bet structure (not an array):", rawBets);
             }
 
-            if (validBets.length === 0 && currentBankroll < config.betLimits.min) {
+            if (!isVirtual && validBets.length === 0 && currentBankroll < config.betLimits.min) {
                  // Bankroll too low to play
                  break;
             }
@@ -205,7 +207,10 @@ export const useSimulationRunner = () => {
 
             roundProfit = resultBets.reduce((sum, b) => sum + b.profit, 0);
             const bankrollBefore = currentBankroll;
-            currentBankroll += roundProfit;
+            
+            if (!isVirtual) {
+                currentBankroll += roundProfit;
+            }
 
             spinResults.push({
                 id: Math.random().toString(36).substr(2, 9),
@@ -215,7 +220,23 @@ export const useSimulationRunner = () => {
                 winningColor: color,
                 bankrollBefore,
                 bankrollAfter: currentBankroll,
-                totalProfit: roundProfit,
+                virtualBankroll: strategyState.virtualActive ? strategyState.virtualBankroll : undefined,
+                isVirtual,
+                totalProfit: isVirtual ? 0 : roundProfit, // Keep totalProfit 0 for virtual spins in main log (or should we store it?)
+                // If we store roundProfit in totalProfit, the Chart might plot it as P/L?
+                // Standard chart uses bankrollAfter.
+                // ExecutionLog uses totalProfit.
+                // If isVirtual, we probably want totalProfit to be 0 so "Profit" column shows 0/Push (or we handle display).
+                // User wants "Profit indicating it is virtual amount".
+                // If I store the virtual profit here, it might mess up "Win Rate" stats?
+                // useSimulationStore: winningSpins = filter(s => s.totalProfit > 0).
+                // If I count virtual wins as wins, it distorts stats.
+                // So totalProfit should be 0.
+                // I will add a separate `virtualProfit` field? Or just use `bets` to calculate?
+                // Let's stick to totalProfit = 0 for safety, and use `bets` to display.
+                // Wait, user wants "Profit indicating it is virtual amount".
+                // I can calculate it from bets in the UI.
+                
                 timestamp: new Date().toISOString(),
                 bets: resultBets
             });

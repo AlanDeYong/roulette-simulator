@@ -114,6 +114,10 @@ export const useSimulationStore = create<SimulationStore>()(
       const cacheKey = id || 'custom';
       const cached = state.cachedResults[cacheKey];
       
+      // If we found cached results, load them.
+      // If NOT, we should check if the ID has changed (e.g. server sync changed paths)
+      // BUT for now, we rely on the ID being stable or matching the cache key.
+      
       return { 
           currentFileId: id,
           results: cached ? { spins: cached.spins, metrics: cached.metrics, zoomState: cached.zoomState } : { spins: [], metrics: { ...DEFAULT_METRICS, finalBankroll: state.config.startingBankroll }, zoomState: undefined },
@@ -128,7 +132,26 @@ export const useSimulationStore = create<SimulationStore>()(
           const res = await fetch('/api/files');
           if (res.ok) {
               const nodes = await res.json();
-              set({ fsNodes: nodes });
+              set((state) => {
+                  // If we have a current file, update the active strategy code with the latest server version
+                  // This ensures we don't run stale code after external updates
+                  let newStrategy = state.strategy;
+                  if (state.currentFileId && nodes[state.currentFileId]) {
+                      const serverContent = nodes[state.currentFileId].content;
+                      if (serverContent && serverContent !== state.strategy.code) {
+                          // Only update if different (and assuming no local unsaved changes we want to keep on reload)
+                          // Since 'strategy' is not persisted, on reload we definitely want the server version.
+                          newStrategy = {
+                              ...state.strategy,
+                              code: serverContent
+                          };
+                      }
+                  }
+                  return { 
+                      fsNodes: nodes,
+                      strategy: newStrategy
+                  };
+              });
           }
       } catch (e) {
           console.warn("Could not sync with server, using local state", e);
@@ -317,17 +340,31 @@ export const useSimulationStore = create<SimulationStore>()(
       // Cache the results
       const cacheKey = state.currentFileId || 'custom';
       
+      // Ensure we are saving a complete object
+      const resultsToCache = {
+          spins: newSpins,
+          metrics: {
+              totalProfit,
+              winRate,
+              maxDrawdown,
+              averageBet,
+              maxBet,
+              finalBankroll: currentBankroll,
+              peakBankroll,
+              spinsToPeak,
+              lowestBankroll,
+              spinsToLowest,
+              winningSpins,
+              losingSpins
+          },
+          zoomState: undefined // Reset zoom on new run
+      };
+
       return {
-        results: {
-            ...newResults,
-            zoomState: undefined // Reset zoom on new run
-        },
+        results: resultsToCache,
         cachedResults: {
             ...state.cachedResults,
-            [cacheKey]: {
-                ...newResults,
-                zoomState: undefined
-            }
+            [cacheKey]: resultsToCache
         }
       };
     }),
@@ -389,6 +426,10 @@ export const useSimulationStore = create<SimulationStore>()(
   setChartZoom: (startIndex, endIndex) => 
       set((state) => {
           const cacheKey = state.currentFileId || 'custom';
+          
+          // Safety check: if no results exist, don't try to zoom or cache
+          if (state.results.spins.length === 0) return {};
+
           const newResults = {
               ...state.results,
               zoomState: { startIndex, endIndex }
@@ -399,8 +440,9 @@ export const useSimulationStore = create<SimulationStore>()(
               cachedResults: {
                   ...state.cachedResults,
                   [cacheKey]: {
-                      ...state.cachedResults[cacheKey], // Preserve spins/metrics
-                      spins: state.results.spins, // Ensure we have latest spins (should match cache)
+                      ...state.cachedResults[cacheKey], 
+                      // Ensure we have valid data in cache before updating zoom
+                      spins: state.results.spins.length > 0 ? state.results.spins : (state.cachedResults[cacheKey]?.spins || []),
                       metrics: state.results.metrics,
                       zoomState: { startIndex, endIndex }
                   }
@@ -414,8 +456,24 @@ export const useSimulationStore = create<SimulationStore>()(
         savedStrategies: state.savedStrategies,
         config: state.config,
         fsNodes: state.fsNodes, // Persist File System
-        cachedResults: state.cachedResults // Persist Results Cache
+        cachedResults: state.cachedResults, // Persist Results Cache
+        currentFileId: state.currentFileId, // Persist current file selection
+        importedData: state.importedData, // Persist imported data
+        importedFileName: state.importedFileName // Persist filename
       }),
+      onRehydrateStorage: () => (state) => {
+        // When store is rehydrated, if we have a selected file but empty results,
+        // try to restore from cache.
+        if (state && state.currentFileId && state.cachedResults[state.currentFileId]) {
+            const cached = state.cachedResults[state.currentFileId];
+            // Manually restore results to avoid 'results' persistence duplication
+            state.results = {
+                spins: cached.spins,
+                metrics: cached.metrics,
+                zoomState: cached.zoomState
+            };
+        }
+      }
     }
   )
 );

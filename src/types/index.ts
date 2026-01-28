@@ -52,6 +52,8 @@ export interface SpinResult {
   bankrollBefore: number;
   bankrollAfter: number;
   totalProfit: number;
+  virtualBankroll?: number;
+  isVirtual?: boolean;
   timestamp: string;
   bets: Bet[];
 }

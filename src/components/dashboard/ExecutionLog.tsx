@@ -32,22 +32,41 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
   };
 
   const totalBet = spin.bets.reduce((sum: number, b: any) => sum + b.amount, 0);
+  const payout = spin.bets.reduce((sum: number, b: any) => sum + b.payout, 0);
+  const roundProfit = payout - totalBet; // Actual round profit based on bets (Virtual or Real)
+
+  // Status Logic
+  let statusText = 'Push';
+  let statusColor = 'bg-gray-800 text-gray-400';
+  
+  if (spin.isVirtual) {
+      statusText = 'Stop Loss';
+      statusColor = 'bg-cyan-900/50 text-cyan-400 border border-cyan-800';
+  } else if (totalBet === 0) {
+      statusText = 'Pending Data';
+      statusColor = 'bg-gray-800 text-gray-500 italic';
+  } else if (roundProfit > 0) {
+      statusText = 'Win';
+      statusColor = 'bg-green-900/50 text-green-400 border border-green-800';
+  } else if (roundProfit < 0) {
+      statusText = 'Loss';
+      statusColor = 'bg-red-900/50 text-red-400 border border-red-800';
+  }
 
   // Tooltip content for Win/Loss/Push
   const resultTooltip = (() => {
-      const winAmount = isWin ? spin.totalProfit + totalBet : (spin.totalProfit === 0 ? totalBet : 0); 
-      // Note: totalProfit is Net. 
-      // If win: profit = payout - totalBet. Payout = profit + totalBet.
-      // If loss: profit = -totalBet. Payout = 0.
-      // If push: profit = 0. Payout = totalBet.
-      
       return (
           <div className="text-xs space-y-1">
-              <div><span className="text-text-muted">Total Bet:</span> ${totalBet}</div>
-              <div><span className="text-text-muted">Payout:</span> ${spin.bets.reduce((sum: number, b: any) => sum + b.payout, 0)}</div>
-              <div className={`font-bold ${isWin ? 'text-green-400' : spin.totalProfit < 0 ? 'text-red-400' : 'text-gray-400'}`}>
-                  Net: {spin.totalProfit > 0 ? '+' : ''}{spin.totalProfit}
+              <div><span className="text-text-muted">Total Bet{spin.isVirtual ? ' (Virtual)' : ''}:</span> ${totalBet}</div>
+              <div><span className="text-text-muted">Payout:</span> ${payout}</div>
+              <div className={`font-bold ${roundProfit > 0 ? 'text-green-400' : roundProfit < 0 ? 'text-red-400' : 'text-gray-400'}`}>
+                  Net: {roundProfit > 0 ? '+' : ''}{roundProfit}
               </div>
+              {spin.virtualBankroll !== undefined && (
+                  <div className="pt-1 border-t border-white/10 text-cyan-400">
+                      Virtual Bankroll: ${spin.virtualBankroll}
+                  </div>
+              )}
           </div>
       );
   })();
@@ -121,19 +140,22 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
       {/* Win/Loss Badge with Tooltip */}
       <div className="col-span-2 text-center">
           <Tooltip content={resultTooltip}>
-            <span className={`px-2 py-0.5 rounded text-xs font-bold uppercase cursor-help
-                ${isWin ? 'bg-green-900/50 text-green-400 border border-green-800' : 
-                spin.totalProfit < 0 ? 'bg-red-900/50 text-red-400 border border-red-800' : 
-                'bg-gray-800 text-gray-400'}`}>
-                {isWin ? 'Win' : spin.totalProfit < 0 ? 'Loss' : 'Push'}
+            <span className={`px-2 py-0.5 rounded text-xs font-bold uppercase cursor-help whitespace-nowrap ${statusColor}`}>
+                {statusText}
             </span>
           </Tooltip>
       </div>
 
       {/* Net Profit */}
       <div className="col-span-2 text-right font-mono font-medium">
-        <span className={`${isWin ? 'text-green-500' : spin.totalProfit < 0 ? 'text-red-500' : 'text-text-muted'}`}>
-            {spin.totalProfit > 0 ? '+' : ''}{spin.totalProfit}
+        <span className={`${
+            spin.isVirtual ? 'text-cyan-400' :
+            roundProfit > 0 ? 'text-green-500' : 
+            roundProfit < 0 ? 'text-red-500' : 
+            'text-text-muted'
+        }`}>
+            {roundProfit > 0 ? '+' : ''}{roundProfit}
+            {spin.isVirtual && <span className="text-[10px] ml-0.5 opacity-70">V</span>}
         </span>
       </div>
 
