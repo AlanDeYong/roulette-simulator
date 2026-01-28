@@ -24,7 +24,7 @@
  */
 function bet(spinHistory, bankroll, config, state, utils) {
     // 0. CONFIGURATION & CONSTANTS
-    const MIN_HISTORY = 50;
+    const MIN_HISTORY = 90;
     const DOUBLE_STREETS = [
         [1, 2, 3, 4, 5, 6],
         [7, 8, 9, 10, 11, 12],

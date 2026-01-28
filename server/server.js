@@ -70,7 +70,8 @@ async function buildFileTree(dir, parentId = 'root') {
 
         } else {
             // It's a file
-            if (!entry.name.endsWith('.js')) continue; // Only sync .js files
+            // Allow .js, .txt, .json, .csv
+            if (!entry.name.match(/\.(js|txt|json|csv)$/i)) continue;
 
             const content = await fs.readFile(fullPath, 'utf-8');
             nodes[id] = {

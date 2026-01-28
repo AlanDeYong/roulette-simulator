@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useSimulationStore } from '../../store/useSimulationStore';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Eye } from 'lucide-react';
+import { Eye, Download } from 'lucide-react';
+import { Button } from '../ui/Button';
+import { Tooltip } from '../ui/Tooltip';
 
 interface LogItemProps {
   spin: any;
@@ -30,6 +32,44 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
   };
 
   const totalBet = spin.bets.reduce((sum: number, b: any) => sum + b.amount, 0);
+  const payout = spin.bets.reduce((sum: number, b: any) => sum + b.payout, 0);
+  const roundProfit = payout - totalBet; // Actual round profit based on bets (Virtual or Real)
+
+  // Status Logic
+  let statusText = 'Push';
+  let statusColor = 'bg-gray-800 text-gray-400';
+  
+  if (spin.isVirtual) {
+      statusText = 'Stop Loss';
+      statusColor = 'bg-cyan-900/50 text-cyan-400 border border-cyan-800';
+  } else if (totalBet === 0) {
+      statusText = 'Pending Data';
+      statusColor = 'bg-gray-800 text-gray-500 italic';
+  } else if (roundProfit > 0) {
+      statusText = 'Win';
+      statusColor = 'bg-green-900/50 text-green-400 border border-green-800';
+  } else if (roundProfit < 0) {
+      statusText = 'Loss';
+      statusColor = 'bg-red-900/50 text-red-400 border border-red-800';
+  }
+
+  // Tooltip content for Win/Loss/Push
+  const resultTooltip = (() => {
+      return (
+          <div className="text-xs space-y-1">
+              <div><span className="text-text-muted">Total Bet{spin.isVirtual ? ' (Virtual)' : ''}:</span> ${totalBet}</div>
+              <div><span className="text-text-muted">Payout:</span> ${payout}</div>
+              <div className={`font-bold ${roundProfit > 0 ? 'text-green-400' : roundProfit < 0 ? 'text-red-400' : 'text-gray-400'}`}>
+                  Net: {roundProfit > 0 ? '+' : ''}{roundProfit}
+              </div>
+              {spin.virtualBankroll !== undefined && (
+                  <div className="pt-1 border-t border-white/10 text-cyan-400">
+                      Virtual Bankroll: ${spin.virtualBankroll}
+                  </div>
+              )}
+          </div>
+      );
+  })();
 
   return (
     <div className="grid grid-cols-12 gap-2 items-center py-2 border-b border-white/5 text-sm hover:bg-white/5 px-2 transition-colors relative group">
@@ -37,7 +77,7 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
       <div className="col-span-1 text-text-muted font-mono">#{spin.spinNumber}</div>
       
       {/* Bets (View) */}
-      <div className="col-span-2 relative">
+      <div className="col-span-1 relative">
           <div 
             className="flex items-center space-x-1 cursor-help text-primary hover:text-primary/80 transition-colors"
             onMouseEnter={() => setShowTooltip(true)}
@@ -82,6 +122,11 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
           )}
       </div>
 
+      {/* Total Bet */}
+      <div className="col-span-2 text-right font-mono text-text-muted">
+          ${totalBet}
+      </div>
+
       {/* Winning Number */}
       <div className="col-span-2 flex justify-center">
         <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-sm
@@ -92,25 +137,30 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
         </div>
       </div>
 
-      {/* Win/Loss Badge */}
+      {/* Win/Loss Badge with Tooltip */}
       <div className="col-span-2 text-center">
-          <span className={`px-2 py-0.5 rounded text-xs font-bold uppercase
-            ${isWin ? 'bg-green-900/50 text-green-400 border border-green-800' : 
-              spin.totalProfit < 0 ? 'bg-red-900/50 text-red-400 border border-red-800' : 
-              'bg-gray-800 text-gray-400'}`}>
-              {isWin ? 'Win' : spin.totalProfit < 0 ? 'Loss' : 'Push'}
-          </span>
+          <Tooltip content={resultTooltip}>
+            <span className={`px-2 py-0.5 rounded text-xs font-bold uppercase cursor-help whitespace-nowrap ${statusColor}`}>
+                {statusText}
+            </span>
+          </Tooltip>
       </div>
 
       {/* Net Profit */}
       <div className="col-span-2 text-right font-mono font-medium">
-        <span className={`${isWin ? 'text-green-500' : spin.totalProfit < 0 ? 'text-red-500' : 'text-text-muted'}`}>
-            {spin.totalProfit > 0 ? '+' : ''}{spin.totalProfit}
+        <span className={`${
+            spin.isVirtual ? 'text-cyan-400' :
+            roundProfit > 0 ? 'text-green-500' : 
+            roundProfit < 0 ? 'text-red-500' : 
+            'text-text-muted'
+        }`}>
+            {roundProfit > 0 ? '+' : ''}{roundProfit}
+            {spin.isVirtual && <span className="text-[10px] ml-0.5 opacity-70">V</span>}
         </span>
       </div>
 
       {/* Bankroll */}
-      <div className="col-span-3 text-right font-mono text-text-muted">
+      <div className="col-span-2 text-right font-mono text-text-muted">
           ${spin.bankrollAfter}
       </div>
     </div>
@@ -121,20 +171,52 @@ export const ExecutionLog: React.FC = () => {
   const { results } = useSimulationStore();
   const spins = [...results.spins]; // Show oldest first (ascending order)
 
+  const handleExport = () => {
+      if (spins.length === 0) return;
+
+      const header = "Spin #,Winning Number,Winning Color,Total Bet,Profit,Bankroll,Bets\n";
+      const rows = spins.map(s => {
+          const betsStr = s.bets.map((b: any) => `${b.type}${b.value !== undefined ? `:${b.value}` : ''}($${b.amount})`).join(' | ');
+          const totalBet = s.bets.reduce((sum: number, b: any) => sum + b.amount, 0);
+          return `${s.spinNumber},${s.winningNumber},${s.winningColor},${totalBet},${s.totalProfit},${s.bankrollAfter},"${betsStr}"`;
+      }).join('\n');
+
+      const blob = new Blob([header + rows], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `simulation_export_${new Date().toISOString().slice(0,19).replace(/:/g,'-')}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+  };
+
   return (
     <Card className="h-[400px] flex flex-col border-t-4 border-t-primary">
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between py-3">
         <CardTitle>Execution Log</CardTitle>
+        <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={handleExport} 
+            disabled={spins.length === 0}
+            className="h-7 text-xs"
+        >
+            <Download className="w-3 h-3 mr-2" />
+            Export CSV
+        </Button>
       </CardHeader>
       <CardContent className="flex-1 overflow-auto pr-2 custom-scrollbar">
         {/* Table Header */}
         <div className="grid grid-cols-12 gap-2 pb-2 border-b border-white/10 text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 px-2">
             <div className="col-span-1">Spin #</div>
-            <div className="col-span-2">Bets</div>
+            <div className="col-span-1">View</div>
+            <div className="col-span-2 text-right">Total Bet</div>
             <div className="col-span-2 text-center">Result</div>
             <div className="col-span-2 text-center">Status</div>
             <div className="col-span-2 text-right">Profit</div>
-            <div className="col-span-3 text-right">Bankroll</div>
+            <div className="col-span-2 text-right">Bankroll</div>
         </div>
         
         <div className="space-y-0">

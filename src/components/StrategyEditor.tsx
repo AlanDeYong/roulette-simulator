@@ -207,6 +207,12 @@ export const StrategyEditor: React.FC = () => {
       }
   })();
 
+  const editorLanguage = (() => {
+      if (currentFileName.endsWith('.json')) return 'json';
+      if (currentFileName.endsWith('.txt')) return 'plaintext';
+      return 'javascript';
+  })();
+
   return (
     <Card className="h-full flex flex-col border-t-4 border-t-primary relative">
       <ConfirmationDialog 
@@ -289,6 +295,7 @@ export const StrategyEditor: React.FC = () => {
             <Editor
                 height="100%"
                 defaultLanguage="javascript"
+                language={editorLanguage}
                 theme="vs-dark"
                 value={strategy.code}
                 onChange={handleEditorChange}
