@@ -43,7 +43,6 @@ function bet(spinHistory, bankroll, config, state, utils) {
     if (!state.virtualLockedStreets) state.virtualLockedStreets = [];
 
     // 2. CHECK PREVIOUS SPIN RESULT
-    console.log("Innovate SL Running. X=" + X + ", History=" + spinHistory.length);
     if (spinHistory.length >= X) {
         const lastSpin = spinHistory[spinHistory.length - 1];
         const winningNum = lastSpin.winningNumber;
@@ -203,7 +202,9 @@ function bet(spinHistory, bankroll, config, state, utils) {
                `   --------------------------------------------------\n`;
 
     state.logHistory += logLine;
-    utils.saveFile("rankings_log.txt", state.logHistory);
+    if (spinHistory.length % 50 === 0) {
+        utils.saveFile("rankings_log.txt", state.logHistory);
+    }
 
     // 5. HELPER FUNCTIONS
     function getTargetStreetCount(lvl) {

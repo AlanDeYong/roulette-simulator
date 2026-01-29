@@ -26,11 +26,7 @@
  */
 function bet(spinHistory, bankroll, config, state, utils) {
     // 0. CONFIGURATION & CONSTANTS
-<<<<<<< HEAD
-    const X = 300; // Rolling window size for analysis
-=======
-    const X = 90; // Rolling window size for analysis
->>>>>>> 1c639c7fdc58cab07941f957739ed896b74242f2
+    const X = 111; // Rolling window size for analysis
     
     const DOUBLE_STREETS = [
         [1, 2, 3, 4, 5, 6],
@@ -125,7 +121,9 @@ function bet(spinHistory, bankroll, config, state, utils) {
                     `   --------------------------------------------------\n`;
 
     state.logHistory += logLine;
-    utils.saveFile("rankings_log.txt", state.logHistory);
+    if (spinHistory.length % 50 === 0) {
+        utils.saveFile("rankings_log.txt", state.logHistory);
+    }
     // ----------------
 
     // 5. GENERATE OR RETRIEVE LOCKED PLAN
