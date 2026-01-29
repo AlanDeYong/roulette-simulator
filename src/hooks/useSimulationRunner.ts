@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { useSimulationStore } from '../store/useSimulationStore';
 import { spinRoulette, calculatePayout, getNumberColor } from '../utils/roulette';
 import { Bet, SpinResult, StrategyBet } from '../types';
@@ -6,88 +6,68 @@ import { Bet, SpinResult, StrategyBet } from '../types';
 export const useSimulationRunner = () => {
   const store = useSimulationStore();
   const { config, strategy, importedData } = store;
+  // Ref to hold the latest importedData
+  const importedDataRef = useRef(importedData);
+  
+  // Update ref when importedData changes
+  useEffect(() => {
+      importedDataRef.current = importedData;
+  }, [importedData]);
+
   const stopRef = useRef(false);
 
   const runSimulation = useCallback(async () => {
+    // Force get the absolute latest state from the store directly
+    // This bypasses any stale closures or effect timing issues in the component
+    const currentStore = useSimulationStore.getState();
+    const currentImportedData = currentStore.importedData;
+    const currentConfig = currentStore.config;
+    
     stopRef.current = false;
     store.resetSimulation();
     store.setStatus('running');
+    
+    // Debug log to verify what data we are using
+    console.log("Run Simulation - Data Source:", currentConfig.useImportedData ? "Imported" : "Random");
+    console.log("Run Simulation - Imported Data Length:", currentImportedData.length);
+    if (currentImportedData.length > 0) {
+        console.log("Run Simulation - First 5 numbers:", currentImportedData.slice(0, 5));
+    }
 
     // Allow UI to update to 'running' state
     await new Promise(r => setTimeout(r, 0));
 
-    let currentBankroll = config.startingBankroll;
+    let currentBankroll = currentConfig.startingBankroll;
     const spinResults: SpinResult[] = [];
     
     // Determine the sequence of numbers
     let numbersToProcess: number[] = [];
     
-    if (config.useImportedData && importedData.length > 0) {
-        let start = (config.dataRange.start || 1) - 1; // 0-based index
-        let end = config.dataRange.end ? config.dataRange.end : importedData.length;
+    if (currentConfig.useImportedData && currentImportedData.length > 0) {
+        // Use directly fetched data
+        const dataToUse = currentImportedData;
         
-        if (config.dataRange.fromEnd) {
-            // Start from end
-            // E.g. start=1 means last item. start=10 means 10th from last.
-            // This is ambiguous. "Input for selecting first spin to start from top or bottom of data"
-            // Usually "from bottom" means taking the last N spins or starting N from end?
-            // Let's assume standard array slicing.
-            // If "Start from end" is checked:
-            // start index = length - start
-            // end index = length - end (if provided)
-            
-            // Let's interpret "Start Spin" as index from end if checked.
-            // If start=1, fromEnd=true -> index = length - 1.
-            start = Math.max(0, importedData.length - config.dataRange.start);
-            if (config.dataRange.end) {
-                 // If end provided with fromEnd, maybe it defines the range?
-                 // Let's assume user wants a range.
-                 // Simplest: Slice array then reverse? Or just slice.
-                 // Let's stick to simple: "Start Spin" is the index.
-                 // If fromEnd, start is relative to end.
-            }
-        }
+        // Use config from fresh state
+        let start = (currentConfig.dataRange.start || 1) - 1; 
+        let end = currentConfig.dataRange.end ? currentConfig.dataRange.end : dataToUse.length;
         
-        // Simple slicing based on user input (1-based index from UI)
-        let startIndex = Math.max(0, config.dataRange.start - 1);
-        let endIndex = config.dataRange.end || importedData.length;
+        let startIndex = Math.max(0, currentConfig.dataRange.start - 1);
+        let endIndex = currentConfig.dataRange.end || dataToUse.length;
         
-        if (config.dataRange.fromEnd) {
-            // Re-interpret: Start processing from the end of the file?
-            // "Input for selecting first spin to start from top or bottom of data"
-            // Likely means: Do we start simulation at line 1 (Top) or line N (Bottom)?
-            // If Bottom, we probably process in reverse or just start at N?
-            // "Bulk Simulation: Iterates through... spin-by-spin"
-            // Let's assume standard:
-            // Top: Index 0 -> End
-            // Bottom: Index N -> 0? Or Index N -> End?
-            // Usually data is ordered chronologically.
-            // If "Start from bottom", maybe they want to run the MOST RECENT spins?
-            // e.g. Start from Spin 1000 (which is at the bottom).
-            
-            // Let's implement:
-            // if fromEnd is false: slice(start-1, end)
-            // if fromEnd is true: slice(length - start, length - end??)
-            // Let's simplify: User selects specific start index. 
-            // If "fromEnd" is checked, start index is calculated as length - start.
-            if (config.dataRange.fromEnd) {
-                 startIndex = Math.max(0, importedData.length - config.dataRange.start);
-            }
+        if (currentConfig.dataRange.fromEnd) {
+             startIndex = Math.max(0, dataToUse.length - currentConfig.dataRange.start);
         }
 
-        numbersToProcess = importedData.slice(startIndex, endIndex);
+        numbersToProcess = dataToUse.slice(startIndex, endIndex);
         
-        // Limit by maxSpins if necessary? The prompt says "Iterates through...".
-        // Usually maxSpins overrides.
-        if (config.maxSpins && numbersToProcess.length > config.maxSpins) {
-            numbersToProcess = numbersToProcess.slice(0, config.maxSpins);
+        if (currentConfig.maxSpins && numbersToProcess.length > currentConfig.maxSpins) {
+            numbersToProcess = numbersToProcess.slice(0, currentConfig.maxSpins);
         }
     } else {
         // Random generation
-        // We will generate on the fly in the loop
     }
 
-    const totalSpinsToRun = config.useImportedData ? numbersToProcess.length : config.maxSpins;
+    const totalSpinsToRun = currentConfig.useImportedData ? numbersToProcess.length : currentConfig.maxSpins;
 
     try {
         // Prepare Strategy Function

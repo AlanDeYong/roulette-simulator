@@ -415,13 +415,18 @@ export const useSimulationStore = create<SimulationStore>()(
       }),
 
   setImportedData: (data) =>
-      set((state) => ({
-          importedData: data,
-          config: {
+      set((state) => {
+          // Force config update as well to ensure it picks up the change
+          const newConfig = {
               ...state.config,
               useImportedData: data.length > 0
-          }
-      })),
+          };
+          
+          return {
+              importedData: [...data], // Ensure new reference
+              config: newConfig
+          };
+      }),
 
   setChartZoom: (startIndex, endIndex) => 
       set((state) => {

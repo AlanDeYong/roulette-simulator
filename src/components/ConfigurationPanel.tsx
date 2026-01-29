@@ -23,17 +23,27 @@ export const ConfigurationPanel: React.FC = () => {
     }
   };
 
+  const [isLoadingFile, setIsLoadingFile] = React.useState(false);
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
     
-    setImportedFileName(file.name);
+    // Clear old data and set loading state immediately
+    setIsLoadingFile(true);
+    setImportedData([]); 
+    setImportedFileName(file.name); // Set filename so user sees what they picked
 
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target?.result as string;
       parseAndSetData(text);
+      setIsLoadingFile(false);
     };
+    reader.onerror = () => {
+      console.error("File reading failed");
+      setIsLoadingFile(false);
+    }
     reader.readAsText(file);
   };
 
@@ -46,7 +56,13 @@ export const ConfigurationPanel: React.FC = () => {
     const matches = text.match(/-?\d+/g);
     if (matches) {
       const numbers = matches.map(Number).filter(n => !isNaN(n));
-      setImportedData(numbers);
+      // Force a new array reference AND ensure config updates to use it
+      setImportedData([...numbers]);
+      
+      // Auto-enable "Use Imported Data" when a file is loaded
+      if (!config.useImportedData) {
+          setConfig({ useImportedData: true });
+      }
     } else {
       setImportedData([]);
     }
@@ -177,7 +193,13 @@ export const ConfigurationPanel: React.FC = () => {
                         </Button>
                     </div>
                     <div className="text-xs text-muted-foreground flex justify-between">
-                        <span>Loaded: {importedData.length} spins</span>
+                        <span>
+                            {isLoadingFile ? (
+                                <span className="text-yellow-500 animate-pulse">Loading...</span>
+                            ) : (
+                                `Loaded: ${importedData.length} spins`
+                            )}
+                        </span>
                         {importedFileName && <span className="text-primary truncate max-w-[150px]" title={importedFileName}>{importedFileName}</span>}
                     </div>
                 </div>
