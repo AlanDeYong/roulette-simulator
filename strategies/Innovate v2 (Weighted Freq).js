@@ -137,7 +137,9 @@ function bet(spinHistory, bankroll, config, state, utils) {
                     `   --------------------------------------------------\n`;
 
     state.logHistory += logLine;
-    utils.saveFile("rankings_log.txt", state.logHistory);
+    if (spinHistory.length % 50 === 0) {
+        utils.saveFile("rankings_log.txt", state.logHistory);
+    }
     // -----------------------------------------------------------------------
 
     // 5. GENERATE OR RETRIEVE LOCKED PLAN

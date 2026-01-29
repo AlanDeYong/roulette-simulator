@@ -138,23 +138,8 @@ function bet(spinHistory, bankroll, config, state, utils) {
 
     state.logHistory += logLine;
     
-    // Only save every 100 spins OR if it's the very last spin
-    // We can't easily know "last spin" here without config passed fully or checking bankroll,
-    // but we can check if we just finished a chunk.
-    // To ensure the FINAL spin is always saved, we might need a cleanup, 
-    // but since this is called per spin, we can just save more frequently 
-    // or rely on the user stopping it.
-    // BETTER FIX: Save every 50 spins to be safer, and rely on the fact that 
-    // the user will see most data. 
-    // ideally we would catch the "end of simulation" event but strategy doesn't know that.
-    
-    if (currentSpinNum % 50 === 0 || currentSpinNum > 0) { // Saving on every spin again but relies on the server fix
-         // Actually, now that server limit is 50MB, we can try saving every spin again?
-         // NO, 1000 requests/sec will still choke the BROWSER network stack.
-         // Let's save every 10 spins. It's a good balance.
-    }
-
-    if (currentSpinNum % 10 === 0) {
+    // Save every 50 spins to avoid network congestion
+    if (currentSpinNum % 50 === 0) {
         utils.saveFile("rankings_log.txt", state.logHistory);
     }
     // -----------------------------------------------------------------------
