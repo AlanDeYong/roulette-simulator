@@ -18,13 +18,14 @@ I need you to write a Javascript strategy function for a custom Roulette Simulat
 3.  **Output**: Return an array of bet objects: `[{ type: '...', value: ..., amount: ... }]` or `null` / `[]` for no bets.
 4.  **Utils**: You can use `utils.saveFile(filename, content)` to save text data (e.g., logs, analysis) to the strategies folder.
     *   Example: `utils.saveFile("my-strategy-log.txt", "Log entry...");`
-    *   Note: This performs a network request. Use sparingly (e.g., at end of session or on specific triggers), not on every spin.
+    *   **Note**: This returns a Promise. 
+    *   **Frequency**: Do NOT call this on every spin. Save periodically (e.g., every 10 or 50 spins) to avoid network congestion.
 5.  **Respect Bet Limits**: You **MUST** use the limits defined in `config.betLimits` for all bet amounts. Do not hardcode bet amounts if possible, or ensure they are clamped to these limits.
     *   `config.betLimits.min` (Minimum for Inside bets like numbers)
     *   `config.betLimits.minOutside` (Minimum for Outside bets like Red/Black, Dozens)
     *   `config.betLimits.max` (Maximum bet allowed)
-5.  **State Persistence**: Use the `state` object to store variables between spins (e.g., progression levels, triggers). Do not use global variables.
-6.  **History Access**: `spinHistory` is an array of past results. The last result is `spinHistory[spinHistory.length - 1]`.
+6.  **State Persistence**: Use the `state` object to store variables between spins (e.g., progression levels, triggers). Do not use global variables.
+7.  **History Access**: `spinHistory` is an array of past results. The last result is `spinHistory[spinHistory.length - 1]`.
     *   Access the number via `.winningNumber` (0-36).
     *   Access the color via `.winningColor` ('red', 'black', 'green').
 
@@ -57,13 +58,13 @@ config = {
 ```
 
 **Example of correctly respecting limits:**
- 
- ```javascript
- function bet(spinHistory, bankroll, config, state, utils) {
-     // 1. Determine base unit
-     const unit = config.betLimits.minOutside; // or config.betLimits.min
- 
-     // 2. Initialize State
+
+```javascript
+function bet(spinHistory, bankroll, config, state, utils) {
+    // 1. Determine base unit
+    const unit = config.betLimits.minOutside; // or config.betLimits.min
+
+    // 2. Initialize State
     if (!state.progression) state.progression = 1;
 
     // 3. Calculate Bet Amount
