@@ -19,7 +19,12 @@ I need you to write a Javascript strategy function for a custom Roulette Simulat
 4.  **Utils**: You can use `utils.saveFile(filename, content)` to save text data (e.g., logs, analysis) to the strategies folder.
     *   Example: `utils.saveFile("my-strategy-log.txt", "Log entry...");`
     *   **Note**: This returns a Promise. 
-    *   **Frequency**: Do NOT call this on every spin. Save periodically (e.g., every 10 or 50 spins) to avoid network congestion.
+    *   **Frequency**: Do NOT call this on every spin. Save periodically (e.g., every 50 or 100 spins) to avoid network congestion.
+        ```javascript
+        if (spinHistory.length % 50 === 0) {
+            utils.saveFile("log.txt", state.logData);
+        }
+        ```
 5.  **Respect Bet Limits**: You **MUST** use the limits defined in `config.betLimits` for all bet amounts. Do not hardcode bet amounts if possible, or ensure they are clamped to these limits.
     *   `config.betLimits.min` (Minimum for Inside bets like numbers)
     *   `config.betLimits.minOutside` (Minimum for Outside bets like Red/Black, Dozens)
