@@ -7,6 +7,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Simulation Generated Logs (prevent bloat)
+strategies/*_log_[0-9]*.txt
+strategies/checkmate8_log_*.txt
+strategies/five_streets_log_*.txt
+strategies/strategy_log_*.txt
+strategies/three_dog_log_*.txt
+
 node_modules
 dist
 dist-ssr

@@ -1,1 +1,1 @@
-Spin: 150 | Bankroll: 7098 | Level: 1 | HWM: 7098
+Spin: 200 | Bankroll: 7222 | Level: 1 | HWM: 7222
