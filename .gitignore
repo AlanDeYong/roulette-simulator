@@ -8,7 +8,9 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Simulation Generated Logs (prevent bloat)
-strategies/*_log_[0-9]*.txt
+strategies/*_log*.txt
+strategies/*_log*.csv
+strategies/*_stop.txt
 strategies/checkmate8_log_*.txt
 strategies/five_streets_log_*.txt
 strategies/strategy_log_*.txt
