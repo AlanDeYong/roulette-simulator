@@ -16,15 +16,8 @@ I need you to write a Javascript strategy function for the Roulette Strategy.
     *   **The Goal**: What is the target profit or stop-loss condition?
 2.  **Function Signature**: `function bet(spinHistory, bankroll, config, state, utils)`
 3.  **Output**: Return an array of bet objects: `[{ type: '...', value: ..., amount: ... }]` or `null` / `[]` for no bets.
-4.  **Utils**: You can use `utils.saveFile(filename, content)` to save text data (e.g., logs, analysis) to the strategies folder.
-    *   Example: `utils.saveFile("my-strategy-log.txt", "Log entry...");`
-    *   **Note**: This returns a Promise. 
-    *   **Frequency**: Do NOT call this on every spin. Save periodically (e.g., every 50 or 100 spins) to avoid network congestion.
-        ```javascript
-        if (spinHistory.length % 50 === 0) {
-            utils.saveFile("log.txt", state.logData);
-        }
-        ```
+4.  **Logging**: You generally do **NOT** need to generate external log files (using `utils.saveFile`) unless specifically requested for complex debugging or data export. The simulator handles internal logging of spin results and bankroll.
+    *   If you *must* log for debugging, use `console.log()` sparingly.
 5.  **Respect Bet Limits**: You **MUST** use the limits defined in `config.betLimits` for all bet amounts. Do not hardcode bet amounts if possible, or ensure they are clamped to these limits.
     *   `config.betLimits.min` (Minimum for Inside bets like numbers)
     *   `config.betLimits.minOutside` (Minimum for Outside bets like Red/Black, Dozens)
