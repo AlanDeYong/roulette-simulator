@@ -2,7 +2,7 @@
  * STRATEGY: The Money Maker System
  * * SOURCE: 
  * URL: https://www.youtube.com/watch?v=yPEOX_hAqww
- * Channel: CEG Dealer School
+ * Channel: The Roulette Master
  * * THE LOGIC:
  * This system combines Split bets and Straight Up "Jackpot" bets to cover roughly 20 numbers.
  * - 6 Split Bets: 1/4, 9/12, 13/16, 21/24, 25/28, 33/36.

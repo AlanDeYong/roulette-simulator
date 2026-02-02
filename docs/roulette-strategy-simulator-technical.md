@@ -6,44 +6,68 @@ graph TD
     B --> C[Strategy Engine]
     B --> D[Simulation Controller]
     B --> E[Chart Components]
+    B --> F[File Manager]
     
     subgraph "Frontend Layer"
         B
         C
         D
         E
+        F
     end
     
+    subgraph "Backend Layer"
+        I[Node.js Express Server]
+        J[Local File System]
+    end
+
     subgraph "External Libraries"
-        F[Tailwind CSS]
-        G[Recharts]
-        H[Monaco Editor]
+        G[Tailwind CSS]
+        H[Recharts]
+        K[Monaco Editor]
     end
     
-    C --> F
-    D --> G
-    E --> G
-    B --> H
+    C --> G
+    D --> H
+    E --> H
+    B --> K
+    F <--> I
+    I <--> J
 ```
 
 ## 2. Technology Description
-- Frontend: React@18 + TailwindCSS@3 + Vite
-- Charting: Recharts@2
-- Code Editor: Monaco Editor (VS Code editor)
-- State Management: React Context API + useReducer
-- Build Tool: Vite@4
+- **Frontend**: React@18 + TailwindCSS@3 + Vite
+- **Backend**: Node.js + Express
+- **Charting**: Recharts@2
+- **Code Editor**: Monaco Editor (VS Code editor)
+- **State Management**: React Context API + useReducer + Zustand
+- **Build Tool**: Vite@6
 
 ## 3. Route definitions
 | Route | Purpose |
 |-------|---------|
 | / | Main simulator interface with all components |
-| /strategy/:id | Shareable strategy link (optional feature) |
 
 ## 4. API definitions
-This is a client-side only application with no backend API requirements.
+The application uses a local Node.js server to manage strategy files.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/files | Retrieve the full file tree of strategies |
+| POST | /api/save | Save strategy content to a file |
+| POST | /api/delete | Delete a file or directory |
+| POST | /api/rename | Rename or move a file/directory |
+| POST | /api/create-dir | Create a new directory |
+| POST | /api/duplicate | Duplicate an existing file or directory |
 
 ## 5. Server architecture diagram
-No server architecture required - this is a pure frontend application.
+The server is a lightweight Node.js Express application that serves as a bridge between the frontend and the local file system.
+
+```mermaid
+graph LR
+    Client[React Frontend] -- HTTP JSON --> Server[Express Server]
+    Server -- fs module --> Storage[Strategy Files Directory]
+```
 
 ## 6. Data model
 
@@ -84,6 +108,8 @@ erDiagram
         string description
         boolean isPreset
         date createdAt
+        date updatedAt
+        string path
     }
     
     BET {
@@ -98,10 +124,27 @@ erDiagram
 ```
 
 ### 6.2 Data Definition Language
-Since this is a client-side application, data is stored in browser localStorage and JavaScript objects:
+Data is stored in two ways:
+1. **Strategies**: Stored as physical `.js` files in the `strategies/` directory.
+2. **Simulation State**: Stored in browser memory and localStorage.
 
 ```javascript
-// Simulation State Structure
+// Strategy File Node Structure (Backend)
+interface FileNode {
+  id: string; // Relative path
+  parentId: string;
+  name: string;
+  type: 'file' | 'directory';
+  content?: string; // Only for files
+  children?: string[]; // IDs of children
+  metadata: {
+    createdAt: number;
+    updatedAt: number;
+    size: number;
+  };
+}
+
+// Simulation State Structure (Frontend)
 interface SimulationState {
   id: string;
   config: {
@@ -130,24 +173,4 @@ interface SimulationState {
   };
   status: 'idle' | 'running' | 'paused' | 'completed';
 }
-
-// Strategy Preset Data
-const strategyPresets = [
-  {
-    id: 'the-one',
-    name: 'The One',
-    description: 'A proven roulette strategy with progressive betting',
-    code: `function bet(spinHistory, bankroll) {
-  // Progressive betting strategy
-  if (spinHistory.length === 0) return { bet: 1, type: 'red' };
-  
-  const lastSpin = spinHistory[spinHistory.length - 1];
-  if (lastSpin.color === 'red') {
-    return { bet: 1, type: 'black' };
-  } else {
-    return { bet: Math.min(bankroll * 0.05, 100), type: 'red' };
-  }
-}`
-  }
-];
 ```
