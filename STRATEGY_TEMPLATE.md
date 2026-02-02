@@ -6,7 +6,7 @@ Use the following prompt when asking an LLM (like ChatGPT, Claude, or DeepSeek) 
 
 **Copy and paste the text below:**
 
-I need you to write a Javascript strategy function for a custom Roulette Simulator. 
+I need you to write a Javascript strategy function for the Roulette Strategy. 
 
 **Requirements:**
 1.  **Documentation (Crucial)**: You **MUST** include a block comment at the very top of the function explaining the strategy logic in natural language. Include:
