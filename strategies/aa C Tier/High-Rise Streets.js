@@ -2,7 +2,7 @@
  * STRATEGY: High-Rise Streets (AI-Optimized Roulette Strategy)
  * * SOURCE: 
  * URL: https://www.youtube.com/watch?v=HlwrXu4i-og
- * Channel: CEG Dealer School (Strategy by AI)
+ * Channel: Love4Art420 (Strategy by AI)
  * * THE LOGIC:
  * This strategy focuses on increasing board coverage (win probability) rather than just 
  * aggressively increasing the bet amount. It uses a ladder progression that adds 
