@@ -40,7 +40,6 @@ function bet(spinHistory, bankroll, config, state, utils) {
         state.currentUnit = state.baseUnit;    // Current bet amount per street
         state.activeStreets = [];              // Array of street start numbers
         state.sessionStartBankroll = bankroll; // To track session profit
-        state.logData = "";
         state.initialized = true;
         
         // Pick initial streets
@@ -77,13 +76,9 @@ function bet(spinHistory, bankroll, config, state, utils) {
             
             // Bet amount stays the same (unless we reset)
             
-            // Log
-            state.logData += `WIN on ${lastNum}. Removed Street ${wonStreet}. Active: ${state.activeStreets.length}\n`;
-
             // Check if we cleared all streets or hit profit target
             const currentSessionProfit = bankroll - state.sessionStartBankroll;
             if (state.activeStreets.length === 0 || currentSessionProfit >= TARGET_PROFIT_PER_SESSION) {
-                state.logData += `Session Goal Met (Profit: ${currentSessionProfit} or Cleared Board). RESETTING.\n`;
                 state.activeStreets = pickRandomStreets(TOTAL_STREETS_TO_PICK);
                 state.currentUnit = state.baseUnit;
                 state.sessionStartBankroll = bankroll;
@@ -93,7 +88,6 @@ function bet(spinHistory, bankroll, config, state, utils) {
             // === LOSS LOGIC ===
             // Increase bet by 1 unit on ALL active streets
             state.currentUnit += state.baseUnit;
-            state.logData += `LOSS on ${lastNum}. Increased unit to ${state.currentUnit}\n`;
         }
     }
 
@@ -110,16 +104,11 @@ function bet(spinHistory, bankroll, config, state, utils) {
     // Stop if bankroll is too low to place all bets
     const totalNeeded = finalAmount * state.activeStreets.length;
     if (bankroll < totalNeeded) {
-        state.logData += `Bankroll too low (${bankroll}) for required bets (${totalNeeded}). Stopping.\n`;
         return []; 
     }
 
-    // --- 5. LOGGING ---
-    // Save logs every 50 spins
-    if (spinHistory.length > 0 && spinHistory.length % 50 === 0) {
-        utils.saveFile("65_eliminator_log.txt", state.logData);
-        state.logData = ""; // Clear buffer after save
-    }
+    // --- 5. LOGGING (Disabled) ---
+    // No external log file generation
 
     // --- 6. PLACE BETS ---
     // Map active streets to bet objects
