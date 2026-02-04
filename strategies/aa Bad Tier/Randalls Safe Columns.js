@@ -2,7 +2,7 @@
  * STRATEGY: Safe Columns (Created by Randall)
  * * SOURCE: 
  * YouTube: "SAFEST NEW ROULETTE SYSTEM SHARED BY THE ROULETTE MASTER..."
- * Channel: CEG Dealer School
+ * Channel: The Roulette Master
  * URL: https://www.youtube.com/watch?v=RqbfI8gWOd4
  * * THE LOGIC:
  * 1. Base Bet: Place equal bets on Column 2 and Column 3.
