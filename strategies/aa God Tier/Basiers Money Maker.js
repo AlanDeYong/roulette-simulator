@@ -135,12 +135,7 @@ function bet(spinHistory, bankroll, config, state, utils) {
     state.totalBetAmount = currentTotalBet;
     state.spinCount++;
 
-    // Save logs periodically (every 50 spins)
-    if (state.spinCount % 50 === 0 && utils && utils.saveFile) {
-        const logData = `Spin: ${state.spinCount} | Bankroll: ${bankroll} | Level: ${state.level} | HWM: ${state.highWaterMark}\n`;
-        // We use .catch to prevent errors from stopping the strategy if file save fails
-        utils.saveFile("money_maker_log.txt", logData).catch(() => {});
-    }
-
+    // Logging disabled to prevent file bloat
+    
     return bets;
 }
