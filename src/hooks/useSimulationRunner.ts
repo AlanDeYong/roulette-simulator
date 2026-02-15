@@ -48,16 +48,23 @@ export const useSimulationRunner = () => {
         const dataToUse = currentImportedData;
         
         // Use config from fresh state
-        let start = (currentConfig.dataRange.start || 1) - 1; 
-        let end = currentConfig.dataRange.end ? currentConfig.dataRange.end : dataToUse.length;
+        // If fromEnd is false: start index is just the number (1-based) - 1
+        // If fromEnd is true: start index is length - number
         
-        let startIndex = Math.max(0, currentConfig.dataRange.start - 1);
+        let startIndex = Math.max(0, (currentConfig.dataRange.start || 1) - 1);
         let endIndex = currentConfig.dataRange.end || dataToUse.length;
         
         if (currentConfig.dataRange.fromEnd) {
-             startIndex = Math.max(0, dataToUse.length - currentConfig.dataRange.start);
+             // Example: Length 100. Start 10 from end.
+             // Start index = 90.
+             startIndex = Math.max(0, dataToUse.length - (currentConfig.dataRange.start || 1));
         }
 
+        // Slice the data
+        // Note: endIndex from UI is usually "Up to spin X" or "Count"?
+        // Usually "End Spin" implies index.
+        // If endIndex is not provided, we go to the end.
+        
         numbersToProcess = dataToUse.slice(startIndex, endIndex);
         
         if (currentConfig.maxSpins && numbersToProcess.length > currentConfig.maxSpins) {
