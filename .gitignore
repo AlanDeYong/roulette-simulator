@@ -1,0 +1,33 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Simulation Generated Logs (prevent bloat)
+strategies/*_log*.txt
+strategies/*_log*.csv
+strategies/*_stop.txt
+strategies/checkmate8_log_*.txt
+strategies/five_streets_log_*.txt
+strategies/strategy_log_*.txt
+strategies/three_dog_log_*.txt
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
