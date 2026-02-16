@@ -221,8 +221,9 @@ export const useSimulationRunner = () => {
                 bets: resultBets
             });
             
-            // Optional: Yield to UI thread every 500 spins to prevent freeze
-            if (i % 500 === 0 && i > 0) {
+            // Optional: Yield to UI thread every 20 spins to prevent freeze
+            // Large simulations (e.g. 700k spins) need frequent yielding to keep "Stop" button responsive
+            if (i % 20 === 0 && i > 0) {
                  await new Promise(r => setTimeout(r, 0));
             }
         }

@@ -461,9 +461,9 @@ export const useSimulationStore = create<SimulationStore>()(
         savedStrategies: state.savedStrategies,
         config: state.config,
         fsNodes: state.fsNodes, // Persist File System
-        cachedResults: state.cachedResults, // Persist Results Cache
         currentFileId: state.currentFileId, // Persist current file selection
-        // Note: importedData is intentionally NOT persisted to avoid
+        // cachedResults: state.cachedResults, // DO NOT PERSIST CACHE - It's too large for localStorage (5MB limit)
+        // importedData is intentionally NOT persisted to avoid
         // serializing huge arrays (700K+ items) to localStorage which
         // causes the UI to freeze. Users re-import after page reload.
       }),
