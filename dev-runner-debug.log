@@ -1,0 +1,253 @@
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m18762[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.27.106.179:[1m5173[22m/[39m
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+Strategies directory: C:\AI\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m44720[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.27.106.179:[1m5173[22m/[39m
+[Dev Runner] Cleanup triggered by SIGINT
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m3087[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://172.27.106.179:[1m5173[22m/[39m
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+Strategies directory: C:\AI\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m11444[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://172.24.172.88:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [2m5:36:41 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ConfigurationPanel.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:36:41 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/ExecutionLog.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:36:41 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/MetricsPanel.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:36:43 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/FileManager.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:36:43 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ui/Input.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:36:43 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:36:43 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[Dev Runner] [Frontend] [2m5:36:43 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css, /src/components/ConfigurationPanel.tsx, /src/components/StrategyEditor.tsx, /src/components/dashboard/BankrollChart.tsx, /src/components/dashboard/MetricsPanel.tsx, /src/components/dashboard/ExecutionLog.tsx, /src/components/FileManager.tsx[22m
+[Dev Runner] [Frontend] [2m5:36:43 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2msrc/types/index.ts[22m
+[Dev Runner] [Frontend] [2m5:36:43 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/ui/Button.tsx, /src/components/ui/Input.tsx, /src/components/ui/Label.tsx, /src/components/ui/Card.tsx, /src/components/FileManager.tsx[22m
+[Dev Runner] [Frontend] [2m5:36:43 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mtailwind.config.js[22m
+[Dev Runner] [Frontend] [2m5:36:43 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Layout.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:36:43 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/SimulationDashboard.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:36:43 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/StrategyEditor.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:36:43 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ui/Label.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:36:43 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ui/Tooltip.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:36:44 pm[22m [36m[1m[vite][22m[39m [32mvite.config.ts changed, restarting server...[39m
+[Dev Runner] [Frontend] [2m5:36:47 pm[22m [36m[1m[vite][22m[39m server restarted.
+[Dev Runner] [Frontend] [2m5:37:14 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ConfigurationPanel.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:44:27 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ConfigurationPanel.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:44:29 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ConfigurationPanel.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:44:33 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ConfigurationPanel.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:45:03 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ConfigurationPanel.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:45:04 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/ExecutionLog.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:45:04 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/MetricsPanel.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:45:04 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/FileManager.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:45:04 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Layout.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:45:04 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/SimulationDashboard.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:45:04 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/StrategyEditor.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:45:04 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ui/Input.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:45:05 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ui/Label.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:45:05 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ui/Tooltip.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m5:45:05 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/App.tsx[22m
+[Dev Runner] [Frontend] [2m5:45:05 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[Dev Runner] [Frontend] [2m5:45:05 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/dashboard/MetricsPanel.tsx, /src/components/FileManager.tsx, /src/App.tsx, /src/components/StrategyEditor.tsx, /src/components/ConfigurationPanel.tsx, /src/components/dashboard/BankrollChart.tsx, /src/components/dashboard/ExecutionLog.tsx[22m
+[Dev Runner] [Frontend] [2m5:45:05 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2msrc/types/index.ts[22m
+[Dev Runner] [Frontend] [2m5:45:05 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ui/Card.tsx, /src/index.css, /src/components/ui/Button.tsx, /src/components/FileManager.tsx, /src/components/ui/Input.tsx, /src/components/ui/Label.tsx[22m
+[Dev Runner] [Frontend] [2m5:45:05 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mtailwind.config.js[22m
+[Dev Runner] [Frontend] [2m5:45:05 pm[22m [36m[1m[vite][22m[39m [32mvite.config.ts changed, restarting server...[39m
+[Dev Runner] [Frontend] [2m5:45:07 pm[22m [36m[1m[vite][22m[39m server restarted.
+[Dev Runner] [Frontend] [2m5:45:13 pm[22m [36m[1m[vite][22m[39m [32mvite.config.ts changed, restarting server...[39m
+[Dev Runner] [Frontend] [2m5:45:14 pm[22m [36m[1m[vite][22m[39m server restarted.
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3002
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3002
+[Dev Runner] [Backend] Strategies directory: C:\AI\roulette-simulator\strategies
+[Dev Runner] [Frontend] Port 5173 is in use, trying another one...
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m10918[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5174[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.24.172.88:[1m5174[22m/[39m
+[Dev Runner] Cleanup triggered by SIGINT
+[Dev Runner] Frontend exited with code 1
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3002
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3002
+[Dev Runner] [Backend] Strategies directory: C:\AI\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m3195[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://172.27.126.53:[1m5173[22m/[39m
+[Dev Runner] [Backend ERR] ^C
+[Dev Runner] Frontend exited with code 3221225786
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m3821[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://172.27.126.53:[1m5173[22m/[39m
+[Dev Runner] [Backend ERR] Error: UNKNOWN: unknown error, open 'C:\AI\roulette-simulator\strategies\elite8_strategy_log.txt'
+    at async open (node:internal/fs/promises:639:25)
+    at async Object.writeFile (node:internal/fs/promises:1213:14)
+    at async file:///C:/AI/roulette-simulator/server/server.js:167:9 {
+  errno: -4094,
+  code: 'UNKNOWN',
+  syscall: 'open',
+  path: 'C:\\AI\\roulette-simulator\\strategies\\elite8_strategy_log.txt'
+}
+[Dev Runner] [Backend ERR] Error: UNKNOWN: unknown error, open 'C:\AI\roulette-simulator\strategies\elite8_strategy_log.txt'
+    at async open (node:internal/fs/promises:639:25)
+    at async Object.writeFile (node:internal/fs/promises:1213:14)
+    at async file:///C:/AI/roulette-simulator/server/server.js:167:9 {
+  errno: -4094,
+  code: 'UNKNOWN',
+  syscall: 'open',
+  path: 'C:\\AI\\roulette-simulator\\strategies\\elite8_strategy_log.txt'
+}
+[Dev Runner] [Backend ERR] Error: UNKNOWN: unknown error, open 'C:\AI\roulette-simulator\strategies\elite8_strategy_log.txt'
+    at async open (node:internal/fs/promises:639:25)
+    at async Object.writeFile (node:internal/fs/promises:1213:14)
+    at async file:///C:/AI/roulette-simulator/server/server.js:167:9 {
+  errno: -4094,
+  code: 'UNKNOWN',
+  syscall: 'open',
+  path: 'C:\\AI\\roulette-simulator\\strategies\\elite8_strategy_log.txt'
+}
+[Dev Runner] [Backend ERR] Error: UNKNOWN: unknown error, open 'C:\AI\roulette-simulator\strategies\elite8_strategy_log.txt'
+    at async open (node:internal/fs/promises:639:25)
+    at async Object.writeFile (node:internal/fs/promises:1213:14)
+    at async file:///C:/AI/roulette-simulator/server/server.js:167:9 {
+  errno: -4094,
+  code: 'UNKNOWN',
+  syscall: 'open',
+  path: 'C:\\AI\\roulette-simulator\\strategies\\elite8_strategy_log.txt'
+}
+[Dev Runner] [Backend ERR] Error: UNKNOWN: unknown error, open 'C:\AI\roulette-simulator\strategies\elite8_strategy_log.txt'
+    at async open (node:internal/fs/promises:639:25)
+    at async Object.writeFile (node:internal/fs/promises:1213:14)
+    at async file:///C:/AI/roulette-simulator/server/server.js:167:9 {
+  errno: -4094,
+  code: 'UNKNOWN',
+  syscall: 'open',
+  path: 'C:\\AI\\roulette-simulator\\strategies\\elite8_strategy_log.txt'
+}
+[Dev Runner] [Backend ERR] Error: UNKNOWN: unknown error, open 'C:\AI\roulette-simulator\strategies\elite8_strategy_log.txt'
+    at async open (node:internal/fs/promises:639:25)
+    at async Object.writeFile (node:internal/fs/promises:1213:14)
+    at async file:///C:/AI/roulette-simulator/server/server.js:167:9 {
+  errno: -4094,
+  code: 'UNKNOWN',
+  syscall: 'open',
+  path: 'C:\\AI\\roulette-simulator\\strategies\\elite8_strategy_log.txt'
+}
+[Dev Runner] Cleanup triggered by SIGINT
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+Strategies directory: C:\AI\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m3596[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://172.27.126.53:[1m5173[22m/[39m
+[Dev Runner] Cleanup triggered by SIGINT
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m11377[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.27.126.53:[1m5173[22m/[39m
+[Dev Runner] [Frontend ERR] ^C
+[Dev Runner] Frontend exited with code 3221225786
+[Dev Runner] [Backend ERR] ^C
+[Dev Runner] Backend exited with code 3221225786
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m31201[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://10.245.125.246:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.24.135.50:[1m5173[22m/[39m
+[Dev Runner] Cleanup triggered by SIGINT
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m10993[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://10.245.125.246:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.24.135.50:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [2m4:21:32 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ConfigurationPanel.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m4:21:33 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css, /src/components/StrategyEditor.tsx, /src/components/ConfigurationPanel.tsx, /src/components/FileManager.tsx, /src/components/dashboard/MetricsPanel.tsx, /src/components/dashboard/BankrollChart.tsx, /src/components/dashboard/ExecutionLog.tsx[22m
+[Dev Runner] Cleanup triggered by SIGINT
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m14055[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://10.245.121.239:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.24.135.50:[1m5173[22m/[39m
+[Dev Runner] Cleanup triggered by SIGINT
