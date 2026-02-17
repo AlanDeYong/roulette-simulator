@@ -6,15 +6,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 export const BankrollChart: React.FC = () => {
   const { results, config, setChartZoom } = useSimulationStore();
   
-  // Prepare data: Add initial point
-  const data = React.useMemo(() => [
-    { spin: 0, bankroll: config.startingBankroll, virtualBankroll: undefined },
-    ...results.spins.map(s => ({ 
-        spin: s.spinNumber, 
-        bankroll: s.bankrollAfter,
-        virtualBankroll: s.virtualBankroll 
-    }))
-  ], [results.spins, config.startingBankroll]);
+    // Prepare data: Add initial point
+    const data = React.useMemo(() => [
+        // Spin 0 removed as requested
+        ...results.spins.map(s => ({ 
+            spin: s.spinNumber, 
+            bankroll: s.bankrollAfter,
+            virtualBankroll: s.virtualBankroll,
+            totalBet: s.bets.reduce((sum, b) => sum + b.amount, 0)
+        }))
+    ], [results.spins]);
 
   const handleBrushChange = (e: any) => {
       // Recharts Brush onChange fires on every pixel move.
@@ -101,16 +102,22 @@ export const BankrollChart: React.FC = () => {
                 tickFormatter={(value) => `$${value}`}
             />
             <Tooltip 
-                contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333', color: '#fff' }}
-                itemStyle={{ color: '#d4af37' }}
-                formatter={(value: number, name: string) => {
-                    if (name === 'virtualBankroll') return [`$${value}`, 'Virtual Bankroll'];
-                    return [`$${value}`, 'Bankroll'];
+                content={({ active, payload, label }) => {
+                    if (active && payload && payload.length) {
+                        const data = payload[0].payload;
+                        return (
+                            <div className="bg-[#1a1a1a] border border-[#333] p-2 text-white text-xs shadow-lg rounded">
+                                <p className="font-bold mb-1">Spin {label}</p>
+                                <p className="text-[#d4af37]">Bankroll: ${data.bankroll}</p>
+                                {data.virtualBankroll !== undefined && (
+                                    <p className="text-[#00ffff]">Virtual: ${data.virtualBankroll}</p>
+                                )}
+                                <p className="text-[#888]">Total Bet: ${data.totalBet}</p>
+                            </div>
+                        );
+                    }
+                    return null;
                 }}
-                labelFormatter={(label) => `Spin ${label}`}
-                position={{ y: 0 }} 
-                wrapperStyle={{ top: -40, zIndex: 100 }}
-                allowEscapeViewBox={{ y: true }}
             />
             <Legend verticalAlign="top" height={36}/>
             <Brush 
