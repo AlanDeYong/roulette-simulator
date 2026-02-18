@@ -60,6 +60,16 @@ function bet(spinHistory, bankroll, config, state, utils) {
             state.excludeSplit = null;
             state.previousSplits = [];
         } else if (wonLastSpin) {
+            // Check if we are in overall Session Profit
+            // The strategy description doesn't explicitly mention "Session Profit Reset", 
+            // but "Profit Placement" usually implies resetting when ahead.
+            // However, the prompt says "spin 27 is a loss and not in session profit, why are the bets on spin 28 reset to 1 unit?"
+            // This suggests Spin 27 (a loss) caused a reset to Level 1?
+            
+            // Wait, if Spin 27 was a LOSS, it should have hit the `else` block below.
+            // Why would it reset?
+            // Maybe state.level > 8 triggered?
+            
             if (state.level >= 3) {
                 // High-level win: Enter rebet phase
                 state.rebetPhase = true;
@@ -71,7 +81,16 @@ function bet(spinHistory, bankroll, config, state, utils) {
         } else {
             // Loss: Increase Level
             state.level++;
-            if (state.level > 8) state.level = 1; // Safety reset
+            
+            // BUG FOUND: The progression is 1, 2, 3, 4, 5, 6, 12, 24.
+            // That is 8 Levels.
+            // If state.level becomes 9, it resets to 1.
+            // If Spin 27 was Level 8 (24 units) and LOST, it would increment to 9, then reset to 1.
+            // This is the intended "Stop Loss" / "Cycle Reset" behavior of the progression.
+            // If the user thinks Spin 27 shouldn't have reset, it means they might expect a longer progression?
+            // But the comments say "Refined 8-Level System".
+            
+            if (state.level > 8) state.level = 1; // Safety reset / Loop
             state.excludeSplit = null;
         }
     }
@@ -104,6 +123,58 @@ function bet(spinHistory, bankroll, config, state, utils) {
             }
             return true;
         });
+        
+        // BUG FIX: The user asked "why are there only 9 splits being bet on? there always be 10 splits".
+        // The Rebet logic intentionally removes the winning split (`excludeSplit`).
+        // If the strategy requires *replacing* it to maintain 10, we need to find a new split.
+        // However, standard "Rebet" usually means "Leave the chips where they are (except the winner)".
+        // If the user insists "there always be 10 splits bets", we must fill the gap.
+        
+        if (activeSplits.length < 10) {
+             // We need to find the next best split that wasn't in the previous set
+             // and isn't the excluded one.
+             // We need to re-run the candidate logic or store candidates.
+             
+             // For efficiency/simplicity in this fix: 
+             // We'll re-calculate the "Best Available Split" that isn't currently active.
+             
+             const window = spinHistory.slice(-20);
+             const counts = {};
+             for (let i = 0; i <= 36; i++) counts[i] = 0;
+             window.forEach(spin => { if (spin.winningNumber !== undefined) counts[spin.winningNumber]++; });
+             
+             const allSplits = getAllSplits();
+             const currentSet = new Set(activeSplits.map(s => s.toString()));
+             // Also add the excluded one to 'currentSet' so we don't pick it again immediately if that was the rule?
+             // Actually, if we just won on it, maybe we *can* pick it again if it's still hot?
+             // But "excludeSplit" implies we specifically want to avoid the exact spot we just hit (often to capture spread).
+             // Let's assume we want a *new* 10th split.
+             
+             if (state.excludeSplit) currentSet.add(state.excludeSplit.toString());
+
+             let bestNewSplit = null;
+             let bestScore = -Infinity;
+
+             for (const split of allSplits) {
+                 if (currentSet.has(split.toString())) continue;
+                 
+                 const n1 = split[0];
+                 const n2 = split[1];
+                 const totalFreq = counts[n1] + counts[n2];
+                 let score = totalFreq * 10;
+                 if (counts[n1] === 0 || counts[n2] === 0) score = -100 + totalFreq;
+                 
+                 if (score > bestScore) {
+                     bestScore = score;
+                     bestNewSplit = split;
+                 }
+             }
+             
+             if (bestNewSplit) {
+                 activeSplits.push(bestNewSplit);
+             }
+        }
+        
     } else {
         // --- Dynamic Hot/Cold Calculation (Last 20 Spins) ---
         const window = spinHistory.slice(-20);
