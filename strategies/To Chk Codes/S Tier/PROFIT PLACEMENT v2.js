@@ -60,16 +60,6 @@ function bet(spinHistory, bankroll, config, state, utils) {
             state.excludeSplit = null;
             state.previousSplits = [];
         } else if (wonLastSpin) {
-            // Check if we are in overall Session Profit
-            // The strategy description doesn't explicitly mention "Session Profit Reset", 
-            // but "Profit Placement" usually implies resetting when ahead.
-            // However, the prompt says "spin 27 is a loss and not in session profit, why are the bets on spin 28 reset to 1 unit?"
-            // This suggests Spin 27 (a loss) caused a reset to Level 1?
-            
-            // Wait, if Spin 27 was a LOSS, it should have hit the `else` block below.
-            // Why would it reset?
-            // Maybe state.level > 8 triggered?
-            
             if (state.level >= 3) {
                 // High-level win: Enter rebet phase
                 state.rebetPhase = true;
@@ -82,14 +72,6 @@ function bet(spinHistory, bankroll, config, state, utils) {
             // Loss: Increase Level
             state.level++;
             
-            // BUG FOUND: The progression is 1, 2, 3, 4, 5, 6, 12, 24.
-            // That is 8 Levels.
-            // If state.level becomes 9, it resets to 1.
-            // If Spin 27 was Level 8 (24 units) and LOST, it would increment to 9, then reset to 1.
-            // This is the intended "Stop Loss" / "Cycle Reset" behavior of the progression.
-            // If the user thinks Spin 27 shouldn't have reset, it means they might expect a longer progression?
-            // But the comments say "Refined 8-Level System".
-            
             if (state.level > 8) state.level = 1; // Safety reset / Loop
             state.excludeSplit = null;
         }
@@ -99,6 +81,15 @@ function bet(spinHistory, bankroll, config, state, utils) {
     const minInside = config.betLimits.min;
     
     // Sequence: 1, 2, 3, 4, 5, 6, 12, 24 units
+    // state.level 1 -> 1u
+    // state.level 2 -> 2u
+    // state.level 3 -> 3u
+    // state.level 4 -> 4u
+    // state.level 5 -> 5u
+    // state.level 6 -> 6u
+    // state.level 7 -> 12u
+    // state.level 8 -> 24u
+    
     let multiplier = state.level;
     if (state.level === 7) multiplier = 12;
     if (state.level === 8) multiplier = 24;
