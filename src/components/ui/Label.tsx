@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React from 'react';
 import { cn } from '../../utils/cn';
 
@@ -15,21 +14,4 @@ export const Label = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttribute
   )
 );
 Label.displayName = 'Label';
-=======
-import React from 'react';
-import { cn } from '../../utils/cn';
 
-export const Label = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttributes<HTMLLabelElement>>(
-  ({ className, ...props }, ref) => (
-    <label
-      ref={ref}
-      className={cn(
-        'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-text-muted mb-2 block',
-        className
-      )}
-      {...props}
-    />
-  )
-);
-Label.displayName = 'Label';
->>>>>>> origin/main
