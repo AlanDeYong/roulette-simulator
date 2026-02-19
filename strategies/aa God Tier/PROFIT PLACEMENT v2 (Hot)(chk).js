@@ -4,16 +4,18 @@
  * * The Logic: 
  * - Tracking Phase: Observes the first 20 spins without betting to build a frequency map.
  * - Selection: Analyzes the trailing 20 spins. Selects 10 non-overlapping splits with the 
- *   highest combined hit frequency. Heavily penalizes and avoids splits containing "Cold" (0 hit) numbers.
+ * highest combined hit frequency. Heavily penalizes and avoids splits containing "Cold" (0 hit) numbers.
  * - Bet Execution: Places equal units on the 10 chosen splits and the number Zero.
  * * The Progression:
  * - Levels 1-6: Increase base bet by 1 unit after a loss (1u, 2u, 3u, 4u, 5u, 6u).
  * - Levels 7-8: Accelerate bet size (12u, 24u). Caps at Level 8 if losing streak continues.
  * - Rebet Phase: If a win occurs at Level 3 or higher, the strategy enters a 1-spin "Rebet Phase" 
- *   using the exact same splits (excluding the one that just won, replacing it with the next best).
+ * using the exact same splits (excluding the one that just won, replacing it with the next best).
+ * - NEW: If a Rebet Phase spin loses, the standard loss progression applies.
  * * The Goal:
- * - Target Profit: +2% of the initial session bankroll. 
- * - The progression level ONLY resets to base (Level 1) when this 2% profit target is met.
+ * - Target Profit: Dynamic Trailing Peak. 
+ * - The progression level ONLY resets to base (Level 1) when a win brings the bankroll 
+ * to within 2% of the highest recorded session peak, canceling rebet phases immediately.
  */
 
 function bet(spinHistory, bankroll, config, state, utils) {
@@ -22,14 +24,14 @@ function bet(spinHistory, bankroll, config, state, utils) {
         if (!state.initialized) {
             state.level = 1;
             state.rebetPhase = false;
-            state.excludeSplit = null; // Used to remove winning split during Rebet Phase
-            state.previousSplits = []; // Stores the selected split values for Rebet logic
-            state.initialBankroll = bankroll; // Store initial bankroll for % profit calc
+            state.excludeSplit = null; 
+            state.previousSplits = []; 
+            state.initialBankroll = bankroll; 
+            state.peakBankroll = bankroll; // Tracks the trailing peak
             state.initialized = true;
         }
 
         // --- 2. Tracking Phase (First 20 Spins) ---
-        // We need 20 past results to calculate Hot/Cold.
         if (spinHistory.length < 20) {
             return [];
         }
@@ -44,11 +46,9 @@ function bet(spinHistory, bankroll, config, state, utils) {
             // Check if our last bets hit
             if (state.lastBets) {
                 for (const b of state.lastBets) {
-                    // Check Zero
                     if (b.type === 'number' && b.value === lastWinNum) {
                         wonLastSpin = true;
                     }
-                    // Check Splits
                     if (b.type === 'split' && b.value.includes(lastWinNum)) {
                         wonLastSpin = true;
                         winningSplitValue = b.value;
@@ -56,38 +56,57 @@ function bet(spinHistory, bankroll, config, state, utils) {
                 }
             }
 
-            // Logic Transitions
+            // --- DYNAMIC TRAILING PEAK LOGIC ---
+            if (state.peakBankroll === undefined) state.peakBankroll = state.initialBankroll;
+            if (state.initialBankroll === undefined) state.initialBankroll = bankroll;
+            
+            // Update highest peak
+            if (bankroll > state.peakBankroll) {
+                state.peakBankroll = bankroll;
+            }
+
+            // Calculate target bounds (Peak minus 2% of initial starting bankroll)
+            const margin = state.initialBankroll * 0.02;
+            const resetTarget = state.peakBankroll - margin;
+
+            // --- STATE TRANSITIONS ---
+            let justFinishedRebet = false;
+
             if (state.rebetPhase) {
-                // One-time rebet finished. Reset.
+                // One-time rebet finished.
+                state.rebetPhase = false;
+                state.excludeSplit = null;
+                state.previousSplits = [];
+                justFinishedRebet = true; 
+                
+                // NEW: If the Rebet spin lost, apply standard loss progression
+                if (!wonLastSpin) {
+                    state.level++;
+                    if (state.level > 8) state.level = 1;
+                }
+                
+            } else if (wonLastSpin) {
+                if (state.level >= 3) {
+                    // High-level win: Stage the rebet phase
+                    state.rebetPhase = true;
+                    state.excludeSplit = winningSplitValue; 
+                }
+                // Low-level wins just stage a level maintain
+            } else {
+                // Loss: Increase Level
+                state.level++;
+                if (state.level > 8) state.level = 1; // Safety loop
+                state.excludeSplit = null;
+            }
+
+            // --- GOAL OVERRIDE (Immediate Reset & Cancellation) ---
+            // If we are back inside the 2% peak bounds following a win or a rebet conclusion, 
+            // override the transitions, kill any pending rebets, and drop back to base Level 1.
+            if (bankroll >= resetTarget && (wonLastSpin || justFinishedRebet)) {
                 state.level = 1;
                 state.rebetPhase = false;
                 state.excludeSplit = null;
                 state.previousSplits = [];
-            } else if (wonLastSpin) {
-                if (state.level >= 3) {
-                    // High-level win: Enter rebet phase
-                    state.rebetPhase = true;
-                    state.excludeSplit = winningSplitValue; // Can be null if Zero won
-                } else {
-                    // Low-level win: Reset logic
-                    // New Rule: Only reset if the win is within 2% of session profit
-                    
-                    if (state.initialBankroll === undefined) state.initialBankroll = bankroll;
-                    
-                    const currentSessionProfit = bankroll - state.initialBankroll;
-                    const profitPercentage = (currentSessionProfit / state.initialBankroll) * 100;
-
-                    if (profitPercentage >= 2) {
-                        state.level = 1; // Reset to base
-                    } else {
-                        // Maintain level
-                    }
-                }
-            } else {
-                // Loss: Increase Level
-                state.level++;
-                if (state.level > 8) state.level = 1; // Safety reset / Loop
-                state.excludeSplit = null;
             }
         }
 
@@ -100,7 +119,6 @@ function bet(spinHistory, bankroll, config, state, utils) {
 
         let chipAmount = minInside * multiplier;
         
-        // Clamp to table limits
         chipAmount = Math.max(chipAmount, config.betLimits.min);
         chipAmount = Math.min(chipAmount, config.betLimits.max);
 
@@ -108,8 +126,7 @@ function bet(spinHistory, bankroll, config, state, utils) {
         let activeSplits = [];
 
         if (state.rebetPhase) {
-            // In Rebet Phase, strictly use the PREVIOUS set of splits
-            // Exclude the specific split that just won (if any)
+            // Strictly use previous set of splits, minus the winner
             if (!state.previousSplits) state.previousSplits = [];
             
             activeSplits = state.previousSplits.filter(s => {
@@ -132,11 +149,18 @@ function bet(spinHistory, bankroll, config, state, utils) {
                  
                  if (state.excludeSplit) currentSet.add(state.excludeSplit.toString());
 
+                 const coveredInRebet = new Set();
+                 activeSplits.forEach(s => {
+                     coveredInRebet.add(s[0]);
+                     coveredInRebet.add(s[1]);
+                 });
+
                  let bestNewSplit = null;
                  let bestScore = -Infinity;
 
                  for (const split of allSplits) {
                      if (currentSet.has(split.toString())) continue;
+                     if (coveredInRebet.has(split[0]) || coveredInRebet.has(split[1])) continue;
                      
                      const n1 = split[0];
                      const n2 = split[1];
@@ -156,7 +180,7 @@ function bet(spinHistory, bankroll, config, state, utils) {
             }
             
         } else {
-            // --- Dynamic Hot/Cold Calculation (Last 20 Spins) ---
+            // Dynamic Hot/Cold Calculation
             const window = spinHistory.slice(-20);
             const counts = {};
             for (let i = 0; i <= 36; i++) counts[i] = 0;
@@ -165,7 +189,6 @@ function bet(spinHistory, bankroll, config, state, utils) {
                 if (spin.winningNumber !== undefined) counts[spin.winningNumber]++;
             });
 
-            // Generate all valid board splits
             const allSplits = getAllSplits();
             let candidates = [];
 
@@ -207,12 +230,10 @@ function bet(spinHistory, bankroll, config, state, utils) {
         // --- 6. Construct Final Bets ---
         const bets = [];
 
-        // Always 1 unit on Zero (scaled by progression)
         if (bankroll >= chipAmount) {
             bets.push({ type: 'number', value: 0, amount: chipAmount });
         }
 
-        // Add Split Bets
         for (const val of activeSplits) {
             if (bankroll >= chipAmount) {
                 bets.push({
@@ -232,23 +253,15 @@ function bet(spinHistory, bankroll, config, state, utils) {
     }
 }
 
-// --- Helper: Generate all standard roulette splits ---
+// --- Helper ---
 function getAllSplits() {
     const splits = [];
-    
-    // 1. Horizontal Splits (e.g., 1|2, 2|3)
     for (let row = 1; row <= 34; row += 3) {
-        splits.push([row, row + 1]);     // 1|2, 4|5...
-        splits.push([row + 1, row + 2]); // 2|3, 5|6...
+        splits.push([row, row + 1]);     
+        splits.push([row + 1, row + 2]); 
     }
-
-    // 2. Vertical Splits (e.g., 1|4, 2|5)
     for (let n = 1; n <= 33; n++) {
         splits.push([n, n + 3]);
     }
-
-    // Note: We generally exclude Zero splits from the "Splits" pool 
-    // because we are betting on Zero straight up separately.
-    
     return splits;
 }
