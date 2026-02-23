@@ -81,13 +81,13 @@ export const BankrollChart: React.FC = () => {
   };
 
   return (
-    <Card className="h-[400px] flex flex-col border-t-4 border-t-primary">
-      <CardHeader>
-        <CardTitle>Bankroll Progression</CardTitle>
+    <Card className="h-full flex flex-col border-t-4 border-t-primary">
+      <CardHeader className="flex-none py-3">
+        <CardTitle className="text-sm">Bankroll Progression</CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 min-h-0 pb-4 pr-4">
+      <CardContent className="flex-1 min-h-0 pb-2 pr-2 overflow-hidden">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 40, right: 10, left: 0, bottom: 0 }}>
+          <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#333" />
             <XAxis 
                 dataKey="spin" 

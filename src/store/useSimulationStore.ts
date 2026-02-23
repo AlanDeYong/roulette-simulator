@@ -33,6 +33,9 @@ interface SimulationStore extends SimulationState {
   // Result Caching
   cachedResults: Record<string, { spins: SpinResult[], metrics: SimulationMetrics, zoomState?: { startIndex?: number, endIndex?: number } }>;
   setChartZoom: (startIndex?: number, endIndex?: number) => void;
+  
+  // Layout
+  setLayout: (layout: Partial<SimulationState['layout']>) => void;
 }
 
 const DEFAULT_CONFIG: SimulationConfig = {
@@ -42,6 +45,8 @@ const DEFAULT_CONFIG: SimulationConfig = {
   betLimits: { min: 2, minOutside: 5, max: 500 },
   dataRange: { start: 1, end: null, fromEnd: false },
   useImportedData: false,
+  minIncrementalBet: 1,
+  incrementMode: 'fixed',
 };
 
 const DEFAULT_STRATEGY: Strategy = {
@@ -88,6 +93,7 @@ export const useSimulationStore = create<SimulationStore>()(
     (set) => ({
       id: generateId(),
       config: DEFAULT_CONFIG,
+      layout: { strategyEditorHeight: 500, chartHeight: 300, logHeight: 300 },
       strategy: DEFAULT_STRATEGY,
       savedStrategies: [],
       importedData: [],
@@ -136,7 +142,18 @@ export const useSimulationStore = create<SimulationStore>()(
               // If we have a current file, update the active strategy code with the latest server version
               // This ensures we don't run stale code after external updates
               let newStrategy = state.strategy;
-              if (state.currentFileId && nodes[state.currentFileId]) {
+              let newCurrentFileId = state.currentFileId;
+
+              // Check if currentFileId still exists in new nodes
+              if (state.currentFileId && !nodes[state.currentFileId]) {
+                  // File was deleted on server (or we have a stale ID)
+                  // Try to find if it was renamed? No easy way.
+                  // Just deselect it to avoid errors.
+                  console.warn(`Current file ${state.currentFileId} no longer exists on server. Deselecting.`);
+                  newCurrentFileId = null;
+                  // Should we reset strategy to default? Maybe keep the code in editor but unsaved?
+                  // Let's keep the code, but mark as "Untitled" (currentFileId = null)
+              } else if (state.currentFileId && nodes[state.currentFileId]) {
                 const serverContent = nodes[state.currentFileId].content;
                 if (serverContent && serverContent !== state.strategy.code) {
                   // Only update if different (and assuming no local unsaved changes we want to keep on reload)
@@ -149,9 +166,12 @@ export const useSimulationStore = create<SimulationStore>()(
               }
               return {
                 fsNodes: nodes,
-                strategy: newStrategy
+                strategy: newStrategy,
+                currentFileId: newCurrentFileId
               };
             });
+          } else {
+             console.error("Failed to sync with server:", res.status, res.statusText);
           }
         } catch (e) {
           console.warn("Could not sync with server, using local state", e);
@@ -454,12 +474,15 @@ export const useSimulationStore = create<SimulationStore>()(
             }
           };
         }),
+
+      setLayout: (layout) => set((state) => ({ layout: { ...state.layout, ...layout } })),
     }),
     {
       name: 'roulette-simulation-storage',
       partialize: (state) => ({
         savedStrategies: state.savedStrategies,
         config: state.config,
+        layout: state.layout,
         fsNodes: state.fsNodes, // Persist File System
         currentFileId: state.currentFileId, // Persist current file selection
         // cachedResults: state.cachedResults, // DO NOT PERSIST CACHE - It's too large for localStorage (5MB limit)

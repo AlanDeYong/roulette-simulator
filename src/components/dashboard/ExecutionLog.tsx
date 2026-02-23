@@ -193,23 +193,23 @@ export const ExecutionLog: React.FC = () => {
   };
 
   return (
-    <Card className="h-[400px] flex flex-col border-t-4 border-t-primary">
-      <CardHeader className="flex flex-row items-center justify-between py-3">
-        <CardTitle>Execution Log</CardTitle>
+    <Card className="h-full flex flex-col border-t-4 border-t-primary">
+      <CardHeader className="flex-none flex flex-row items-center justify-between py-2 px-4">
+        <CardTitle className="text-sm">Execution Log</CardTitle>
         <Button 
             variant="outline" 
             size="sm" 
             onClick={handleExport} 
             disabled={spins.length === 0}
-            className="h-7 text-xs"
+            className="h-6 text-xs"
         >
             <Download className="w-3 h-3 mr-2" />
             Export CSV
         </Button>
       </CardHeader>
-      <CardContent className="flex-1 overflow-auto pr-2 custom-scrollbar">
-        {/* Table Header */}
-        <div className="grid grid-cols-12 gap-2 pb-2 border-b border-white/10 text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 px-2">
+      <CardContent className="flex-1 overflow-hidden flex flex-col min-h-0">
+        {/* Table Header - Fixed */}
+        <div className="flex-none grid grid-cols-12 gap-2 pb-2 border-b border-white/10 text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 px-4 mr-2">
             <div className="col-span-1">Spin #</div>
             <div className="col-span-1">View</div>
             <div className="col-span-2 text-right">Total Bet</div>
@@ -219,14 +219,17 @@ export const ExecutionLog: React.FC = () => {
             <div className="col-span-2 text-right">Bankroll</div>
         </div>
         
-        <div className="space-y-0">
-          {spins.length === 0 ? (
-            <div className="text-center text-text-muted py-8 flex flex-col items-center">
-                <span className="opacity-50">No spins yet</span>
-            </div>
-          ) : (
-            spins.map(spin => <LogItem key={spin.id} spin={spin} />)
-          )}
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto pr-2 pl-2 custom-scrollbar">
+          <div className="space-y-0">
+            {spins.length === 0 ? (
+              <div className="text-center text-text-muted py-8 flex flex-col items-center">
+                  <span className="opacity-50">No spins yet</span>
+              </div>
+            ) : (
+              spins.map(spin => <LogItem key={spin.id} spin={spin} />)
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>

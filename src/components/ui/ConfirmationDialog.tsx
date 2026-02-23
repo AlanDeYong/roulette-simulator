@@ -37,7 +37,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
                         <Button variant="outline" size="sm" onClick={onCancel}>
                             Cancel
                         </Button>
-                        <Button variant="default" size="sm" onClick={onConfirm}>
+                        <Button variant="primary" size="sm" onClick={onConfirm}>
                             Confirm
                         </Button>
                     </div>

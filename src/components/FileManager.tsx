@@ -185,11 +185,12 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                 }
                 const fullPath = [...pathParts, newItemName + (newItemName.endsWith('.js') ? '' : '.js')].join('/');
                 
-                await fetch('/api/save', {
+                const res = await fetch('/api/save', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id: fullPath, content: "// New Strategy" })
                 });
+                if (!res.ok) throw new Error('Failed to create file');
 
             } else {
                 const dir = fs.createDirectory(parentId, newItemName);
@@ -204,11 +205,12 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                 }
                 const fullPath = [...pathParts, newItemName].join('/');
                 
-                await fetch('/api/create-dir', {
+                const res = await fetch('/api/create-dir', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id: fullPath })
                 });
+                if (!res.ok) throw new Error('Failed to create directory');
             }
             
             saveFS();

@@ -37,8 +37,20 @@ config = {
     minOutside: 5,  // Use for Outside bets (red/black, even/odd, high/low, dozens, columns)
     max: 500        // Absolute max for any single bet
   },
-  startingBankroll: 2000
+  startingBankroll: 2000,
+  minIncrementalBet: 1,      // New: Minimum amount to increase a bet by (default 1 unit)
+  incrementMode: 'fixed'     // New: 'fixed' (increase by minIncrementalBet) or 'base' (increase by initial bet on that position)
 };
+
+// Incremental Bet Logic
+// Strategies should respect `config.incrementMode`:
+// - If 'fixed': Increase bets by `config.minIncrementalBet`
+// - If 'base': Increase bets by the initial bet amount for that specific position
+//
+// Example Logic:
+// let increment = config.incrementMode === 'base' ? initialBet : config.minIncrementalBet;
+// currentBet += increment;
+
 
 // Valid Bet Types
 // - Inside: 

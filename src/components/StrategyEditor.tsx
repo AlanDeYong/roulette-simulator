@@ -132,10 +132,23 @@ export const StrategyEditor: React.FC = () => {
           const fs = new VirtualFileSystem(fsNodes);
           
           if (currentFileId) {
+              // Check if file exists in local FS
+              let nodeExists = false;
+              try {
+                  fs.getNode(currentFileId);
+                  nodeExists = true;
+              } catch (e) {
+                  // File missing
+              }
+
+              if (!nodeExists) {
+                   setIsSaving(true);
+                   showFeedback('error', "Original file missing. Please save as new file.");
+                   return;
+              }
+
               // Direct Overwrite
               try {
-                  fs.getNode(currentFileId); 
-                  
                   fs.writeFile(currentFileId, strategy.code);
                   const newNodes = fs.serialize();
                   setFSNodes(newNodes);
@@ -269,7 +282,7 @@ export const StrategyEditor: React.FC = () => {
                             <BookOpen className="w-4 h-4" />
                         </Button>
                         <Button 
-                            variant={isDirty ? "default" : "outline"}
+                            variant={isDirty ? "primary" : "outline"}
                             size="sm" 
                             onClick={handleSave}
                             disabled={isRunning}

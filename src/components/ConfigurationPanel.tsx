@@ -1,11 +1,41 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useSimulationStore } from '../store/useSimulationStore';
 import { parseFileInChunks } from '../utils/fileParser';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
 import { Input } from './ui/Input';
 import { Label } from './ui/Label';
-import { Settings, Upload, FileText } from 'lucide-react';
+import { Settings, Upload, FileText, ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from './ui/Button';
+
+// Helper component for collapsible sections
+const CollapsibleSection: React.FC<{
+    title: string;
+    icon: React.ReactNode;
+    children: React.ReactNode;
+    defaultOpen?: boolean;
+}> = ({ title, icon, children, defaultOpen = false }) => {
+    const [isOpen, setIsOpen] = useState(defaultOpen);
+
+    return (
+        <div className="border border-primary/10 rounded-md overflow-hidden">
+            <button
+                className="w-full flex items-center justify-between p-2 bg-primary/5 hover:bg-primary/10 transition-colors text-left"
+                onClick={() => setIsOpen(!isOpen)}
+            >
+                <div className="flex items-center space-x-2">
+                    {icon}
+                    <span className="text-xs font-semibold">{title}</span>
+                </div>
+                {isOpen ? <ChevronDown className="w-3 h-3 text-muted-foreground" /> : <ChevronRight className="w-3 h-3 text-muted-foreground" />}
+            </button>
+            {isOpen && (
+                <div className="p-2 space-y-2 bg-background/50">
+                    {children}
+                </div>
+            )}
+        </div>
+    );
+};
 
 export const ConfigurationPanel: React.FC = () => {
     const { config, setConfig, status, setImportedData, importedData, importedFileName, setImportedFileName } = useSimulationStore();
@@ -92,110 +122,141 @@ export const ConfigurationPanel: React.FC = () => {
     };
 
     return (
-        <Card className="h-full border-t-4 border-t-primary overflow-y-auto max-h-[calc(100vh-2rem)]">
-            <CardHeader>
+        <Card className="h-full border-t-4 border-t-primary flex flex-col overflow-hidden">
+            <CardHeader className="flex-none pb-3 pt-4 px-4">
                 <div className="flex items-center space-x-2">
                     <Settings className="w-5 h-5 text-primary" />
                     <CardTitle>Configuration</CardTitle>
                 </div>
             </CardHeader>
-            <CardContent className="space-y-5">
+            <CardContent className="space-y-3 flex-1 overflow-y-auto min-h-0 pr-1 pl-3 pb-2">
                 {/* Bankroll & Spins */}
-                <div className="grid grid-cols-2 gap-4 items-start">
-                    <div className="space-y-2">
-                        <Label className="h-5 block">Starting Bankroll ($)</Label>
+                <div className="grid grid-cols-2 gap-2 items-start">
+                    <div className="space-y-1">
+                        <Label className="h-4 block text-[10px] text-muted-foreground">Starting Bankroll ($)</Label>
                         <Input
                             type="number"
                             value={config.startingBankroll}
                             onChange={(e) => handleChange('startingBankroll', Number(e.target.value))}
                             disabled={isRunning}
                             min={1}
+                            className="h-7 px-2 text-xs"
                         />
                     </div>
-                    <div className="space-y-2">
-                        <Label className="h-5 block">Max Spins</Label>
+                    <div className="space-y-1">
+                        <Label className="h-4 block text-[10px] text-muted-foreground">Max Spins</Label>
                         <Input
                             type="number"
                             value={config.maxSpins}
                             onChange={(e) => handleChange('maxSpins', Number(e.target.value))}
                             disabled={isRunning}
                             min={1}
+                            className="h-7 px-2 text-xs"
                         />
                     </div>
                 </div>
 
-                {/* Table Type */}
-                <div className="space-y-2">
-                    <Label>Table Type</Label>
-                    <select
-                        className="flex h-10 w-full rounded-md border border-primary/20 bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 text-text"
-                        value={config.tableType}
-                        onChange={(e) => handleChange('tableType', e.target.value)}
-                        disabled={isRunning}
-                    >
-                        <option value="european">European (Single Zero)</option>
-                        <option value="american">American (Double Zero)</option>
-                    </select>
+                <div className="grid grid-cols-2 gap-2 items-start">
+                    {/* Table Type */}
+                    <div className="space-y-1">
+                        <Label className="text-[10px] text-muted-foreground">Table Type</Label>
+                        <select
+                            className="flex h-7 w-full rounded-md border border-primary/20 bg-background px-1 py-1 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 text-text"
+                            value={config.tableType}
+                            onChange={(e) => handleChange('tableType', e.target.value)}
+                            disabled={isRunning}
+                        >
+                            <option value="european">European (Single)</option>
+                            <option value="american">American (Double)</option>
+                        </select>
+                    </div>
+
+                    {/* Minimum Incremental Bet */}
+                    <div className="space-y-1">
+                         <Label className="text-[10px] text-muted-foreground">Min Incr. Bet</Label>
+                         <Input
+                            type="number"
+                            value={config.minIncrementalBet ?? 1}
+                            onChange={(e) => handleChange('minIncrementalBet', Number(e.target.value))}
+                            disabled={isRunning}
+                            min={0.1}
+                            step={0.1}
+                            className="h-7 px-2 text-xs"
+                         />
+                    </div>
                 </div>
 
                 {/* Bet Limits */}
-                <div className="space-y-2">
-                    <Label>Bets Size</Label>
-                    <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-1 pt-1">
+                    <Label className="text-xs font-semibold">Bets Size & Increment</Label>
+                    <div className="grid grid-cols-2 gap-2 bg-black/20 p-2 rounded-md border border-white/5">
                         <div>
-                            <span className="text-xs text-muted-foreground block mb-1">Min (Inside)</span>
+                            <span className="text-[10px] text-muted-foreground block mb-0.5">Min (Inside)</span>
                             <Input
                                 type="number"
                                 value={config.betLimits.min}
                                 onChange={(e) => handleChange('betLimits.min', Number(e.target.value))}
                                 disabled={isRunning}
                                 min={0}
+                                className="h-6 px-2 text-xs"
                             />
                         </div>
                         <div>
-                            <span className="text-xs text-muted-foreground block mb-1">Min (Outside)</span>
+                            <span className="text-[10px] text-muted-foreground block mb-0.5">Min (Outside)</span>
                             <Input
                                 type="number"
                                 value={config.betLimits.minOutside}
                                 onChange={(e) => handleChange('betLimits.minOutside', Number(e.target.value))}
                                 disabled={isRunning}
                                 min={0}
+                                className="h-6 px-2 text-xs"
                             />
                         </div>
-                        <div className="col-span-2">
-                            <span className="text-xs text-muted-foreground block mb-1">Max Bet</span>
-                            <Input
-                                type="number"
-                                value={config.betLimits.max}
-                                onChange={(e) => handleChange('betLimits.max', Number(e.target.value))}
-                                disabled={isRunning}
-                                min={1}
-                            />
+                        <div>
+                           <span className="text-[10px] text-muted-foreground block mb-0.5">Max Bet</span>
+                           <Input
+                               type="number"
+                               value={config.betLimits.max}
+                               onChange={(e) => handleChange('betLimits.max', Number(e.target.value))}
+                               disabled={isRunning}
+                               min={1}
+                                className="h-6 px-2 text-xs"
+                           />
+                        </div>
+                        <div>
+                             <span className="text-[10px] text-muted-foreground block mb-0.5">Increment Mode</span>
+                             <select
+                                 className="flex h-6 w-full rounded-md border border-primary/20 bg-background px-1 py-0 text-[10px] shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 text-text"
+                                 value={config.incrementMode || 'fixed'}
+                                 onChange={(e) => handleChange('incrementMode', e.target.value)}
+                                 disabled={isRunning}
+                             >
+                                 <option value="fixed">Fixed</option>
+                                 <option value="base">Base Bet</option>
+                             </select>
                         </div>
                     </div>
                 </div>
 
-                {/* Data Import Section */}
-                <div className="border-t border-primary/10 pt-4 space-y-4">
-                    <div className="flex items-center space-x-2">
-                        <FileText className="w-4 h-4 text-primary" />
-                        <h3 className="font-semibold text-sm">Data Import</h3>
-                    </div>
-
-                    <div className="flex items-center gap-2 mt-2">
+                {/* Data Import Section (Collapsible) */}
+                <CollapsibleSection 
+                    title="Data Import" 
+                    icon={<FileText className="w-3.5 h-3.5 text-primary" />}
+                    defaultOpen={true}
+                >
+                    <div className="flex items-center gap-2">
                         <input
                             type="checkbox"
                             id="useImportedData"
                             checked={config.useImportedData}
                             onChange={(e) => handleChange('useImportedData', e.target.checked)}
                             disabled={isRunning || importedData.length === 0}
-                            className="accent-primary"
+                            className="accent-primary h-3 w-3"
                         />
-                        <Label htmlFor="useImportedData" className="text-xs font-normal cursor-pointer">Use Imported Data</Label>
+                        <Label htmlFor="useImportedData" className="text-[10px] font-normal cursor-pointer">Use Imported Data</Label>
                     </div>
 
-                    <div className="space-y-2">
-                        <Label>Import File (.txt, .csv)</Label>
+                    <div className="space-y-1">
                         <div className="flex gap-2">
                             <input
                                 type="file"
@@ -207,54 +268,55 @@ export const ConfigurationPanel: React.FC = () => {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="w-full"
+                                className="w-full h-7 text-xs"
                                 onClick={() => fileInputRef.current?.click()}
                                 disabled={isRunning}
                             >
-                                <Upload className="w-4 h-4 mr-2" />
+                                <Upload className="w-3 h-3 mr-2" />
                                 Upload File
                             </Button>
                         </div>
-                        <div className="text-xs text-muted-foreground flex justify-between">
+                        <div className="text-[10px] text-muted-foreground flex justify-between h-4">
                             <span>
                                 {isLoadingFile ? (
                                     <span className="text-yellow-500 animate-pulse">
-                                        Loading... {loadingProgress > 0 && `(${loadingProgress})`}
+                                        Loading...
                                     </span>
                                 ) : (
-                                    `Loaded: ${importedData.length} spins`
+                                    `Loaded: ${importedData.length}`
                                 )}
                             </span>
-                            {importedFileName && <span className="text-primary truncate max-w-[150px]" title={importedFileName}>{importedFileName}</span>}
+                            {importedFileName && <span className="text-primary truncate max-w-[100px]" title={importedFileName}>{importedFileName}</span>}
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <Label>Bulk Data Entry</Label>
+                    <div className="space-y-1">
+                        <Label className="text-[10px] text-muted-foreground">Bulk Data Entry</Label>
                         <textarea
-                            className="flex min-h-[80px] w-full rounded-md border border-primary/20 bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 text-text resize-none"
-                            placeholder="Paste numbers (comma, space, or newline separated)"
+                            className="flex min-h-[50px] w-full rounded-md border border-primary/20 bg-background px-2 py-1 text-[10px] ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 text-text resize-none"
+                            placeholder="Paste numbers..."
                             onChange={handleBulkDataChange}
                             disabled={isRunning}
                         />
                     </div>
 
                     {/* Data Range */}
-                    <div className="space-y-2">
-                        <Label>Data Range</Label>
+                    <div className="space-y-1">
+                        <Label className="text-[10px] text-muted-foreground">Data Range</Label>
                         <div className="grid grid-cols-2 gap-2">
                             <div>
-                                <span className="text-xs text-muted-foreground block mb-1">Start Spin</span>
+                                <span className="text-[10px] text-muted-foreground block mb-0.5">Start</span>
                                 <Input
                                     type="number"
                                     value={config.dataRange.start}
                                     onChange={(e) => handleChange('dataRange.start', Number(e.target.value))}
                                     disabled={isRunning}
                                     min={1}
+                                    className="h-6 px-2 text-xs"
                                 />
                             </div>
                             <div>
-                                <span className="text-xs text-muted-foreground block mb-1">End Spin (Optional)</span>
+                                <span className="text-[10px] text-muted-foreground block mb-0.5">End</span>
                                 <Input
                                     type="number"
                                     value={config.dataRange.end || ''}
@@ -262,22 +324,23 @@ export const ConfigurationPanel: React.FC = () => {
                                     disabled={isRunning}
                                     min={1}
                                     placeholder="All"
+                                    className="h-6 px-2 text-xs"
                                 />
                             </div>
                         </div>
-                        <div className="flex items-center gap-2 mt-2">
+                        <div className="flex items-center gap-2 mt-1">
                             <input
                                 type="checkbox"
                                 id="fromEnd"
                                 checked={config.dataRange.fromEnd}
                                 onChange={(e) => handleChange('dataRange.fromEnd', e.target.checked)}
                                 disabled={isRunning}
-                                className="accent-primary"
+                                className="accent-primary h-3 w-3"
                             />
-                            <Label htmlFor="fromEnd" className="text-xs font-normal cursor-pointer">Start from end of data</Label>
+                            <Label htmlFor="fromEnd" className="text-[10px] font-normal cursor-pointer">Start from end</Label>
                         </div>
                     </div>
-                </div>
+                </CollapsibleSection>
             </CardContent>
         </Card>
     );

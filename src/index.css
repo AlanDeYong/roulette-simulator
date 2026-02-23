@@ -12,15 +12,15 @@ body {
 }
 
 /* Custom scrollbar for dark theme */
-.custom-scrollbar::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   @apply bg-surface;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   @apply bg-primary/20 rounded-full hover:bg-primary/40;
 }

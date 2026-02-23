@@ -19,6 +19,8 @@ export interface SimulationConfig {
   betLimits: BetLimits;
   dataRange: DataRange;
   useImportedData: boolean;
+  minIncrementalBet: number;
+  incrementMode: 'fixed' | 'base';
 }
 
 export interface Strategy {
@@ -76,15 +78,23 @@ export interface SimulationMetrics {
 export interface SimulationResults {
     spins: SpinResult[];
     metrics: SimulationMetrics;
+    zoomState?: { startIndex?: number, endIndex?: number };
 }
 
 export interface SavedStrategy extends Strategy {
     createdAt: number;
 }
 
+export interface LayoutConfig {
+    strategyEditorHeight: number; // Pixels
+    chartHeight: number; // Pixels
+    logHeight: number; // Pixels
+}
+
 export interface SimulationState {
   id: string;
   config: SimulationConfig;
+  layout: LayoutConfig;
   strategy: Strategy;
   savedStrategies: SavedStrategy[];
   importedData: number[];

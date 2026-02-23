@@ -225,7 +225,7 @@ export class VirtualFileSystem {
         if (newParent.type !== 'directory') throw new FileSystemError('Destination is not a directory', 'ENOTDIR');
         
         // Cycle detection
-        let current = newParent;
+        let current: FSNode = newParent;
         while (current.parentId) {
             if (current.id === id) throw new FileSystemError('Cannot move directory into itself', 'EINVAL');
             current = this.nodes.get(current.parentId)!;

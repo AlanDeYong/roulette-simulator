@@ -5,6 +5,20 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+    process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    process.exit(1);
+});
+
+process.on('exit', (code) => {
+    console.log(`Process exiting with code: ${code}`);
+});
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -12,7 +26,7 @@ console.log("Starting server script...");
 
 const app = express();
 // Allow port to be set via environment variable, default to 3001 if not provided
-const PORT = process.env.API_PORT || 3002;
+const PORT = process.env.API_PORT || 3001;
 const STRATEGIES_DIR = path.join(__dirname, '../strategies');
 
 app.use(cors());
@@ -243,10 +257,21 @@ async function copyRecursive(src, dest) {
 // POST /api/duplicate - Duplicate file or folder
 app.post('/api/duplicate', async (req, res) => {
     try {
+        console.log('Duplicate request received:', req.body);
         const { id } = req.body;
         if (!id) return res.status(400).json({ error: 'Missing id' });
 
         const srcPath = path.join(STRATEGIES_DIR, id);
+        console.log('Source path:', srcPath);
+        
+        // Verify source exists first
+        try {
+            await fs.access(srcPath);
+        } catch (e) {
+            console.error('Source file not found:', srcPath);
+            return res.status(404).json({ error: 'Source file not found' });
+        }
+
         const dirname = path.dirname(srcPath);
         const ext = path.extname(id);
         const basename = path.basename(id, ext); // Filename without extension
@@ -269,16 +294,18 @@ app.post('/api/duplicate', async (req, res) => {
                 break;
             }
         }
+        
+        console.log('Destination path:', destPath);
 
         await copyRecursive(srcPath, destPath);
         res.json({ success: true, newId });
     } catch (err) {
-        console.error(err);
+        console.error('Error in /api/duplicate:', err);
         res.status(500).json({ error: err.message });
     }
 });
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${PORT}`);
     console.log(`Strategies directory: ${STRATEGIES_DIR}`);
 });
