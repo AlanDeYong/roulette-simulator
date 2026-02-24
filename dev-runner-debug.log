@@ -8669,3 +8669,36 @@ vite.config.ts:1:285: ERROR: Unexpected "<<"
 [Dev Runner] [Frontend] [2m2:49:38 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/ExecutionLog.tsx, /src/index.css[22m
 [Dev Runner] [Frontend] [2m2:49:54 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/ExecutionLog.tsx, /src/index.css[22m
 [Dev Runner] Cleanup triggered by SIGINT
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m745[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.125:[1m5173[22m/[39m
+[Dev Runner] [Backend] Duplicate request received: { id: 'INNOVATE OG.js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\INNOVATE OG.js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\INNOVATE OG (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'Number One Secret.js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\Number One Secret.js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\Number One Secret (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'Positive Cash Mod.js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\Positive Cash Mod.js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\Positive Cash Mod (1).js
+[Dev Runner] [Backend ERR] Error: ENOENT: no such file or directory, rename 'C:\AI\Projects\roulette-simulator\strategies\123.js' -> 'C:\AI\Projects\roulette-simulator\strategies\123 (chk).js'
+    at async Object.rename (node:internal/fs/promises:782:10)
+    at async file:///C:/AI/Projects/roulette-simulator/server/server.js:222:9 {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'rename',
+  path: 'C:\\AI\\Projects\\roulette-simulator\\strategies\\123.js',
+  dest: 'C:\\AI\\Projects\\roulette-simulator\\strategies\\123 (chk).js'
+}
+[Dev Runner] [Backend] Duplicate request received: { id: 'aa Bad Tier/HIT SPOT 2.0 (chk).js' }
+Source path: C:\AI\Projects\roulette-simulator\strategies\aa Bad Tier\HIT SPOT 2.0 (chk).js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\aa Bad Tier\HIT SPOT 2.0 (chk) (1).js
