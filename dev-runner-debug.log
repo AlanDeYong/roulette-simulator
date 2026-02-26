@@ -8702,3 +8702,53 @@ Destination path: C:\AI\Projects\roulette-simulator\strategies\Positive Cash Mod
 [Dev Runner] [Backend] Duplicate request received: { id: 'aa Bad Tier/HIT SPOT 2.0 (chk).js' }
 Source path: C:\AI\Projects\roulette-simulator\strategies\aa Bad Tier\HIT SPOT 2.0 (chk).js
 [Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\aa Bad Tier\HIT SPOT 2.0 (chk) (1).js
+[Dev Runner] Cleanup triggered by SIGINT
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m2175[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.24.133.196:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [2m6:27:27 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m6:27:27 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ConfigurationPanel.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m6:27:27 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/BankrollChart.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m6:27:27 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ui/Button.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m6:27:27 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m6:27:28 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css, /src/components/SimulationDashboard.tsx, /src/components/StrategyEditor.tsx, /src/components/ConfigurationPanel.tsx, /src/components/dashboard/MetricsPanel.tsx, /src/components/dashboard/ExecutionLog.tsx, /src/components/dashboard/BankrollChart.tsx, /src/components/FileManager.tsx[22m
+[Dev Runner] [Frontend] [2m6:27:28 pm[22m [36m[1m[vite][22m[39m [32mvite.config.ts changed, restarting server...[39m
+[Dev Runner] [Frontend] [2m6:27:28 pm[22m [36m[1m[vite][22m[39m server restarted.
+[Dev Runner] [Frontend] [2m6:27:29 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/SimulationDashboard.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m6:27:29 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/ui/ConfirmationDialog.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m6:27:29 pm[22m [36m[1m[vite][22m[39m [32mvite.config.ts changed, restarting server...[39m
+[Dev Runner] [Frontend] [2m6:27:30 pm[22m [36m[1m[vite][22m[39m server restarted.
+[Dev Runner] [Frontend ERR] ^C
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m631[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.135:[1m5173[22m/[39m
+[Dev Runner] [Backend] Duplicate request received: { id: 'RACETRACK CC LIVE (chk).js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\RACETRACK CC LIVE (chk).js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\RACETRACK CC LIVE (chk) (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'RACETRACK CW STATIC (chk).js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\RACETRACK CW STATIC (chk).js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\RACETRACK CW STATIC (chk) (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'RACETRACK CCW LIVE (chk).js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\RACETRACK CCW LIVE (chk).js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\RACETRACK CCW LIVE (chk) (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'Bruces System 1 and 2.js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\Bruces System 1 and 2.js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\Bruces System 1 and 2 (1).js

@@ -27,7 +27,7 @@
  */
 function bet(spinHistory, bankroll, config, state, utils) {
     // 0. CONFIGURATION & CONSTANTS
-    const X = 111; // Rolling window size for analysis
+    const X = 37; // Rolling window size for analysis
     
     const DOUBLE_STREETS = [
         [1, 2, 3, 4, 5, 6],

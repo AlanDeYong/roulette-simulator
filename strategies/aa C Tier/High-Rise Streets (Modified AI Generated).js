@@ -30,7 +30,7 @@
  */
 function bet(spinHistory, bankroll, config, state, utils) {
     // --- 1. CONFIGURATION & CONSTANTS ---
-    const TARGET_PROFIT_PERCENT = 0.25; // 25% Gain
+    const TARGET_PROFIT_PERCENT = 3.25; // 25% Gain
     const MAX_LEVEL = 7;
     
     // Define the progression structure: Number of streets to bet, and units per street

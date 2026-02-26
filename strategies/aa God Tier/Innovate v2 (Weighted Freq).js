@@ -1,13 +1,13 @@
 
 /**
- * STRATEGY: Innovate 2 (Sticky Plan Version)
+ * STRATEGY: Innovate 2 (Sticky Plan + Weighted Rolling Frequency)
  * SOURCE: YouTube Channel "Bet With Mo" - Video: https://www.youtube.com/watch?v=2lNPusqEMMk
  *
  * LOGIC:
- * 1. Ranking: Uses 111 spins of history to rank numbers.
- * 2. Sticky Selection: At the start of a sequence (Level 1), the strategy generates a "Battle Plan".
- * It identifies the Top 2, Next 2, and Last 1 Double Streets and the specific numbers to bet.
- * These targets are LOCKED. The strategy will not change numbers based on new rankings until a Reset.
+ * 1. Ranking: Uses a ROLLING window of the last X spins (X=111).
+ * Ranks numbers by weighted criteria: Frequency > Recency > Gap > Trend.
+ * 2. Sticky Selection: At Level 1, generates a "Battle Plan" using the weighted stats of the last X spins.
+ * These targets are LOCKED until a full reset (Straight hit).
  *
  * PROGRESSION (11 Levels):
  * - Level 1: Bet Locked Group A (Top 2 Streets). Unit 2.
@@ -16,16 +16,16 @@
  * - Level 4-11: Bet All 5 Locked Groups. Increasing Units.
  *
  * RECOVERY RULES:
- * - STRAIGHT HIT: Reset to Level 1 (Triggers new Ranking/Plan).
+ * - STRAIGHT HIT: Reset to Level 1 (Unlocks plan -> Generates new plan based on latest X spins).
  * - SPLIT HIT: REBET (Stay at current level, Keep current plan).
  * - LOSS: Increase Level (Add streets/units from the locked plan).
  *
  * LOGGING:
- * - Saves "rankings_log.txt" showing the live statistical rankings for every spin.
+ * - Saves "rankings_log.txt" showing numbers sorted by Weighted Rank over the last X spins.
  */
 function bet(spinHistory, bankroll, config, state, utils) {
     // 0. CONFIGURATION & CONSTANTS
-    const MIN_HISTORY = 90;
+    const X = 37; // Rolling window size
     const DOUBLE_STREETS = [
         [1, 2, 3, 4, 5, 6],
         [7, 8, 9, 10, 11, 12],
@@ -45,9 +45,7 @@ function bet(spinHistory, bankroll, config, state, utils) {
     if (!state.lockedPlan) state.lockedPlan = null; // Stores the sticky bets
 
     // 2. CHECK PREVIOUS SPIN (Progression & Reset Logic)
-    let resetTriggered = false;
-
-    if (spinHistory.length > MIN_HISTORY && state.lastTargets.straights.length > 0) {
+    if (spinHistory.length > X && state.lastTargets.straights.length > 0) {
         const lastSpin = spinHistory[spinHistory.length - 1];
         const winningNum = lastSpin.winningNumber;
         
@@ -56,8 +54,7 @@ function bet(spinHistory, bankroll, config, state, utils) {
 
         if (hitStraight) {
             state.level = 1;
-            state.lockedPlan = null; // Unlock: Force new plan on next bet
-            resetTriggered = true;
+            state.lockedPlan = null; // Unlock: Force new plan on next bet using NEW rolling stats
         } else if (hitSplit) {
             state.level = state.level; // Rebet same level
             // Do NOT clear lockedPlan (Stick to bets)
@@ -68,17 +65,20 @@ function bet(spinHistory, bankroll, config, state, utils) {
     }
 
     // 3. DATA SUFFICIENCY
-    if (spinHistory.length < MIN_HISTORY) {
+    if (spinHistory.length < X) {
         return []; 
     }
 
-    // 4. STATISTICAL ANALYSIS (Running every spin for LOGGING purposes)
+    // 4. STATISTICAL ANALYSIS (ROLLING WEIGHTED CALCULATION)
+    // We calculate this every spin to ensure the LOG is accurate and up-to-date.
+    // Calculations are based ONLY on the analysisWindow (Last X Spins).
     const stats = [];
+    const analysisWindow = spinHistory.slice(-X); // Strict Rolling Window
+
     for (let num = 0; num <= 36; num++) {
         let frequency = 0;
-        let lastHitIndex = -1;
-        let secondLastHitIndex = -1;
-        const analysisWindow = spinHistory.slice(-MIN_HISTORY);
+        let lastHitIndex = -1;       // Index relative to the window (0 to X-1)
+        let secondLastHitIndex = -1; // Index relative to the window
         
         for (let i = analysisWindow.length - 1; i >= 0; i--) {
             if (analysisWindow[i].winningNumber === num) {
@@ -105,7 +105,7 @@ function bet(spinHistory, bankroll, config, state, utils) {
         });
     }
 
-    // Sort Ranks
+    // Sort Ranks: Freq (Desc) -> Recency (Asc) -> Gap (Asc) -> Trend (Desc)
     stats.sort((a, b) => {
         if (a.frequency !== b.frequency) return b.frequency - a.frequency;
         if (a.recency !== b.recency) return a.recency - b.recency;
@@ -116,7 +116,7 @@ function bet(spinHistory, bankroll, config, state, utils) {
     const rankMap = new Map();
     stats.forEach((stat, index) => rankMap.set(stat.number, index));
 
-    // --- LOGGING (Always log the *current* reality, even if bets are old) ---
+    // --- LOGGING ---
     const rankedNumbersList = stats.map(s => s.number).join(', ');
     
     // Calculate current hypothetical street rankings for the log
@@ -132,13 +132,15 @@ function bet(spinHistory, bankroll, config, state, utils) {
     const last1 = currentStreetScores.slice(4, 5).map(s => getStreetName(s.numbers)).join(', ');
 
     const currentSpinNum = spinHistory.length + 1;
-    const logLine = `Spin ${currentSpinNum} | Ranked: [${rankedNumbersList}]\n` +
+    const logLine = `Spin ${currentSpinNum} | Last ${X} Spins Weighted: [${rankedNumbersList}]\n` +
                     `   > Stats Targets: [1st: ${top2}] | [2nd: ${next2}] | [3rd: ${last1}]` +
-                    (state.lockedPlan ? ` | (BETTING LOCKED PLAN)` : ` | (NEW PLAN GENERATED)`) + `\n` +
+                    (state.lockedPlan ? ` | (LOCKED PLAN ACTIVE)` : ` | (GENERATING NEW PLAN)`) + `\n` +
                     `   --------------------------------------------------\n`;
 
     state.logHistory += logLine;
-    if (spinHistory.length % 50 === 0) {
+    
+    // Save every 50 spins to avoid network congestion
+    if (currentSpinNum % 50 === 0) {
         utils.saveFile("rankings_log.txt", state.logHistory);
     }
     // -----------------------------------------------------------------------
@@ -146,16 +148,15 @@ function bet(spinHistory, bankroll, config, state, utils) {
     // 5. GENERATE OR RETRIEVE LOCKED PLAN
     // We only generate a new plan if we don't have one (Level 1 start)
     if (!state.lockedPlan) {
-        // We use the 'currentStreetScores' we just calculated for logging
-        // But we need to define the specific bets for ALL 5 potential streets now.
-        
+        // Use the Rolling Stats calculated above to build the plan
         const plan = [];
-        // We take the top 5 streets
+        
+        // We take the top 5 streets based on the current stats
         const targetStreets = currentStreetScores.slice(0, 5);
 
         targetStreets.forEach(streetObj => {
             const nums = streetObj.numbers;
-            // Sort numbers in this street by CURRENT rank
+            // Sort numbers in this street by CURRENT WEIGHTED RANK
             const sortedNumsInStreet = [...nums].sort((a, b) => rankMap.get(a) - rankMap.get(b));
             
             const best1 = sortedNumsInStreet[0];
@@ -201,7 +202,7 @@ function bet(spinHistory, bankroll, config, state, utils) {
             });
         });
 
-        // Store in state: Group 1 (0-1), Group 2 (2-3), Group 3 (4)
+        // Store the plan. This effectively "snapshots" the Weighted Ranks at this moment.
         state.lockedPlan = plan;
     }
 
