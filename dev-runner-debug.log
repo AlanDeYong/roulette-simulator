@@ -8752,3 +8752,12 @@ Destination path: C:\AI\Projects\roulette-simulator\strategies\RACETRACK CW STAT
 [Dev Runner] [Backend] Duplicate request received: { id: 'Bruces System 1 and 2.js' }
 [Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\Bruces System 1 and 2.js
 [Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\Bruces System 1 and 2 (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'ELEVATE 3.js' }
+Source path: C:\AI\Projects\roulette-simulator\strategies\ELEVATE 3.js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\ELEVATE 3 (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'To Test/Kentucky Whites 9 Streets.js' }
+Source path: C:\AI\Projects\roulette-simulator\strategies\To Test\Kentucky Whites 9 Streets.js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\To Test\Kentucky Whites 9 Streets (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'To Chk Codes/S Tier/5 PRO (chk).js' }
+Source path: C:\AI\Projects\roulette-simulator\strategies\To Chk Codes\S Tier\5 PRO (chk).js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\To Chk Codes\S Tier\5 PRO (chk) (1).js
