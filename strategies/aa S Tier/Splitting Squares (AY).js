@@ -22,229 +22,147 @@
  * - Accumulate profit by targeting "hot" sectors and condensing coverage (Squares -> Splits) when accuracy improves.
  * - Stop Loss: Bankroll depletion.
  */
+/**
+ * Source: Adapting https://www.youtube.com/watch?v=54Skimo6xW4 logic with Expanding Hot-Zone Tracking
+ * Modifications: Added Hot-Split tracking. If a targeted straight ("square") hits, it is replaced by the hottest split.
+ */
 
-function bet(spinHistory, bankroll, config, state) {
-    // --- 0. Configuration & Limits ---
-    const MIN_HISTORY = 20;
-    const ROULETTE_NUMBERS = Array.from({ length: 37 }, (_, i) => i);
-    
-    // Ensure we respect the config minimums, defaulting to 2 if not provided or too low
-    const baseUnit = Math.max(config.betLimits.min || 1, 2);
-    const maxBet = config.betLimits.max || 10000;
-
-    // --- 1. State Initialization ---
-    if (!state.initialized) {
-        state.peakBankroll = bankroll; // Track High Water Mark
-        state.multiplier = 1;          // Progression Multiplier
-        state.streetStates = {};       // Track Square vs Split for each Double Street
-        state.activeSplitsCount = 0;   // How many streets are currently Splits
-        
-        // Initialize all 6 Double Streets to 'square'
-        // IDs 1-6 correspond to ranges: 1:1-6, 2:7-12, 3:13-18, 4:19-24, 5:25-30, 6:31-36
-        for (let i = 1; i <= 6; i++) {
-            state.streetStates[i] = 'square';
-        }
-        
-        state.initialized = true;
-    }
-
-    // --- 2. History Check ---
-    // We need 111 spins for analysis before we start betting (starting spin #112)
-    if (spinHistory.length < MIN_HISTORY) {
+function bet(spinHistory, bankroll, config, state, utils) {
+    // 1. Observation Phase: Wait for 37 spins
+    if (spinHistory.length < 37) {
         return []; 
     }
 
-    // --- 3. Process Previous Result (Progression & Logic) ---
-    const lastSpinIndex = spinHistory.length - 1;
-    const lastResult = spinHistory[lastSpinIndex];
-    const winningNum = lastResult.winningNumber; // Assuming accessor is .winningNumber
+    // 2. Initialize State
+    if (!state.initialized) {
+        state.initialized = true;
+        state.level = 1;
+        state.hotStreets = []; 
+        state.hotSplits = []; // Added: Will store ranked splits
+        state.lastBankroll = bankroll;
+    }
 
-    // Only process logic if we actually placed a bet previously (i.e., we are past the warmup)
-    if (spinHistory.length > MIN_HISTORY) {
-        const previousBankroll = state.lastBankroll || bankroll;
-        const profit = bankroll - previousBankroll;
-
-        if (profit > 0) {
-            // --- WIN LOGIC ---
-            
-            // 1. Peak Bankroll Check
-            if (bankroll > state.peakBankroll) {
-                state.peakBankroll = bankroll;
-                state.multiplier = 1; // Reset progression on new peak
-            }
-
-            // 2. Identify which Double Street (DS) hit
-            // DS 1: 1-6, DS 2: 7-12 ... DS i: (i-1)*6 + 1 to i*6
-            let hitDS = null;
-            if (winningNum !== 0) {
-                hitDS = Math.ceil(winningNum / 6);
-            }
-
-            // 3. Handle Conversion (Square -> Split)
-            // Strategy: If a square hits, convert to split. If > 3 splits, reset all.
-            if (hitDS && state.streetStates[hitDS] === 'square') {
-                if (state.activeSplitsCount < 3) {
-                    state.streetStates[hitDS] = 'split';
-                    state.activeSplitsCount++;
-                } else {
-                    // Reset Condition: "Convert only up to 3... after that reset"
-                    // Interpretation: If we hit a square and are already at cap, we reset everything.
-                    for (let i = 1; i <= 6; i++) {
-                        state.streetStates[i] = 'square';
-                    }
-                    state.activeSplitsCount = 0;
-                }
-            }
+    // 3. Evaluate previous spin & manage progression
+    let triggerReset = false;
+    
+    if (state.hotStreets.length > 0) {
+        const isWin = bankroll > state.lastBankroll;
+        
+        if (isWin) {
+            state.level = 1;
+            triggerReset = true; 
         } else {
-            // --- LOSS LOGIC ---
-            // Double up and rebet
-            state.multiplier *= 2;
+            state.level++;
+            if (state.level > 7) {
+                state.level = 1;
+                triggerReset = true; 
+            }
         }
     }
 
-    // Update tracking for next spin
     state.lastBankroll = bankroll;
 
-    // --- 4. Ranking Algorithm (The "Brain") ---
-    // Analyze last 111 spins
-    const analysisHistory = spinHistory.slice(-111);
-    const stats = {};
-    
-    // Initialize stats
-    ROULETTE_NUMBERS.forEach(num => {
-        stats[num] = { freq: 0, lastIndex: -1, gaps: [], avgGap: 0, trend: 0, rankScore: 0 };
-    });
-
-    // Populate raw metrics
-    analysisHistory.forEach((spin, idx) => {
-        const num = spin.winningNumber;
-        if (stats[num]) {
-            const prevIndex = stats[num].lastIndex;
-            stats[num].freq++;
-            if (prevIndex !== -1) {
-                stats[num].gaps.push(idx - prevIndex);
+    // 4. Rank Hot Zones & Hot Splits (Only on L1 / Reset)
+    if (state.level === 1 || state.hotStreets.length === 0 || triggerReset) {
+        const last37 = spinHistory.slice(-37);
+        const lineCounts = { 1: 0, 7: 0, 13: 0, 19: 0, 25: 0, 31: 0 };
+        
+        // Setup all valid roulette splits
+        const allSplits = [];
+        for (let i = 1; i <= 36; i++) {
+            if (i % 3 !== 0) allSplits.push(`${i}-${i + 1}`); // Horizontal splits
+            if (i <= 33) allSplits.push(`${i}-${i + 3}`);     // Vertical splits
+        }
+        const splitCounts = {};
+        allSplits.forEach(s => splitCounts[s] = 0);
+        
+        for (let spin of last37) {
+            const num = spin.winningNumber;
+            if (num === 0 || num === '00') continue; 
+            
+            // Tally streets
+            const lineBase = Math.floor((num - 1) / 6) * 6 + 1;
+            if (lineCounts[lineBase] !== undefined) {
+                lineCounts[lineBase]++;
             }
-            stats[num].lastIndex = idx;
-        }
-    });
 
-    // Calculate Final Rank Score
-    const totalAnalysisSpins = analysisHistory.length;
-    ROULETTE_NUMBERS.forEach(num => {
-        const s = stats[num];
-        const recency = totalAnalysisSpins - s.lastIndex; // Lower is better
-        
-        const sumGaps = s.gaps.reduce((a, b) => a + b, 0);
-        s.avgGap = s.gaps.length > 0 ? sumGaps / s.gaps.length : totalAnalysisSpins; // Lower is better
-
-        const lastGap = s.gaps.length > 0 ? s.gaps[s.gaps.length - 1] : totalAnalysisSpins;
-        // Positive trend if gaps are shrinking (avg > last)
-        s.trend = s.gaps.length > 1 ? (s.avgGap - lastGap) : 0; 
-
-        // Weighted Scoring (Arbitrary weights to match "higher weight" description)
-        // Adjust these weights to tune the strategy
-        const freqScore = s.freq * 10; 
-        const recencyScore = 1000 / (recency + 1);
-        const gapScore = 1000 / (s.avgGap + 1);
-        const trendScore = s.trend * 5;
-
-        s.rankScore = freqScore + recencyScore + gapScore + trendScore;
-    });
-
-    const getRank = (n) => stats[n].rankScore;
-
-    // --- 5. Bet Construction ---
-    const bets = [];
-    const currentBetAmount = Math.min(baseUnit * state.multiplier, maxBet);
-
-    // Helper to generate numbers in a Double Street
-    // dsId: 1-6
-    const getDSNumbers = (dsId) => {
-        const start = (dsId - 1) * 6 + 1;
-        return Array.from({ length: 6 }, (_, i) => start + i);
-    };
-
-    // Helper: Get all possible squares (corners) in a Double Street range
-    const getSquaresInDS = (dsId) => {
-        const start = (dsId - 1) * 6 + 1;
-        // In a block of 6 (e.g., 1-6), squares are: [1,2,4,5] and [2,3,5,6]
-        // Top-left numbers are start and start+1
-        return [
-            { topLeft: start, numbers: [start, start+1, start+3, start+4] },
-            { topLeft: start+1, numbers: [start+1, start+2, start+4, start+5] }
-        ];
-    };
-
-    // Helper: Get all possible splits in a Double Street range
-    const getSplitsInDS = (dsId) => {
-        const start = (dsId - 1) * 6 + 1;
-        const end = start + 5;
-        const splits = [];
-        
-        // Horizontal splits (n, n+1) where n % 3 != 0
-        for (let i = start; i < end; i++) {
-            if (i % 3 !== 0) splits.push([i, i + 1]);
-        }
-        // Vertical splits (n, n+3)
-        for (let i = start; i <= end - 3; i++) {
-            splits.push([i, i + 3]);
-        }
-        return splits;
-    };
-
-    // A. Bet on Zero (Fixed unit)
-    bets.push({
-        type: 'number', // Straight up
-        value: 0,
-        amount: currentBetAmount
-    });
-
-    // B. Bet on 6 Double Streets (Squares or Splits)
-    for (let dsId = 1; dsId <= 6; dsId++) {
-        const mode = state.streetStates[dsId];
-
-        if (mode === 'square') {
-            // Find best Square
-            const candidates = getSquaresInDS(dsId);
-            let bestCandidate = candidates[0];
-            let bestScore = -Infinity;
-
-            candidates.forEach(cand => {
-                const score = cand.numbers.reduce((sum, n) => sum + getRank(n), 0);
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestCandidate = cand;
-                }
+            // Tally splits
+            allSplits.forEach(s => {
+                const parts = s.split('-').map(Number);
+                if (parts.includes(num)) splitCounts[s]++;
             });
+        }
 
-            bets.push({
-                type: 'corner',
-                value: bestCandidate.topLeft, // API expects top-left number for corner
-                amount: currentBetAmount
-            });
+        // Sort double streets
+        state.hotStreets = Object.keys(lineCounts).map(Number).sort((a, b) => {
+            if (lineCounts[b] !== lineCounts[a]) {
+                return lineCounts[b] - lineCounts[a];
+            }
+            return a - b; 
+        });
 
+        // Sort splits from hottest to coldest
+        state.hotSplits = allSplits.sort((a, b) => {
+            if (splitCounts[b] !== splitCounts[a]) {
+                return splitCounts[b] - splitCounts[a];
+            }
+            return 0; // Tie breaker not strictly necessary for splits
+        });
+    }
+
+    // 5. Progression Array
+    const progressionLevels = [
+        { activeCount: 1, su: 3,  nu: 1 },  
+        { activeCount: 2, su: 3,  nu: 1 },  
+        { activeCount: 3, su: 6,  nu: 2 },  
+        { activeCount: 4, su: 6,  nu: 2 },  
+        { activeCount: 5, su: 6,  nu: 2 },  
+        { activeCount: 5, su: 12, nu: 4 },  
+        { activeCount: 5, su: 24, nu: 8 }   
+    ];
+
+    const currentLevelData = progressionLevels[state.level - 1];
+    const unit = config.betLimits.min;
+    
+    let streetAmount = currentLevelData.su * unit;
+    let str1Amount = currentLevelData.nu * unit;
+    let str2Amount = currentLevelData.nu * unit;
+
+    streetAmount = Math.max(config.betLimits.min, Math.min(streetAmount, config.betLimits.max));
+    str1Amount = Math.max(config.betLimits.min, Math.min(str1Amount, config.betLimits.max));
+    str2Amount = Math.max(config.betLimits.min, Math.min(str2Amount, config.betLimits.max));
+
+    // 6. Generate Expanding Bets & Check Hit Substitution
+    const betsToPlace = [];
+    const lastHit = spinHistory[spinHistory.length - 1].winningNumber;
+    let splitIndexUsed = 0; // Keep track so we don't bet the exact same split twice if multiple numbers hit
+    
+    for (let i = 0; i < currentLevelData.activeCount; i++) {
+        const targetBase = state.hotStreets[i];
+        const targetStraight1 = targetBase + 4;
+        const targetStraight2 = targetBase + 5;
+
+        // Push the main street base
+        betsToPlace.push({ type: 'street', value: targetBase, amount: streetAmount });
+
+        // Check straight 1
+        if (targetStraight1 === lastHit) {
+            const hotSplit = state.hotSplits[splitIndexUsed] || state.hotSplits[0];
+            betsToPlace.push({ type: 'split', value: hotSplit, amount: str1Amount });
+            splitIndexUsed++;
         } else {
-            // Mode is 'split'
-            // Find best Split
-            const candidates = getSplitsInDS(dsId);
-            let bestCandidate = candidates[0];
-            let bestScore = -Infinity;
+            betsToPlace.push({ type: 'number', value: targetStraight1, amount: str1Amount });
+        }
 
-            candidates.forEach(cand => {
-                const score = cand.reduce((sum, n) => sum + getRank(n), 0);
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestCandidate = cand;
-                }
-            });
-
-            bets.push({
-                type: 'split',
-                value: bestCandidate, // API expects array [n1, n2] for split
-                amount: currentBetAmount
-            });
+        // Check straight 2
+        if (targetStraight2 === lastHit) {
+            const hotSplit = state.hotSplits[splitIndexUsed] || state.hotSplits[0];
+            betsToPlace.push({ type: 'split', value: hotSplit, amount: str2Amount });
+            splitIndexUsed++;
+        } else {
+            betsToPlace.push({ type: 'number', value: targetStraight2, amount: str2Amount });
         }
     }
 
-    return bets;
+    return betsToPlace;
 }

@@ -13,6 +13,7 @@ function bet(spinHistory, bankroll, config, state) {
         state.multiplier = 1;          // Progression Multiplier
         state.streetStates = {};       // Track Square vs Split for each Double Street
         state.activeSplitsCount = 0;   // How many streets are currently Splits
+        state.excludedNumbers = {};    // Track which number triggered the split to avoid it
         
         // Initialize all 6 Double Streets to 'square'
         // IDs 1-6 correspond to ranges: 1:1-6, 2:7-12, 3:13-18, 4:19-24, 5:25-30, 6:31-36
@@ -59,12 +60,14 @@ function bet(spinHistory, bankroll, config, state) {
             if (hitDS && state.streetStates[hitDS] === 'square') {
                 if (state.activeSplitsCount < 3) {
                     state.streetStates[hitDS] = 'split';
+                    state.excludedNumbers[hitDS] = winningNum; // Remember the hit number
                     state.activeSplitsCount++;
                 } else {
                     // Reset Condition: If cap reached, reset all to squares
                     for (let i = 1; i <= 6; i++) {
                         state.streetStates[i] = 'square';
                     }
+                    state.excludedNumbers = {}; // Clear exclusions on reset
                     state.activeSplitsCount = 0;
                 }
             }
@@ -195,12 +198,19 @@ function bet(spinHistory, bankroll, config, state) {
 
         } else {
             // Mode is 'split'
-            // Find best Split
-            const candidates = getSplitsInDS(dsId);
-            let bestCandidate = candidates[0];
+            const allCandidates = getSplitsInDS(dsId);
+            const excludedNum = state.excludedNumbers[dsId];
+
+            // Filter out any split candidate that includes the excluded number
+            const validCandidates = excludedNum !== undefined 
+                ? allCandidates.filter(cand => !cand.includes(excludedNum)) 
+                : allCandidates;
+
+            // Find best Split among valid candidates
+            let bestCandidate = validCandidates[0];
             let bestScore = -Infinity;
 
-            candidates.forEach(cand => {
+            validCandidates.forEach(cand => {
                 const score = cand.reduce((sum, n) => sum + getRank(n), 0);
                 if (score > bestScore) {
                     bestScore = score;
