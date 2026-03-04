@@ -26,8 +26,8 @@ function bet(spinHistory, bankroll, config, state) {
     const UNIT = config.betLimits.minOutside; 
     
     // Multipliers for the progression
-    const LEVEL_1_MULT = 1;   // e.g. $5
-    const LEVEL_2_MULT = 2.5; // e.g. $12.5 (rounded down usually, or up)
+    const LEVEL_1_MULT = 50;   // e.g. $5 was 1
+    const LEVEL_2_MULT = 125; // e.g. $12.5 was 2.5(rounded down usually, or up)
 
     // --- Helper: Identify Dozen (0=Zero/Loss, 1=1st, 2=2nd, 3=3rd) --- 
     const getDozen = (spin) => { 
