@@ -42,6 +42,19 @@ config = {
   incrementMode: 'fixed'     // New: 'fixed' (increase by minIncrementalBet) or 'base' (increase by initial bet on that position)
 };
 
+// Return Object Structure
+// Your function must return an array of bet objects.
+// Example:
+return [
+  { type: 'red', amount: 10 },           // Outside bet
+  { type: 'number', value: 17, amount: 5 }, // Inside bet on 17
+  { type: 'split', value: [0, 2], amount: 5 }, // Split bet 0-2
+  { type: 'corner', value: 1, amount: 5 }, // Corner bet covering 1,2,4,5 (value is top-left number)
+  { type: 'street', value: 1, amount: 5 }, // Street bet covering 1,2,3
+  { type: 'line', value: 1, amount: 5 }    // Six line bet covering 1-6
+];
+
+
 // Incremental Bet Logic
 // Strategies should respect `config.incrementMode`:
 // - If 'fixed': Increase bets by `config.minIncrementalBet`

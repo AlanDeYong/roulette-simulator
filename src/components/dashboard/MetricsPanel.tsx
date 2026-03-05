@@ -30,8 +30,10 @@ const MetricCard: React.FC<{
 );
 
 export const MetricsPanel: React.FC = () => {
-  const { results } = useSimulationStore();
+  const { results, config } = useSimulationStore();
   const { metrics } = results;
+
+  const peakProfit = metrics.peakBankroll - config.startingBankroll;
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -63,10 +65,11 @@ export const MetricsPanel: React.FC = () => {
         color="text-red-400"
       />
       <MetricCard
-        title="Max Drawdown"
-        value={`$${metrics.maxDrawdown.toFixed(0)}`}
-        icon={<TrendingDown className="w-5 h-5 text-red-500" />}
-        color="text-red-500"
+        title="Peak Profit"
+        value={`${peakProfit >= 0 ? '+' : ''}$${peakProfit.toFixed(0)}`}
+        subValue="(Peak - Start)"
+        icon={<TrendingUp className="w-5 h-5 text-green-500" />}
+        color="text-green-500"
       />
 
       {/* Row 2: Stats */}

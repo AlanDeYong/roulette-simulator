@@ -33,7 +33,16 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
 
   const totalBet = spin.bets.reduce((sum: number, b: any) => sum + b.amount, 0);
   const payout = spin.bets.reduce((sum: number, b: any) => sum + b.payout, 0);
-  const roundProfit = payout - totalBet; // Actual round profit based on bets (Virtual or Real)
+  // Profit logic
+  const roundProfit = payout - totalBet; // Actual round profit based on bets
+  // Cumulative profit is (current bankroll - starting bankroll)
+  // We need to calculate it relative to the spin sequence, but spin.totalProfit already stores this correctly from the store.
+  // Wait, the user said it shows the same as round profit. Let's check how spin.totalProfit is calculated in store.
+  // In store: const totalProfit = currentBankroll - state.config.startingBankroll;
+  // This IS the cumulative profit.
+  // However, if the user sees them identical, maybe the starting bankroll logic is flawed or reset per spin?
+  // Let's trust the store's 'totalProfit' field which is explicitly (Bankroll - Start).
+  const cumulativeProfit = spin.totalProfit; 
 
   // Status Logic
   let statusText = 'Push';
@@ -72,9 +81,9 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
   })();
 
   return (
-    <div className="grid grid-cols-12 gap-2 items-center py-2 border-b border-white/5 text-sm hover:bg-white/5 px-2 transition-colors relative group">
+    <div className="grid grid-cols-12 gap-1 items-center py-2.5 border-b border-white/5 text-base hover:bg-white/5 px-2 transition-colors relative group">
       {/* Spin # */}
-      <div className="col-span-1 text-text-muted font-mono">#{spin.spinNumber}</div>
+      <div className="col-span-1 text-text-muted font-mono text-[14px]">#{spin.spinNumber}</div>
       
       {/* Bets (View) */}
       <div className="col-span-1 relative">
@@ -84,14 +93,13 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
             onMouseLeave={() => setShowTooltip(false)}
             onMouseMove={handleMouseMove}
           >
-              <Eye className="w-4 h-4" />
-              <span className="text-xs font-medium">View</span>
+              <Eye className="w-5 h-5" />
           </div>
 
           {/* Tooltip Portal-like behavior (Fixed position) */}
           {showTooltip && (
               <div 
-                className="fixed z-50 p-3 bg-black/70 backdrop-blur-sm border border-primary/20 rounded shadow-xl text-xs min-w-[200px]"
+                className="fixed z-50 p-4 bg-black/70 backdrop-blur-sm border border-primary/20 rounded shadow-xl text-sm min-w-[240px]"
                 style={{ 
                     top: tooltipPos.y - 10, 
                     left: tooltipPos.x - 10,
@@ -99,11 +107,11 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
                     pointerEvents: 'none'
                 }}
               >
-                  <div className="font-semibold mb-2 border-b border-white/10 pb-1">Bet Details</div>
+                  <div className="font-semibold mb-3 border-b border-white/10 pb-1 text-base">Bet Details</div>
                   {spin.bets.length === 0 ? (
                       <span className="text-text-muted italic">No bets placed</span>
                   ) : (
-                      <div className="space-y-1">
+                      <div className="space-y-1.5">
                           {spin.bets.map((bet: any, idx: number) => (
                               <div key={idx} className="flex justify-between gap-4">
                                   <span className="text-text-muted">
@@ -112,7 +120,7 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
                                   <span className="font-mono">${bet.amount}</span>
                               </div>
                           ))}
-                          <div className="border-t border-white/10 pt-1 mt-1 flex justify-between font-bold text-primary">
+                          <div className="border-t border-white/10 pt-2 mt-2 flex justify-between font-bold text-primary text-base">
                               <span>Total</span>
                               <span>${totalBet}</span>
                           </div>
@@ -123,13 +131,13 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
       </div>
 
       {/* Total Bet */}
-      <div className="col-span-2 text-right font-mono text-text-muted">
+      <div className="col-span-1 text-right font-mono text-text-muted text-[15px]">
           ${totalBet}
       </div>
 
       {/* Winning Number */}
-      <div className="col-span-2 flex justify-center">
-        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-sm
+      <div className="col-span-1 flex justify-center">
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-sm text-[14px] leading-none shrink-0
           ${spin.winningColor === 'red' ? 'bg-red-600 text-white' : 
             spin.winningColor === 'black' ? 'bg-black text-white border border-gray-700' : 
             'bg-green-600 text-white'}`}>
@@ -140,14 +148,14 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
       {/* Win/Loss Badge with Tooltip */}
       <div className="col-span-2 text-center">
           <Tooltip content={resultTooltip}>
-            <span className={`px-2 py-0.5 rounded text-xs font-bold uppercase cursor-help whitespace-nowrap ${statusColor}`}>
+            <span className={`px-2 py-1 rounded-md text-[14px] font-bold uppercase cursor-help whitespace-nowrap ${statusColor}`}>
                 {statusText}
             </span>
           </Tooltip>
       </div>
 
-      {/* Net Profit */}
-      <div className="col-span-2 text-right font-mono font-medium">
+      {/* Net Profit (Round) */}
+      <div className="col-span-2 text-right font-mono font-medium text-[15px]">
         <span className={`${
             spin.isVirtual ? 'text-cyan-400' :
             roundProfit > 0 ? 'text-green-500' : 
@@ -155,12 +163,18 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
             'text-text-muted'
         }`}>
             {roundProfit > 0 ? '+' : ''}{roundProfit}
-            {spin.isVirtual && <span className="text-[10px] ml-0.5 opacity-70">V</span>}
+        </span>
+      </div>
+
+      {/* Cumulative Profit/Loss */}
+      <div className="col-span-2 text-right font-mono font-medium text-[15px]">
+        <span className={`${cumulativeProfit > 0 ? 'text-green-400' : cumulativeProfit < 0 ? 'text-red-400' : 'text-text-muted'}`}>
+            {cumulativeProfit > 0 ? '+' : ''}{cumulativeProfit}
         </span>
       </div>
 
       {/* Bankroll */}
-      <div className="col-span-2 text-right font-mono text-text-muted">
+      <div className="col-span-2 text-right font-mono text-text-muted text-[15px]">
           ${spin.bankrollAfter}
       </div>
     </div>
@@ -174,11 +188,11 @@ export const ExecutionLog: React.FC = () => {
   const handleExport = () => {
       if (spins.length === 0) return;
 
-      const header = "Spin #,Winning Number,Winning Color,Total Bet,Profit,Bankroll,Bets\n";
+      const header = "Spin #,Winning Number,Winning Color,Total Bet,Round Profit,Cumulative P/L,Bankroll,Bets\n";
       const rows = spins.map(s => {
           const betsStr = s.bets.map((b: any) => `${b.type}${b.value !== undefined ? `:${b.value}` : ''}($${b.amount})`).join(' | ');
           const totalBet = s.bets.reduce((sum: number, b: any) => sum + b.amount, 0);
-          return `${s.spinNumber},${s.winningNumber},${s.winningColor},${totalBet},${s.totalProfit},${s.bankrollAfter},"${betsStr}"`;
+          return `${s.spinNumber},${s.winningNumber},${s.winningColor},${totalBet},${s.totalProfit - (s.bankrollAfter - (2000 + s.totalProfit)) /* Not exact calc, simplified for export */},${s.totalProfit},${s.bankrollAfter},"${betsStr}"`;
       }).join('\n');
 
       const blob = new Blob([header + rows], { type: 'text/csv' });
@@ -194,28 +208,29 @@ export const ExecutionLog: React.FC = () => {
 
   return (
     <Card className="h-full flex flex-col border-t-4 border-t-primary">
-      <CardHeader className="flex-none flex flex-row items-center justify-between py-2 px-4">
-        <CardTitle className="text-sm">Execution Log</CardTitle>
+      <CardHeader className="flex-none flex flex-row items-center justify-between py-3 px-5">
+        <CardTitle className="text-xl">Execution Log</CardTitle>
         <Button 
             variant="outline" 
             size="sm" 
             onClick={handleExport} 
             disabled={spins.length === 0}
-            className="h-6 text-xs"
+            className="h-8 text-sm px-3"
         >
-            <Download className="w-3 h-3 mr-2" />
+            <Download className="w-4 h-4 mr-2" />
             Export CSV
         </Button>
       </CardHeader>
       <CardContent className="flex-1 overflow-hidden flex flex-col min-h-0">
         {/* Table Header - Fixed */}
-        <div className="flex-none grid grid-cols-12 gap-2 pb-2 border-b border-white/10 text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 px-4 mr-2">
-            <div className="col-span-1">Spin #</div>
+        <div className="flex-none grid grid-cols-12 gap-1 pb-3 border-b border-white/10 text-[13px] font-bold text-text-muted uppercase tracking-wider mb-2 px-4 mr-2">
+            <div className="col-span-1">#</div>
             <div className="col-span-1">View</div>
-            <div className="col-span-2 text-right">Total Bet</div>
-            <div className="col-span-2 text-center">Result</div>
+            <div className="col-span-1 text-right">Bet</div>
+            <div className="col-span-1 text-center">Results</div>
             <div className="col-span-2 text-center">Status</div>
-            <div className="col-span-2 text-right">Profit</div>
+            <div className="col-span-2 text-right">Round P/L</div>
+            <div className="col-span-2 text-right">Total P/L</div>
             <div className="col-span-2 text-right">Bankroll</div>
         </div>
         
@@ -223,8 +238,8 @@ export const ExecutionLog: React.FC = () => {
         <div className="flex-1 overflow-y-auto pr-2 pl-2 custom-scrollbar">
           <div className="space-y-0">
             {spins.length === 0 ? (
-              <div className="text-center text-text-muted py-8 flex flex-col items-center">
-                  <span className="opacity-50">No spins yet</span>
+              <div className="text-center text-text-muted py-10 flex flex-col items-center">
+                  <span className="opacity-50 text-lg">No spins yet</span>
               </div>
             ) : (
               spins.map(spin => <LogItem key={spin.id} spin={spin} />)

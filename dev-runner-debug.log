@@ -8780,3 +8780,964 @@ Destination path: C:\AI\Projects\roulette-simulator\strategies\Cassandras 5 Movi
 [Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\Legends Unite (chk).js
 Destination path: C:\AI\Projects\roulette-simulator\strategies\Legends Unite (chk) (1).js
 [Dev Runner] Cleanup triggered by SIGINT
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m2061[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.24.149.181:[1m5173[22m/[39m
+[Dev Runner] [Backend] Duplicate request received: { id: 'aa Machine Only/Kentucky White Moving Corners.js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\aa Machine Only\Kentucky White Moving Corners.js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\aa Machine Only\Kentucky White Moving Corners (1).js
+[Dev Runner] [Frontend] [2m11:17:40 am[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css, /src/components/ConfigurationPanel.tsx, /src/components/SimulationDashboard.tsx, /src/components/StrategyEditor.tsx, /src/components/dashboard/MetricsPanel.tsx, /src/components/dashboard/BankrollChart.tsx, /src/components/FileManager.tsx, /src/components/dashboard/ExecutionLog.tsx[22m
+[Dev Runner] [Frontend] [2m11:17:50 am[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css, /src/components/ConfigurationPanel.tsx, /src/components/SimulationDashboard.tsx, /src/components/StrategyEditor.tsx, /src/components/dashboard/MetricsPanel.tsx, /src/components/dashboard/BankrollChart.tsx, /src/components/FileManager.tsx, /src/components/dashboard/ExecutionLog.tsx[22m
+[Dev Runner] [Frontend] [2m11:18:11 am[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/MetricsPanel.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m3:29:34 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/ExecutionLog.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m3:30:14 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/ExecutionLog.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m3:34:13 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/ExecutionLog.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m3:34:23 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css, /src/components/ConfigurationPanel.tsx, /src/components/SimulationDashboard.tsx, /src/components/StrategyEditor.tsx, /src/components/dashboard/MetricsPanel.tsx, /src/components/dashboard/BankrollChart.tsx, /src/components/FileManager.tsx, /src/components/dashboard/ExecutionLog.tsx[22m
+[Dev Runner] [Frontend ERR] [2m3:34:23 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (237:16)
+
+[0m [90m 235 |[39m           }[33m;[39m
+ [90m 236 |[39m
+[31m[1m>[22m[39m[90m 237 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 238 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 239 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 240 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:237:16
+[33m  239|            let spinsToPeak = 0;
+  240|            let lowestBankroll = state.config.startingBankroll;
+  241|            let spinsToLowest = 0;
+     |                          ^
+  242|            let maxDrawdown = 0;
+  243|            let tempPeak = state.config.startingBankroll;[39m
+[Dev Runner] [Frontend ERR] [2m3:34:23 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (237:16)
+
+[0m [90m 235 |[39m           }[33m;[39m
+ [90m 236 |[39m
+[31m[1m>[22m[39m[90m 237 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 238 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 239 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 240 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:237:16
+[33m  239|            let spinsToPeak = 0;
+  240|            let lowestBankroll = state.config.startingBankroll;
+  241|            let spinsToLowest = 0;
+     |                          ^
+  242|            let maxDrawdown = 0;
+  243|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:23 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (237:16)
+
+[0m [90m 235 |[39m           }[33m;[39m
+ [90m 236 |[39m
+[31m[1m>[22m[39m[90m 237 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 238 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 239 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 240 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:237:16
+[33m  239|            let spinsToPeak = 0;
+  240|            let lowestBankroll = state.config.startingBankroll;
+  241|            let spinsToLowest = 0;
+     |                          ^
+  242|            let maxDrawdown = 0;
+  243|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:23 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (237:16)
+
+[0m [90m 235 |[39m           }[33m;[39m
+ [90m 236 |[39m
+[31m[1m>[22m[39m[90m 237 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 238 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 239 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 240 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:237:16
+[33m  239|            let spinsToPeak = 0;
+  240|            let lowestBankroll = state.config.startingBankroll;
+  241|            let spinsToLowest = 0;
+     |                          ^
+  242|            let maxDrawdown = 0;
+  243|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:23 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (237:16)
+
+[0m [90m 235 |[39m           }[33m;[39m
+ [90m 236 |[39m
+[31m[1m>[22m[39m[90m 237 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 238 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 239 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 240 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:237:16
+[33m  239|            let spinsToPeak = 0;
+  240|            let lowestBankroll = state.config.startingBankroll;
+  241|            let spinsToLowest = 0;
+     |                          ^
+  242|            let maxDrawdown = 0;
+  243|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:23 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (237:16)
+
+[0m [90m 235 |[39m           }[33m;[39m
+ [90m 236 |[39m
+[31m[1m>[22m[39m[90m 237 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 238 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 239 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 240 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:237:16
+[33m  239|            let spinsToPeak = 0;
+  240|            let lowestBankroll = state.config.startingBankroll;
+  241|            let spinsToLowest = 0;
+     |                          ^
+  242|            let maxDrawdown = 0;
+  243|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:23 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (237:16)
+
+[0m [90m 235 |[39m           }[33m;[39m
+ [90m 236 |[39m
+[31m[1m>[22m[39m[90m 237 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 238 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 239 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 240 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:237:16
+[33m  239|            let spinsToPeak = 0;
+  240|            let lowestBankroll = state.config.startingBankroll;
+  241|            let spinsToLowest = 0;
+     |                          ^
+  242|            let maxDrawdown = 0;
+  243|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:23 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (237:16)
+
+[0m [90m 235 |[39m           }[33m;[39m
+ [90m 236 |[39m
+[31m[1m>[22m[39m[90m 237 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 238 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 239 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 240 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:237:16
+[33m  239|            let spinsToPeak = 0;
+  240|            let lowestBankroll = state.config.startingBankroll;
+  241|            let spinsToLowest = 0;
+     |                          ^
+  242|            let maxDrawdown = 0;
+  243|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:23 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (237:16)
+
+[0m [90m 235 |[39m           }[33m;[39m
+ [90m 236 |[39m
+[31m[1m>[22m[39m[90m 237 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 238 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 239 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 240 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:237:16
+[33m  239|            let spinsToPeak = 0;
+  240|            let lowestBankroll = state.config.startingBankroll;
+  241|            let spinsToLowest = 0;
+     |                          ^
+  242|            let maxDrawdown = 0;
+  243|            let tempPeak = state.config.startingBankroll;[39m
+[Dev Runner] [Frontend ERR] [2m3:34:24 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (237:16)
+
+[0m [90m 235 |[31m           }[33m;[31m
+ [90m 236 |[31m
+[31m[1m>[22m[31m[90m 237 |[31m           [36mconst[31m newSpins [33m=[31m [[33m...[31mstate[33m.[31mresults[33m.[31mspins[33m,[31m resultWithCumulative][33m;[31m
+ [90m     |[31m                 [31m[1m^[22m[31m
+ [90m 238 |[31m           [36mlet[31m peakBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m
+ [90m 239 |[31m           [36mlet[31m spinsToPeak [33m=[31m [35m0[31m[33m;[31m
+ [90m 240 |[31m           [36mlet[31m lowestBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:237:16
+[33m  239|            let spinsToPeak = 0;
+  240|            let lowestBankroll = state.config.startingBankroll;
+  241|            let spinsToLowest = 0;
+     |                          ^
+  242|            let maxDrawdown = 0;
+  243|            let tempPeak = state.config.startingBankroll;[39m
+      at constructor (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptScopeHandler.checkRedeclarationInScope (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1619:19)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1585:12)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:4880:11)
+      at TypeScriptParserMixin.declareNameFromIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7567:16)
+      at TypeScriptParserMixin.checkIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7563:12)
+      at TypeScriptParserMixin.checkLVal (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7500:12)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13402:10)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9742:11)
+      at TypeScriptParserMixin.parseVar (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13373:12)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13220:10)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9408:31)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12841:23)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12757:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12737:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13306:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13299:10)
+      at TypeScriptParserMixin.parseBlock (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13287:10)
+      at TypeScriptParserMixin.parseFunctionBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12090:24)
+      at TypeScriptParserMixin.parseArrowExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12065:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11677:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11321:23)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11071:23)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10821:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9776:20)
+      at C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:39
+      at TypeScriptParserMixin.allowInAnd (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12416:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12483:17)
+      at TypeScriptParserMixin.parseExprListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12165:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11242:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11176:29)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11110:19)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9272:18)
+      at TypeScriptParserMixin.parseSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11084:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11075:17)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+[Dev Runner] [Frontend] [2m3:34:37 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css, /src/components/ConfigurationPanel.tsx, /src/components/SimulationDashboard.tsx, /src/components/StrategyEditor.tsx, /src/components/dashboard/MetricsPanel.tsx, /src/components/dashboard/BankrollChart.tsx, /src/components/FileManager.tsx, /src/components/dashboard/ExecutionLog.tsx[22m
+[Dev Runner] [Frontend ERR] [2m3:34:37 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[Dev Runner] [Frontend ERR] [2m3:34:37 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:37 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:37 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:37 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:37 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:37 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:37 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:34:37 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[Dev Runner] [Frontend ERR] [2m3:34:37 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[31m           }[33m;[31m
+ [90m 239 |[31m
+[31m[1m>[22m[31m[90m 240 |[31m           [36mconst[31m newSpins [33m=[31m [[33m...[31mstate[33m.[31mresults[33m.[31mspins[33m,[31m resultWithCumulative][33m;[31m
+ [90m     |[31m                 [31m[1m^[22m[31m
+ [90m 241 |[31m           [36mlet[31m peakBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m
+ [90m 242 |[31m           [36mlet[31m spinsToPeak [33m=[31m [35m0[31m[33m;[31m
+ [90m 243 |[31m           [36mlet[31m lowestBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+      at constructor (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptScopeHandler.checkRedeclarationInScope (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1619:19)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1585:12)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:4880:11)
+      at TypeScriptParserMixin.declareNameFromIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7567:16)
+      at TypeScriptParserMixin.checkIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7563:12)
+      at TypeScriptParserMixin.checkLVal (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7500:12)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13402:10)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9742:11)
+      at TypeScriptParserMixin.parseVar (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13373:12)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13220:10)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9408:31)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12841:23)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12757:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12737:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13306:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13299:10)
+      at TypeScriptParserMixin.parseBlock (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13287:10)
+      at TypeScriptParserMixin.parseFunctionBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12090:24)
+      at TypeScriptParserMixin.parseArrowExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12065:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11677:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11321:23)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11071:23)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10821:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9776:20)
+      at C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:39
+      at TypeScriptParserMixin.allowInAnd (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12416:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12483:17)
+      at TypeScriptParserMixin.parseExprListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12165:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11242:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11176:29)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11110:19)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9272:18)
+      at TypeScriptParserMixin.parseSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11084:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11075:17)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+[Dev Runner] [Frontend] [2m3:35:00 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css, /src/components/ConfigurationPanel.tsx, /src/components/SimulationDashboard.tsx, /src/components/StrategyEditor.tsx, /src/components/dashboard/MetricsPanel.tsx, /src/components/dashboard/BankrollChart.tsx, /src/components/FileManager.tsx, /src/components/dashboard/ExecutionLog.tsx[22m
+[Dev Runner] [Frontend ERR] [2m3:35:00 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[Dev Runner] [Frontend ERR] [2m3:35:00 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:35:00 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:35:00 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:35:00 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:35:00 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:35:00 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:35:00 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[2m3:35:00 pm[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[39m           }[33m;[39m
+ [90m 239 |[39m
+[31m[1m>[22m[39m[90m 240 |[39m           [36mconst[39m newSpins [33m=[39m [[33m...[39mstate[33m.[39mresults[33m.[39mspins[33m,[39m resultWithCumulative][33m;[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+ [90m 241 |[39m           [36mlet[39m peakBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m
+ [90m 242 |[39m           [36mlet[39m spinsToPeak [33m=[39m [35m0[39m[33m;[39m
+ [90m 243 |[39m           [36mlet[39m lowestBankroll [33m=[39m state[33m.[39mconfig[33m.[39mstartingBankroll[33m;[39m[0m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+[Dev Runner] [Frontend ERR] [2m3:35:00 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[31m           }[33m;[31m
+ [90m 239 |[31m
+[31m[1m>[22m[31m[90m 240 |[31m           [36mconst[31m newSpins [33m=[31m [[33m...[31mstate[33m.[31mresults[33m.[31mspins[33m,[31m resultWithCumulative][33m;[31m
+ [90m     |[31m                 [31m[1m^[22m[31m
+ [90m 241 |[31m           [36mlet[31m peakBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m
+ [90m 242 |[31m           [36mlet[31m spinsToPeak [33m=[31m [35m0[31m[33m;[31m
+ [90m 243 |[31m           [36mlet[31m lowestBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+      at constructor (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptScopeHandler.checkRedeclarationInScope (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1619:19)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1585:12)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:4880:11)
+      at TypeScriptParserMixin.declareNameFromIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7567:16)
+      at TypeScriptParserMixin.checkIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7563:12)
+      at TypeScriptParserMixin.checkLVal (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7500:12)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13402:10)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9742:11)
+      at TypeScriptParserMixin.parseVar (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13373:12)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13220:10)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9408:31)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12841:23)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12757:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12737:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13306:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13299:10)
+      at TypeScriptParserMixin.parseBlock (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13287:10)
+      at TypeScriptParserMixin.parseFunctionBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12090:24)
+      at TypeScriptParserMixin.parseArrowExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12065:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11677:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11321:23)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11071:23)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10821:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9776:20)
+      at C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:39
+      at TypeScriptParserMixin.allowInAnd (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12416:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12483:17)
+      at TypeScriptParserMixin.parseExprListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12165:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11242:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11176:29)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11110:19)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9272:18)
+      at TypeScriptParserMixin.parseSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11084:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11075:17)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+[Dev Runner] [Frontend ERR] [2m3:35:29 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[31m           }[33m;[31m
+ [90m 239 |[31m
+[31m[1m>[22m[31m[90m 240 |[31m           [36mconst[31m newSpins [33m=[31m [[33m...[31mstate[33m.[31mresults[33m.[31mspins[33m,[31m resultWithCumulative][33m;[31m
+ [90m     |[31m                 [31m[1m^[22m[31m
+ [90m 241 |[31m           [36mlet[31m peakBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m
+ [90m 242 |[31m           [36mlet[31m spinsToPeak [33m=[31m [35m0[31m[33m;[31m
+ [90m 243 |[31m           [36mlet[31m lowestBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+      at constructor (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptScopeHandler.checkRedeclarationInScope (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1619:19)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1585:12)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:4880:11)
+      at TypeScriptParserMixin.declareNameFromIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7567:16)
+      at TypeScriptParserMixin.checkIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7563:12)
+      at TypeScriptParserMixin.checkLVal (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7500:12)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13402:10)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9742:11)
+      at TypeScriptParserMixin.parseVar (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13373:12)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13220:10)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9408:31)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12841:23)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12757:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12737:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13306:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13299:10)
+      at TypeScriptParserMixin.parseBlock (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13287:10)
+      at TypeScriptParserMixin.parseFunctionBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12090:24)
+      at TypeScriptParserMixin.parseArrowExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12065:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11677:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11321:23)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11071:23)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10821:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9776:20)
+      at C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:39
+      at TypeScriptParserMixin.allowInAnd (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12416:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12483:17)
+      at TypeScriptParserMixin.parseExprListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12165:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11242:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11176:29)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11110:19)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9272:18)
+      at TypeScriptParserMixin.parseSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11084:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11075:17)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+[Dev Runner] [Frontend ERR] [2m3:35:32 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[31m           }[33m;[31m
+ [90m 239 |[31m
+[31m[1m>[22m[31m[90m 240 |[31m           [36mconst[31m newSpins [33m=[31m [[33m...[31mstate[33m.[31mresults[33m.[31mspins[33m,[31m resultWithCumulative][33m;[31m
+ [90m     |[31m                 [31m[1m^[22m[31m
+ [90m 241 |[31m           [36mlet[31m peakBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m
+ [90m 242 |[31m           [36mlet[31m spinsToPeak [33m=[31m [35m0[31m[33m;[31m
+ [90m 243 |[31m           [36mlet[31m lowestBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+      at constructor (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptScopeHandler.checkRedeclarationInScope (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1619:19)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1585:12)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:4880:11)
+      at TypeScriptParserMixin.declareNameFromIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7567:16)
+      at TypeScriptParserMixin.checkIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7563:12)
+      at TypeScriptParserMixin.checkLVal (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7500:12)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13402:10)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9742:11)
+      at TypeScriptParserMixin.parseVar (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13373:12)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13220:10)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9408:31)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12841:23)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12757:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12737:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13306:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13299:10)
+      at TypeScriptParserMixin.parseBlock (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13287:10)
+      at TypeScriptParserMixin.parseFunctionBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12090:24)
+      at TypeScriptParserMixin.parseArrowExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12065:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11677:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11321:23)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11071:23)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10821:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9776:20)
+      at C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:39
+      at TypeScriptParserMixin.allowInAnd (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12416:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12483:17)
+      at TypeScriptParserMixin.parseExprListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12165:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11242:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11176:29)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11110:19)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9272:18)
+      at TypeScriptParserMixin.parseSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11084:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11075:17)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+[Dev Runner] [Frontend ERR] [2m3:35:33 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[31m           }[33m;[31m
+ [90m 239 |[31m
+[31m[1m>[22m[31m[90m 240 |[31m           [36mconst[31m newSpins [33m=[31m [[33m...[31mstate[33m.[31mresults[33m.[31mspins[33m,[31m resultWithCumulative][33m;[31m
+ [90m     |[31m                 [31m[1m^[22m[31m
+ [90m 241 |[31m           [36mlet[31m peakBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m
+ [90m 242 |[31m           [36mlet[31m spinsToPeak [33m=[31m [35m0[31m[33m;[31m
+ [90m 243 |[31m           [36mlet[31m lowestBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+      at constructor (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptScopeHandler.checkRedeclarationInScope (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1619:19)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1585:12)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:4880:11)
+      at TypeScriptParserMixin.declareNameFromIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7567:16)
+      at TypeScriptParserMixin.checkIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7563:12)
+      at TypeScriptParserMixin.checkLVal (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7500:12)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13402:10)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9742:11)
+      at TypeScriptParserMixin.parseVar (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13373:12)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13220:10)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9408:31)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12841:23)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12757:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12737:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13306:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13299:10)
+      at TypeScriptParserMixin.parseBlock (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13287:10)
+      at TypeScriptParserMixin.parseFunctionBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12090:24)
+      at TypeScriptParserMixin.parseArrowExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12065:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11677:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11321:23)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11071:23)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10821:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9776:20)
+      at C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:39
+      at TypeScriptParserMixin.allowInAnd (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12416:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12483:17)
+      at TypeScriptParserMixin.parseExprListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12165:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11242:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11176:29)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11110:19)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9272:18)
+      at TypeScriptParserMixin.parseSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11084:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11075:17)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+[Dev Runner] [Frontend ERR] [2m3:35:33 pm[22m [31m[1m[vite][22m[39m [31mInternal server error: C:\AI\Projects\roulette-simulator\src\store\useSimulationStore.ts: Identifier 'newSpins' has already been declared. (240:16)
+
+[0m [90m 238 |[31m           }[33m;[31m
+ [90m 239 |[31m
+[31m[1m>[22m[31m[90m 240 |[31m           [36mconst[31m newSpins [33m=[31m [[33m...[31mstate[33m.[31mresults[33m.[31mspins[33m,[31m resultWithCumulative][33m;[31m
+ [90m     |[31m                 [31m[1m^[22m[31m
+ [90m 241 |[31m           [36mlet[31m peakBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m
+ [90m 242 |[31m           [36mlet[31m spinsToPeak [33m=[31m [35m0[31m[33m;[31m
+ [90m 243 |[31m           [36mlet[31m lowestBankroll [33m=[31m state[33m.[31mconfig[33m.[31mstartingBankroll[33m;[31m[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mC:/AI/Projects/roulette-simulator/src/store/useSimulationStore.ts[39m:240:16
+[33m  242|            let spinsToPeak = 0;
+  243|            let lowestBankroll = state.config.startingBankroll;
+  244|            let spinsToLowest = 0;
+     |                             ^
+  245|            let maxDrawdown = 0;
+  246|            let tempPeak = state.config.startingBankroll;[39m
+      at constructor (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:365:19)
+      at TypeScriptParserMixin.raise (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:6599:19)
+      at TypeScriptScopeHandler.checkRedeclarationInScope (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1619:19)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:1585:12)
+      at TypeScriptScopeHandler.declareName (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:4880:11)
+      at TypeScriptParserMixin.declareNameFromIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7567:16)
+      at TypeScriptParserMixin.checkIdentifier (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7563:12)
+      at TypeScriptParserMixin.checkLVal (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:7500:12)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13402:10)
+      at TypeScriptParserMixin.parseVarId (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9742:11)
+      at TypeScriptParserMixin.parseVar (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13373:12)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13220:10)
+      at TypeScriptParserMixin.parseVarStatement (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9408:31)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12841:23)
+      at TypeScriptParserMixin.parseStatementContent (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9508:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12757:17)
+      at TypeScriptParserMixin.parseStatementListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12737:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13306:61)
+      at TypeScriptParserMixin.parseBlockBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13299:10)
+      at TypeScriptParserMixin.parseBlock (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:13287:10)
+      at TypeScriptParserMixin.parseFunctionBody (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12090:24)
+      at TypeScriptParserMixin.parseArrowExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12065:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11677:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11321:23)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11071:23)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10821:21)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9776:20)
+      at C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:39
+      at TypeScriptParserMixin.allowInAnd (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12416:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10790:17)
+      at TypeScriptParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12483:17)
+      at TypeScriptParserMixin.parseExprListItem (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:12165:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11242:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11176:29)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11110:19)
+      at TypeScriptParserMixin.parseSubscript (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9272:18)
+      at TypeScriptParserMixin.parseSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11084:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11075:17)
+      at TypeScriptParserMixin.parseUpdate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11056:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:11036:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:9827:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10889:61)
+      at TypeScriptParserMixin.parseExprOps (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10894:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\AI\Projects\roulette-simulator\node_modules\@babel\parser\lib\index.js:10871:23)
+[Dev Runner] [Frontend] [2m3:36:31 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css, /src/components/ConfigurationPanel.tsx, /src/components/SimulationDashboard.tsx, /src/components/StrategyEditor.tsx, /src/components/dashboard/MetricsPanel.tsx, /src/components/dashboard/BankrollChart.tsx, /src/components/FileManager.tsx, /src/components/dashboard/ExecutionLog.tsx[22m
+[Dev Runner] [Frontend] [2m11:01:02 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/ExecutionLog.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m11:05:50 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/ExecutionLog.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m11:06:08 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/ExecutionLog.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m11:06:39 pm[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/ExecutionLog.tsx, /src/index.css[22m
+[Dev Runner] [Backend] Duplicate request received: { id: 'Second to None Cold (chk).js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\Second to None Cold (chk).js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\Second to None Cold (chk) (1).js
+[Dev Runner] Cleanup triggered by SIGINT

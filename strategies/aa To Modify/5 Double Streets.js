@@ -1,7 +1,7 @@
 
 /**
  * Strategy: Five Double Streets (High Coverage)
- * * Source: https://www.youtube.com/watch?v=5T15naHRh3U (Channel: CEG Dealer School)
+ * * Source: https://www.youtube.com/watch?v=5T15naHRh3U (Channel: TRM)
  * * The Logic:
  * - Coverage: Bets on 5 out of 6 "Double Streets" (Lines).
  * - Numbers Covered: 1 through 30 (Lines starting 1, 7, 13, 19, 25).
