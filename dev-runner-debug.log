@@ -9767,3 +9767,18 @@ Destination path: C:\AI\Projects\roulette-simulator\strategies\Second to None Co
   [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
   [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.136:[1m5173[22m/[39m
 [Dev Runner] Cleanup triggered by SIGINT
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m2256[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.137:[1m5173[22m/[39m
+[Dev Runner] [Backend] Duplicate request received: { id: 'aa C Tier/Sunnys Lucky 26.js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\aa C Tier\Sunnys Lucky 26.js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\aa C Tier\Sunnys Lucky 26 (1).js
