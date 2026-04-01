@@ -9803,3 +9803,48 @@ Destination path: C:\AI\Projects\roulette-simulator\strategies\Blackout (chk) (H
 [Dev Runner] [Backend] Duplicate request received: { id: 'Rolling Thunder (chk).js' }
 [Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\Rolling Thunder (chk).js
 Destination path: C:\AI\Projects\roulette-simulator\strategies\Rolling Thunder (chk) (1).js
+[Dev Runner] [Frontend ERR] ^C
+[Dev Runner] Frontend exited with code 3221225786
+[Dev Runner] Restarting Frontend in 1s...
+[Dev Runner] [Backend ERR] ^C
+[Dev Runner] Backend exited with code 3221225786
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m2077[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.139:[1m5173[22m/[39m
+[Dev Runner] [Backend] Duplicate request received: { id: 'Weighted Dozen Cover-All.js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\Weighted Dozen Cover-All.js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\Weighted Dozen Cover-All (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'Weighted Dozen Cover-All (1).js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\Weighted Dozen Cover-All (1).js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\Weighted Dozen Cover-All (1) (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'Weighted Dozen Cover-All (1) (1).js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\Weighted Dozen Cover-All (1) (1).js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\Weighted Dozen Cover-All (1) (1) (1).js
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m2115[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.124:[1m5173[22m/[39m
+[Dev Runner] [Backend] Duplicate request received: { id: 'aa Need Luck to play/4 X 4 (0) (chk).js' }
+Source path: C:\AI\Projects\roulette-simulator\strategies\aa Need Luck to play\4 X 4 (0) (chk).js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\aa Need Luck to play\4 X 4 (0) (chk) (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'aa Need Luck to play/4 X 4 (0) (chk).js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\aa Need Luck to play\4 X 4 (0) (chk).js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\aa Need Luck to play\4 X 4 (0) (chk) (2).js

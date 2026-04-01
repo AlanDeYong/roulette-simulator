@@ -1,129 +1,112 @@
 /**
- * VIPER STRATEGIES - PRO MOD ROULETTE STRATEGY
- * * Source: https://www.youtube.com/watch?v=QbNylOBOgKk (VIPER STRATEGIES)
- * * The Logic:
- * - Uses "Recency Bias": It does not use fixed bet locations. Instead, it analyzes 
- * the last 5 spins to identify the hottest trend among Red, Black, High, or Low, 
- * and places the bet there.
- * - Incorporates session resets: If the bankroll reaches a target profit (~4 units) 
- * or hits a stop-loss (~20 units), the sequence completely resets to protect the bankroll.
- * * The Progression:
- * - Levels 1 to 3 (Soft Progression): Bets are 1, 2, and 3 units. A single win at 
- * any of these levels resets the progression back to Level 1. A loss moves it up one level.
- * - Level 4 and above (Match Play): The bet amount is (Level - 1) units (e.g., Level 4 = 3 units, 
- * Level 5 = 4 units). At these levels, it plays a "Best 2 out of 3" series.
- * - Getting 2 wins in the set drops the progression back down 1 level.
- * - Getting 2 losses in the set pushes the progression up 1 level.
- * * The Goal:
- * - A low-volatility grind designed to survive bad streaks and heavy concentrations of zeros 
- * while aiming for a steady 3-5 unit profit per session.
+ * SOURCE: VIPER STRATEGIES - PLAY LIKE A PRO SMART AND SAFER BETS!
+ * URL: https://www.youtube.com/watch?v=COekbJe-yCc
+ * * THE LOGIC: 
+ * This strategy relies on "Recency Bias" rather than the Gambler's Fallacy. 
+ * Instead of betting against a streak, it looks at the last 15 spins and 
+ * places a 1:1 outside bet (Red/Black) on the outcome that is currently hitting 
+ * the most frequently.
+ * * THE PROGRESSION:
+ * A combination of soft progression and flat-betting match play:
+ * - Level 1: 1 unit. Win -> Reset to L1. Lose -> L2.
+ * - Level 2: 2 units. Win -> Reset to L1. Lose -> L3.
+ * - Level 3: 3 units. Win -> Reset to L1. Lose -> L4.
+ * - Level 4+ (Recovery Mode): Bets remain FLAT at 3 units. You play a "Best of 3" set.
+ * - If you get 2 wins in the set, you move DOWN one level (e.g., L4 to L3).
+ * - If you get 2 losses in the set, you move UP one level (e.g., L4 to L5).
+ * - Any time you reach a new session high (break even or profit), reset to L1.
+ * * THE GOAL:
+ * The strategy operates on strict session limits. The target profit is +5 units, 
+ * and the hard stop-loss is -10 units. 
+ * Note: To keep the simulator running continuously, hitting either the profit target 
+ * or the stop-loss will simply "reset" the session baseline and start fresh.
  */
 function bet(spinHistory, bankroll, config, state, utils) {
-    const baseUnit = config.betLimits.minOutside;
+    // 1. Initialize State
+    const unitSize = config.betLimits.minOutside;
 
-    // 1. Initialize State Variables
-    if (state.level === undefined) {
+    if (state.sessionStartBankroll === undefined) {
+        state.sessionStartBankroll = bankroll;
         state.level = 1;
         state.setWins = 0;
         state.setLosses = 0;
-        state.sessionStartBankroll = bankroll;
         state.lastBetType = null;
     }
 
-    // 2. Check for Session Take-Profit or Stop-Loss
-    const currentProfit = bankroll - state.sessionStartBankroll;
-    if (currentProfit >= (4 * baseUnit) || currentProfit <= (-20 * baseUnit)) {
-        // Reset session
-        state.level = 1;
-        state.setWins = 0;
-        state.setLosses = 0;
-        state.sessionStartBankroll = bankroll; 
-    }
-
-    // 3. Evaluate the Previous Spin
+    // 2. Process the previous spin result
     if (spinHistory.length > 0 && state.lastBetType) {
         const lastResult = spinHistory[spinHistory.length - 1];
-        const num = lastResult.winningNumber;
-        const color = lastResult.winningColor;
-        
-        let wonLastSpin = false;
+        const won = (lastResult.winningColor === state.lastBetType);
 
-        // Zeros are automatic losses for outside bets
-        if (num !== 0 && num !== '00') {
-            if (state.lastBetType === 'red' && color === 'red') wonLastSpin = true;
-            else if (state.lastBetType === 'black' && color === 'black') wonLastSpin = true;
-            else if (state.lastBetType === 'high' && num >= 19 && num <= 36) wonLastSpin = true;
-            else if (state.lastBetType === 'low' && num >= 1 && num <= 18) wonLastSpin = true;
-        }
+        let currentSessionProfit = bankroll - state.sessionStartBankroll;
 
-        // 4. Update Progression Logic
-        if (state.level <= 3) {
-            // Soft Progression Phase
-            if (wonLastSpin) {
-                state.level = 1;
+        // Check if we hit our Stop Win (+5 units) or Stop Loss (-10 units)
+        if (currentSessionProfit >= 5 * unitSize || currentSessionProfit <= -10 * unitSize) {
+            // In a real casino, you walk away. Here, we reset the session to keep simulating.
+            state.sessionStartBankroll = bankroll;
+            state.level = 1;
+            state.setWins = 0;
+            state.setLosses = 0;
+        } 
+        // If we are back in profit for the session, reset progression
+        else if (currentSessionProfit > 0) {
+            state.level = 1;
+            state.setWins = 0;
+            state.setLosses = 0;
+        } 
+        // Handle progression climbing/dropping
+        else {
+            if (state.level < 4) {
+                if (won) {
+                    state.level = 1; // Any win in first 3 levels resets
+                } else {
+                    state.level++;   // Move up a level on loss
+                }
             } else {
-                state.level++;
-            }
-        } else {
-            // Match Play Phase (Best 2 out of 3)
-            if (wonLastSpin) state.setWins++;
-            else state.setLosses++;
+                // Level 4+ (Recovery / Best of 3 mode)
+                if (won) state.setWins++;
+                else state.setLosses++;
 
-            if (state.setWins === 2) {
-                state.level--;
-                state.setWins = 0;
-                state.setLosses = 0;
-            } else if (state.setLosses === 2) {
-                state.level++;
-                state.setWins = 0;
-                state.setLosses = 0;
+                if (state.setWins === 2) {
+                    state.level--; // Drop down a level
+                    state.setWins = 0;
+                    state.setLosses = 0;
+                } else if (state.setLosses === 2) {
+                    state.level++; // Climb up a level
+                    state.setWins = 0;
+                    state.setLosses = 0;
+                }
             }
         }
     }
 
-    // 5. Determine Recency Bias (What to bet on)
-    let nextBetType = 'red'; // Default fallback
-    if (spinHistory.length > 0) {
-        let counts = { red: 0, black: 0, high: 0, low: 0 };
-        // Analyze up to the last 5 spins
-        const recentSpins = spinHistory.slice(-5);
-        
-        recentSpins.forEach(spin => {
-            const n = spin.winningNumber;
-            if (n !== 0 && n !== '00') {
-                if (spin.winningColor === 'red') counts.red++;
-                if (spin.winningColor === 'black') counts.black++;
-                if (n >= 19) counts.high++;
-                if (n <= 18) counts.low++;
-            }
-        });
-
-        // Find the most frequent outcome
-        let maxCount = -1;
-        for (const [type, count] of Object.entries(counts)) {
-            if (count > maxCount) {
-                maxCount = count;
-                nextBetType = type;
-            }
-        }
+    // 3. Determine Recency Bias (Look at the last 15 spins)
+    let redCount = 0;
+    let blackCount = 0;
+    const lookback = Math.min(15, spinHistory.length);
+    
+    for (let i = spinHistory.length - lookback; i < spinHistory.length; i++) {
+        if (spinHistory[i].winningColor === 'red') redCount++;
+        if (spinHistory[i].winningColor === 'black') blackCount++;
     }
+    
+    // Bet on whatever is hitting more. Default to Red if tied or no history.
+    const targetBetType = redCount >= blackCount ? 'red' : 'black';
 
-    // Save the chosen bet type for the next spin's evaluation
-    state.lastBetType = nextBetType;
-
-    // 6. Calculate Bet Amount
+    // 4. Calculate Bet Amount based on Current Level
     let unitsToBet = 1;
     if (state.level === 1) unitsToBet = 1;
     else if (state.level === 2) unitsToBet = 2;
-    else if (state.level === 3) unitsToBet = 3;
-    else unitsToBet = state.level - 1; // Level 4 is 3u, Level 5 is 4u, etc.
+    else if (state.level >= 3) unitsToBet = 3; // The bet amount caps at 3 units
 
-    let amount = unitsToBet * baseUnit;
+    let amount = unitsToBet * unitSize;
 
-    // 7. Clamp to Limits
-    amount = Math.max(amount, config.betLimits.minOutside);
+    // 5. Clamp to Limits
+    amount = Math.max(amount, config.betLimits.minOutside); 
     amount = Math.min(amount, config.betLimits.max);
 
-    // 8. Execute Bet
-    return [{ type: nextBetType, amount: amount }];
+    // 6. Save state for next spin and return bet
+    state.lastBetType = targetBetType;
+    
+    return [{ type: targetBetType, amount: amount }];
 }
