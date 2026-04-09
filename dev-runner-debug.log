@@ -9879,3 +9879,17 @@ Source path: C:\AI\Projects\roulette-simulator\strategies\ Land Grab.js
 [Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\ Land Grab (1).js
 [Dev Runner] [Frontend ERR] ^C
 [Dev Runner] Frontend exited with code 3221225786
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend] Duplicate request received: { id: 'BEST BETS (L2R)(chk).js' }
+Source path: C:\AI\Projects\roulette-simulator\strategies\BEST BETS (L2R)(chk).js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\BEST BETS (L2R)(chk) (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'BEST BETS (L2R only)(chk).js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\BEST BETS (L2R only)(chk).js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\BEST BETS (L2R only)(chk) (1).js
