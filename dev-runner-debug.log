@@ -9893,3 +9893,9 @@ Destination path: C:\AI\Projects\roulette-simulator\strategies\BEST BETS (L2R)(c
 [Dev Runner] [Backend] Duplicate request received: { id: 'BEST BETS (L2R only)(chk).js' }
 [Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\BEST BETS (L2R only)(chk).js
 Destination path: C:\AI\Projects\roulette-simulator\strategies\BEST BETS (L2R only)(chk) (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'Skull Crusher.js' }
+Source path: C:\AI\Projects\roulette-simulator\strategies\Skull Crusher.js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\Skull Crusher (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'Diamondback (chk).js' }
+Source path: C:\AI\Projects\roulette-simulator\strategies\Diamondback (chk).js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\Diamondback (chk) (1).js
