@@ -233,8 +233,8 @@ export const useSimulationStore = create<SimulationStore>()(
           // Note: result.totalProfit from worker is likely just round profit or miscalculated
           // We MUST use our calculated cumulative profit for the metrics too.
           
-          const winningSpins = newSpins.filter((s) => (s.payout - s.bets.reduce((sum:number, b:any) => sum + b.amount, 0)) > 0).length;
-          const losingSpins = newSpins.filter((s) => (s.payout - s.bets.reduce((sum:number, b:any) => sum + b.amount, 0)) < 0).length;
+          const winningSpins = newSpins.filter((s) => s.bets.reduce((sum, b) => sum + b.profit, 0) > 0).length;
+          const losingSpins = newSpins.filter((s) => s.bets.reduce((sum, b) => sum + b.profit, 0) < 0).length;
           const winRate = totalSpins > 0 ? winningSpins / totalSpins : 0;
           let peakBankroll = state.config.startingBankroll;
           let spinsToPeak = 0;
@@ -275,24 +275,10 @@ export const useSimulationStore = create<SimulationStore>()(
           const totalBetAmount = newSpins.reduce((sum, s) => sum + s.bets.reduce((bSum, b) => bSum + b.amount, 0), 0);
           const averageBet = totalSpins > 0 ? totalBetAmount / totalSpins : 0;
 
-          const maxBet = (() => {
-            let lastProfitableIndex = -1;
-            // Find the last index where bankroll was > starting
-            for (let i = newSpins.length - 1; i >= 0; i--) {
-                if (newSpins[i].bankrollAfter > state.config.startingBankroll) {
-                    lastProfitableIndex = i;
-                    break;
-                }
-            }
-            
-            // Calculate max bet only up to that index
-            let max = 0;
-            for (let i = 0; i <= lastProfitableIndex; i++) {
-                 const spinTotalBet = newSpins[i].bets.reduce((bSum, b) => bSum + b.amount, 0);
-                 if (spinTotalBet > max) max = spinTotalBet;
-            }
-            return max;
-          })();
+          const maxBet = newSpins.reduce((max, s) => {
+            const spinTotalBet = s.bets.reduce((bSum, b) => bSum + b.amount, 0);
+            return spinTotalBet > max ? spinTotalBet : max;
+          }, 0);
 
           return {
             results: {
@@ -327,8 +313,8 @@ export const useSimulationStore = create<SimulationStore>()(
               totalProfit: s.bankrollAfter - state.config.startingBankroll
           }));
 
-          const winningSpins = spinsWithCumulative.filter((s) => (s.payout - s.bets.reduce((sum: number, b: any) => sum + b.amount, 0)) > 0).length;
-          const losingSpins = spinsWithCumulative.filter((s) => (s.payout - s.bets.reduce((sum: number, b: any) => sum + b.amount, 0)) < 0).length;
+          const winningSpins = spinsWithCumulative.filter((s) => s.bets.reduce((sum, b) => sum + b.profit, 0) > 0).length;
+          const losingSpins = spinsWithCumulative.filter((s) => s.bets.reduce((sum, b) => sum + b.profit, 0) < 0).length;
           const winRate = totalSpins > 0 ? winningSpins / totalSpins : 0;
 
           const currentBankroll = spinsWithCumulative[spinsWithCumulative.length - 1].bankrollAfter;
@@ -366,23 +352,10 @@ export const useSimulationStore = create<SimulationStore>()(
           const totalBetAmount = spinsWithCumulative.reduce((sum, s) => sum + s.bets.reduce((bSum, b) => bSum + b.amount, 0), 0);
           const averageBet = totalSpins > 0 ? totalBetAmount / totalSpins : 0;
 
-          const maxBet = (() => {
-            let lastProfitableIndex = -1;
-            // Find the last index where bankroll was > starting
-            for (let i = spinsWithCumulative.length - 1; i >= 0; i--) {
-                if (spinsWithCumulative[i].bankrollAfter > state.config.startingBankroll) {
-                    lastProfitableIndex = i;
-                    break;
-                }
-            }
-            
-            let max = 0;
-            for (let i = 0; i <= lastProfitableIndex; i++) {
-                 const spinTotalBet = spinsWithCumulative[i].bets.reduce((bSum, b) => bSum + b.amount, 0);
-                 if (spinTotalBet > max) max = spinTotalBet;
-            }
-            return max;
-          })();
+          const maxBet = spinsWithCumulative.reduce((max, s) => {
+            const spinTotalBet = s.bets.reduce((bSum, b) => bSum + b.amount, 0);
+            return spinTotalBet > max ? spinTotalBet : max;
+          }, 0);
 
           const resultsToCache = {
             spins: spinsWithCumulative,

@@ -9899,3 +9899,12 @@ Source path: C:\AI\Projects\roulette-simulator\strategies\Skull Crusher.js
 [Dev Runner] [Backend] Duplicate request received: { id: 'Diamondback (chk).js' }
 Source path: C:\AI\Projects\roulette-simulator\strategies\Diamondback (chk).js
 Destination path: C:\AI\Projects\roulette-simulator\strategies\Diamondback (chk) (1).js
+[Dev Runner] [Backend ERR] Error: ENOENT: no such file or directory, open 'C:\AI\Projects\roulette-simulator\strategies\9 Street "Holy Grail".js'
+    at async open (node:internal/fs/promises:639:25)
+    at async Object.writeFile (node:internal/fs/promises:1216:14)
+    at async file:///C:/AI/Projects/roulette-simulator/server/server.js:181:9 {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\AI\\Projects\\roulette-simulator\\strategies\\9 Street "Holy Grail".js'
+}
