@@ -89,6 +89,31 @@ export const StrategyEditor: React.FC = () => {
       setTimeout(() => setFeedback(null), 3000);
   };
 
+  const postJson = async (url: string, payload: any) => {
+      const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+      });
+
+      const text = await res.text();
+      let data: any = null;
+      if (text) {
+          try {
+              data = JSON.parse(text);
+          } catch {
+              data = null;
+          }
+      }
+
+      if (!res.ok) {
+          const message = (data && typeof data.error === 'string' && data.error) ? data.error : (text || `Request failed (${res.status})`);
+          throw new Error(message);
+      }
+
+      return data;
+  };
+
   const handleEditorChange = (value: string | undefined) => {
     if (value !== undefined) {
       setStrategyCode(value);
@@ -149,18 +174,11 @@ export const StrategyEditor: React.FC = () => {
 
               // Direct Overwrite
               try {
+                  await postJson('/api/save', { id: currentFileId, content: strategy.code });
                   fs.writeFile(currentFileId, strategy.code);
-                  const newNodes = fs.serialize();
-                  setFSNodes(newNodes);
+                  setFSNodes(fs.serialize());
                   showFeedback('success', 'File saved successfully');
                   setIsDirty(false);
-
-                  // Server Sync
-                  await fetch('/api/save', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ id: currentFileId, content: strategy.code })
-                  });
 
               } catch (e: any) {
                   console.error("Save Error (Overwrite):", e);
@@ -180,31 +198,16 @@ export const StrategyEditor: React.FC = () => {
       if (!saveName.trim()) return;
       
       try {
-          const fs = new VirtualFileSystem(fsNodes);
-          const rootId = fs.getRootId();
-          
           // Append .js if missing
           const fileName = saveName.endsWith('.js') ? saveName : `${saveName}.js`;
-          
-          const newFile = fs.createFile(rootId, fileName, strategy.code);
-          const newNodes = fs.serialize();
-          setFSNodes(newNodes);
-          setCurrentFileId(newFile.id);
+
+          await postJson('/api/save', { id: fileName, content: strategy.code });
+          setCurrentFileId(fileName);
           setIsSaving(false);
           setSaveName('');
           showFeedback('success', 'File saved successfully');
           
-          // Server Sync
-          await fetch('/api/save', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              // For Save As, we assume root level for now, or we need to prompt for folder
-              // We'll use the filename as ID since we are in root
-              body: JSON.stringify({ id: fileName, content: strategy.code })
-          });
-          
-          // Re-sync to ensure IDs align
-          useSimulationStore.getState().syncWithServer();
+          await useSimulationStore.getState().syncWithServer();
 
       } catch (e: any) {
           showFeedback('error', e.message);

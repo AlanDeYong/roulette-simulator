@@ -24,6 +24,31 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     const [newItemName, setNewItemName] = useState('');
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+    const postJson = async (url: string, payload: any) => {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const text = await res.text();
+        let data: any = null;
+        if (text) {
+            try {
+                data = JSON.parse(text);
+            } catch {
+                data = null;
+            }
+        }
+
+        if (!res.ok) {
+            const message = (data && typeof data.error === 'string' && data.error) ? data.error : (text || `Request failed (${res.status})`);
+            throw new Error(message);
+        }
+
+        return data;
+    };
+
     // Dialog State
     const [dialog, setDialog] = useState<{
         isOpen: boolean;
@@ -163,63 +188,31 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                 }
             }
             
-            // Optimistic Update
-            let newId;
             if (creatingType === 'file') {
-                const file = fs.createFile(parentId, newItemName + (newItemName.endsWith('.js') ? '' : '.js'), "// New Strategy");
-                newId = file.id;
-                
-                // Server Sync
-                // We need to construct the full path for the server
-                // This is tricky if IDs are UUIDs locally but Paths remotely.
-                // ideally we switch to using Paths as IDs everywhere.
-                
-                // For this iteration, let's just create the file with the relative path from root
-                // We need to traverse up from parentId to build path
-                let current = parentId;
-                let pathParts = [];
-                while (current !== fs.getRootId()) {
-                    const node = fs.getNode(current);
-                    pathParts.unshift(node.name);
-                    current = node.parentId!;
-                }
-                const fullPath = [...pathParts, newItemName + (newItemName.endsWith('.js') ? '' : '.js')].join('/');
-                
-                const res = await fetch('/api/save', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: fullPath, content: "// New Strategy" })
-                });
-                if (!res.ok) throw new Error('Failed to create file');
+                const fileName = newItemName.endsWith('.js') ? newItemName : `${newItemName}.js`;
+                const dirPath = parentId === fs.getRootId() ? '' : parentId;
+                const fullPath = dirPath ? `${dirPath}/${fileName}` : fileName;
 
+                await postJson('/api/save', { id: fullPath, content: "// New Strategy" });
+                await useSimulationStore.getState().syncWithServer();
+
+                setSelectedId(fullPath);
+                onOpenFile(fullPath, "// New Strategy");
+                setCurrentFileId(fullPath);
             } else {
-                const dir = fs.createDirectory(parentId, newItemName);
-                newId = dir.id;
-                
-                let current = parentId;
-                let pathParts = [];
-                while (current !== fs.getRootId()) {
-                    const node = fs.getNode(current);
-                    pathParts.unshift(node.name);
-                    current = node.parentId!;
-                }
-                const fullPath = [...pathParts, newItemName].join('/');
-                
-                const res = await fetch('/api/create-dir', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: fullPath })
-                });
-                if (!res.ok) throw new Error('Failed to create directory');
+                const dirName = newItemName;
+                const dirPath = parentId === fs.getRootId() ? '' : parentId;
+                const fullPath = dirPath ? `${dirPath}/${dirName}` : dirName;
+
+                await postJson('/api/create-dir', { id: fullPath });
+                await useSimulationStore.getState().syncWithServer();
+
+                setSelectedId(fullPath);
+                setExpanded(prev => ({ ...prev, [fullPath]: true }));
             }
             
-            saveFS();
             setCreatingType(null);
             setNewItemName('');
-            
-            // Refresh from server to get canonical IDs (Paths)
-            useSimulationStore.getState().syncWithServer();
-            
         } catch (e: any) {
             setError(e.message);
             setTimeout(() => setError(null), 3000);
@@ -235,25 +228,13 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
             message: "Are you sure you want to delete this item? This action cannot be undone.",
             onConfirm: async () => {
                 try {
-                    // Get Path
-                    // If we synced with server, ID is the path
-                    // If local UUID, we might fail.
-                    // Let's try sending ID as path
-                    await fetch('/api/delete', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id: selectedId })
-                    });
-                    
-                    fs.delete(selectedId);
-                    saveFS();
+                    await postJson('/api/delete', { id: selectedId });
                     if (selectedId === currentFileId) {
                         setCurrentFileId(null);
                     }
                     setSelectedId(null);
                     setDialog(prev => ({ ...prev, isOpen: false }));
-                    
-                    useSimulationStore.getState().syncWithServer();
+                    await useSimulationStore.getState().syncWithServer();
                 } catch (e: any) {
                     setError(e.message);
                     setTimeout(() => setError(null), 3000);
@@ -265,21 +246,21 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     const handleDuplicate = async () => {
         if (!selectedId) return;
         try {
-            const res = await fetch('/api/duplicate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: selectedId })
-            });
-            const data = await res.json();
-            
-            if (data.success) {
-                // Refresh list
-                useSimulationStore.getState().syncWithServer();
-                // We could optimistically update local FS but duplication logic is complex (recursive),
-                // simpler to just wait for sync.
-            } else {
-                setError(data.error);
-                setTimeout(() => setError(null), 3000);
+            const data = await postJson('/api/duplicate', { id: selectedId });
+            await useSimulationStore.getState().syncWithServer();
+
+            if (data?.newId) {
+                setSelectedId(data.newId);
+                try {
+                    const vfs = new VirtualFileSystem(useSimulationStore.getState().fsNodes);
+                    const node = vfs.getNode(data.newId);
+                    if (node.type === 'file') {
+                        const content = vfs.readFile(data.newId);
+                        onOpenFile(data.newId, content);
+                        setCurrentFileId(data.newId);
+                    }
+                } catch {
+                }
             }
         } catch (e: any) {
             setError(e.message);
@@ -297,53 +278,24 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
         if (!editingId) return;
         try {
             if (renameValue !== fs.getNode(editingId).name) {
-                // Determine old and new paths
-                // Since ID is the path (in sync mode), or ID is UUID (local mode).
-                // If we are renaming, we are effectively moving.
-                
-                // Construct new path
-                // We need to know parent path to construct new path
-                // This logic is getting complex with mixed ID types.
-                // Assuming ID = Path for now as per sync logic
-                
-                // Wait, if ID = Path, then renaming changes the ID.
-                // The backend expects { oldId, newId }
-                
-                // Let's assume editingId is the OLD path (or ID)
-                // We need to construct NEW path.
                 const node = fs.getNode(editingId);
                 const parentId = node.parentId;
                 
-                // Construct parent path
-                let pathParts = [];
-                let current = parentId;
-                while (current && current !== fs.getRootId()) {
-                    const pNode = fs.getNode(current);
-                    pathParts.unshift(pNode.name);
-                    current = pNode.parentId;
-                }
-                
                 const newName = renameValue + (node.type === 'file' && !renameValue.endsWith('.js') ? '.js' : '');
-                const newPath = [...pathParts, newName].join('/');
+                const dirPath = parentId === fs.getRootId() ? '' : (parentId || '');
+                const newPath = dirPath ? `${dirPath}/${newName}` : newName;
                 
-                // Call API
-                await fetch('/api/rename', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ oldId: editingId, newId: newPath })
-                });
-
-                fs.rename(editingId, newName);
-                saveFS();
-                
-                // Clear editing/selected state BEFORE sync to prevent trying to render deleted ID
                 setEditingId(null);
+                await postJson('/api/rename', { oldId: editingId, newId: newPath });
+
                 if (selectedId === editingId) {
-                     setSelectedId(newPath); // Optimistically select new path (assuming ID=Path)
-                     setCurrentFileId(newPath); 
+                    setSelectedId(newPath);
                 }
-                
-                useSimulationStore.getState().syncWithServer();
+                if (currentFileId === editingId) {
+                    setCurrentFileId(newPath);
+                }
+
+                await useSimulationStore.getState().syncWithServer();
             } else {
                 setEditingId(null);
             }
@@ -385,21 +337,21 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
 
             const isRoot = newParentId === fs.getRootId();
             
-            // Construct new path
-            // We assume ID of folder is its path (e.g. "Folder")
-            // New path = "Folder/File.js"
             let newPath = draggedNode.name;
             if (!isRoot) {
                 newPath = `${newParentId}/${draggedNode.name}`;
             }
             
-            await fetch('/api/rename', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ oldId: draggedId, newId: newPath })
-            });
-            
-            useSimulationStore.getState().syncWithServer();
+            await postJson('/api/rename', { oldId: draggedId, newId: newPath });
+
+            if (currentFileId === draggedId) {
+                setCurrentFileId(newPath);
+            }
+            if (selectedId === draggedId) {
+                setSelectedId(newPath);
+            }
+
+            await useSimulationStore.getState().syncWithServer();
             
         } catch (e: any) {
             setError(e.message);

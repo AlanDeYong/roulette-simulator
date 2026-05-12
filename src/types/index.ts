@@ -89,6 +89,7 @@ export interface LayoutConfig {
     strategyEditorHeight: number; // Pixels
     chartHeight: number; // Pixels
     logHeight: number; // Pixels
+    configPanelWidth: number; // Pixels
 }
 
 export interface SimulationState {
