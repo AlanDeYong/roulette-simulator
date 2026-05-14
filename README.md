@@ -1,57 +1,41 @@
-# React + TypeScript + Vite
+# Roulette Simulator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack application built with **React, TypeScript, Vite, and Tailwind CSS** for simulating and managing roulette strategies. The application allows users to create, edit, test, and analyze complex betting strategies directly in the browser.
 
-Currently, two official plugins are available:
+## Architecture
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Frontend**: React + Vite (serving at `http://localhost:5173/` by default). State management via Zustand, code editing via Monaco Editor.
+- **Backend**: Express + Node.js (serving API at `http://localhost:3001/` by default). Manages the filesystem and serves files from the `strategies/` directory.
+- **Dev Runner**: A custom orchestrator (`scripts/dev-runner.js`) spins up both the frontend and backend simultaneously. It ensures a free port is found for the API (via the `API_PORT` environment variable) and handles child process lifecycles.
 
-## Expanding the ESLint configuration
+## 🚀 Development Server Stability Guidelines
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Running the App
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+To start the app locally:
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### ⚠️ CRITICAL: IDE Sandbox & Automated Testing Stability
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+If you are running this app via an automated IDE terminal or a sandbox wrapper (such as Trae's terminal), executing `npm run dev` as a standard background command might result in a premature `SIGINT` when the terminal detaches. This causes `dev-runner.js` to kill both the frontend and backend servers, leading to a `net::ERR_ABORTED` error in the browser.
 
-export default tseslint.config({
-  extends: [
-    // other configs...
-    // Enable lint rules for React
-    reactX.configs['recommended-typescript'],
-    // Enable lint rules for React DOM
-    reactDom.configs.recommended,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+**To ensure absolute stability and prevent the app from failing during iterations**, use the following PowerShell command instead:
+
+```powershell
+Start-Process -FilePath "node" -ArgumentList "scripts/dev-runner.js" -WindowStyle Hidden
 ```
+*(This detaches the node process completely from the IDE terminal session, guaranteeing it stays alive.)*
+
+When you need to stop the servers later, simply run:
+```powershell
+taskkill /F /IM node.exe
+```
+
+### Future Iteration Rules
+
+Every future update to the development environment, server configuration, or build pipeline MUST adhere to these stability constraints:
+1. **Dynamic Ports**: `scripts/dev-runner.js` dynamically assigns a free port to the Express backend and passes it to the frontend via the `API_PORT` environment variable. Do not hardcode ports in a way that breaks this behavior.
+2. **Process Management**: Do not remove the graceful shutdown logic (handling `SIGINT`/`SIGTERM`/`exit`) inside `dev-runner.js`. The runner must clean up its child processes when properly signaled.
+3. **No Breaking Changes**: Before modifying `vite.config.ts`, `server/server.js`, or `scripts/dev-runner.js`, consider how it will affect the automated sandbox startup. Changes that break the detached `Start-Process` startup method are strictly prohibited.

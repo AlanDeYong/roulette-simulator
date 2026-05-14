@@ -11,18 +11,18 @@ const MetricCard: React.FC<{
   trend?: 'up' | 'down' | 'neutral';
   color?: string;
 }> = ({ title, value, subValue, icon, trend, color }) => (
-  <Card className="bg-surface/50 border-primary/10 hover:bg-surface/80 transition-colors">
-    <CardContent className="p-4 flex items-center space-x-3">
+  <Card className="bg-surface/50 border-primary/10 hover:bg-surface/80 transition-colors overflow-hidden">
+    <CardContent className="p-4 flex items-center space-x-3 overflow-hidden">
       <div className={`p-2.5 rounded-full bg-surface/80 border border-white/5 shrink-0 ${color || 'text-primary'}`}>
         {icon}
       </div>
-      <div className="min-w-0">
-        <p className="text-xs text-text-muted font-medium truncate" title={title}>{title}</p>
-        <div className="flex items-baseline gap-2">
-            <p className={`text-xl font-bold ${trend === 'up' ? 'text-green-500' : trend === 'down' ? 'text-red-500' : 'text-text'}`}>
-            {value}
+      <div className="flex-1 min-w-0">
+        <p className="text-xs text-text-muted font-medium whitespace-normal break-words leading-tight">{title}</p>
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 min-w-0">
+            <p className={`text-xl font-bold tabular-nums ${trend === 'up' ? 'text-green-500' : trend === 'down' ? 'text-red-500' : 'text-text'}`}>
+              {value}
             </p>
-            {subValue && <span className="text-xs text-text-muted">{subValue}</span>}
+            {subValue && <span className="text-xs text-text-muted whitespace-normal break-words">{subValue}</span>}
         </div>
       </div>
     </CardContent>
@@ -106,4 +106,3 @@ export const MetricsPanel: React.FC = () => {
     </div>
   );
 };
-

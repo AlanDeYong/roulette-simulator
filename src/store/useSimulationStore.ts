@@ -93,7 +93,7 @@ export const useSimulationStore = create<SimulationStore>()(
     (set) => ({
       id: generateId(),
       config: DEFAULT_CONFIG,
-      layout: { strategyEditorHeight: 500, chartHeight: 300, logHeight: 300 },
+      layout: { strategyEditorHeight: 500, chartHeight: 300, logHeight: 300, configPanelWidth: 420 },
       strategy: DEFAULT_STRATEGY,
       savedStrategies: [],
       importedData: [],
@@ -504,4 +504,3 @@ export const useSimulationStore = create<SimulationStore>()(
     }
   )
 );
-
