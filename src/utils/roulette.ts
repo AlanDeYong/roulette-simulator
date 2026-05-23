@@ -79,6 +79,12 @@ export const calculatePayout = (bet: StrategyBet, winningNumber: number): number
       if (winningNumber >= streetStart && winningNumber < streetStart + 3) return amount * 11;
       return -amount;
 
+    case 'trio': // 3 numbers (typically includes 0 or 00). Payout 11:1. value should be an array of 3 numbers (e.g. [0, 2, 3])
+      if (Array.isArray(value) && value.length === 3) {
+        if (value.includes(winningNumber)) return amount * 11;
+      }
+      return -amount;
+
     case 'corner': // 4 numbers. Payout 8:1. value should be the top-left number of the corner
       if (isZero) return -amount;
       const cornerStart = Number(value);
@@ -96,7 +102,6 @@ export const calculatePayout = (bet: StrategyBet, winningNumber: number): number
 
     case 'split': // 2 numbers. Payout 17:1. value should be an array of 2 numbers OR we can assume horizontal/vertical if passed a single "start"
       // Let's support explicit array of 2 numbers for maximum flexibility: value: [1, 2]
-      if (isZero) return -amount;
       if (Array.isArray(value) && value.length === 2) {
           if (value.includes(winningNumber)) return amount * 17;
       }

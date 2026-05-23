@@ -32,7 +32,7 @@ export interface Strategy {
 }
 
 export interface StrategyBet {
-  type: 'red' | 'black' | 'green' | 'even' | 'odd' | 'low' | 'high' | 'number' | 'dozen' | 'column' | 'street' | 'split' | 'corner' | 'line' | 'basket';
+  type: 'red' | 'black' | 'green' | 'even' | 'odd' | 'low' | 'high' | 'number' | 'dozen' | 'column' | 'street' | 'split' | 'corner' | 'line' | 'basket' | 'trio';
   value?: number | string | number[]; 
   amount: number;
 }

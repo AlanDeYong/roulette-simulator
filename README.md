@@ -8,6 +8,25 @@ A full-stack application built with **React, TypeScript, Vite, and Tailwind CSS*
 - **Backend**: Express + Node.js (serving API at `http://localhost:3001/` by default). Manages the filesystem and serves files from the `strategies/` directory.
 - **Dev Runner**: A custom orchestrator (`scripts/dev-runner.js`) spins up both the frontend and backend simultaneously. It ensures a free port is found for the API (via the `API_PORT` environment variable) and handles child process lifecycles.
 
+## Strategy Bet Types
+
+Strategies return either a single bet object or an array of bet objects:
+
+```js
+return [
+  { type: 'red', amount: 1 },
+  { type: 'street', value: 1, amount: 1 },
+  { type: 'split', value: [0, 2], amount: 1 },
+  { type: 'trio', value: [0, 2, 3], amount: 1 }
+];
+```
+
+Payout calculation is centralized in `src/utils/roulette.ts`:
+
+- `split`: supports explicit arrays like `[0, 2]` (wins when 0 hits).
+- `trio`: supports 3-number arrays like `[0, 2, 3]` and pays 11:1 on hit.
+- `00` is represented internally as `37` (American table only).
+
 ## 🚀 Development Server Stability Guidelines
 
 ### Running the App
