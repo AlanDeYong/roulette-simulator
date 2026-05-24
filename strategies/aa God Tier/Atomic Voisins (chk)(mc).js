@@ -16,18 +16,18 @@
  * - Base Unit: The video uses a $30 total bet model ($12 on Column, $18 on Voisins).
  * - ON LOSS: Increase the betting level by 1 (Arithmetic Progression: 1x -> 2x -> 3x).
  * - ON WIN: 
- * - If Session Profit is reached: Reset to Level 1.
- * - If "Big Win" hit (but no session profit): Decrease level by 1.
- * - If 3 Consecutive "Small Wins": Decrease level by 1.
+ * - If Session Profit is reached (Bankroll >= Peak Bankroll): Reset to Level 1 and set new peak.
+ * - If a Medium, Big, or Atomic Win hits (but no session profit): Decrease level by 1.
+ * - If 3 Consecutive "Small Wins" hit: Decrease level by 1.
  * * The Goal:
- * - Reach any session profit (Bankroll > Start Bankroll) and reset immediately.
+ * - Reach any session profit (Bankroll >= Peak Bankroll) and reset immediately.
  * - Survive variance using the "Small Win" de-escalation logic.
  */
 function bet(spinHistory, bankroll, config, state, utils) {
     // --- 1. State Initialization ---
     if (state.level === undefined) {
         state.level = 1;                // Current betting level (multiplier)
-        state.startBankroll = bankroll; // Snapshot starting bankroll for session profit check
+        state.peakBankroll = bankroll;  // Track the highest bankroll achieved (high-water mark)
         state.smallWinStreak = 0;       // Track consecutive small wins for de-escalation
         state.lastBetTotal = 0;         // Track previous bet size to determine win/loss
     }
@@ -43,9 +43,11 @@ function bet(spinHistory, bankroll, config, state, utils) {
         const isWin = isVoisins || isCol2;
 
         if (isWin) {
-            if (bankroll > state.startBankroll) {
+            // Check for Session Profit against the Peak Bankroll
+            if (bankroll >= state.peakBankroll) {
                 state.level = 1;
                 state.smallWinStreak = 0;
+                state.peakBankroll = bankroll; // Update to the new high-water mark
             } else {
                 const isBigWin = isVoisins && isCol2; 
                 
@@ -96,7 +98,7 @@ function bet(spinHistory, bankroll, config, state, utils) {
 
     // B. Voisins du Zéro (Double Strength = 18 chips total)
     
-    // 0/2/3 Trio - Changed from 'basket' to 'street' to enforce an 11:1 payout
+    // 0/2/3 Trio - Uses 'trio' bet type to strictly enforce an 11:1 payout
     addBet('trio', [0, 2, 3], 4);
 
     // Corner 25/26/28/29 

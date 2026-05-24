@@ -2,30 +2,31 @@
 
 Use the following prompt when asking an LLM (like ChatGPT, Claude, or DeepSeek) to generate a strategy for this simulator.
 
----
+***
 
 **Copy and paste the text below:**
 
-I need you to write a Javascript strategy function for the Roulette Strategy. 
+I need you to write a Javascript strategy function for the Roulette Strategy.
 
 **Requirements:**
-1.  **Documentation (Crucial)**: You **MUST** include a block comment at the very top of the function explaining the strategy logic in natural language. Include:
-    *   **Source**: URL of source video and YouTube channel name.
-    *   **The Logic**: What triggers a bet? What are the conditions?
-    *   **The Progression**: How does the bet size change after wins/losses? (e.g., "Martingale: Double after loss, reset after win").
-    *   **The Goal**: What is the target profit or stop-loss condition?
-2.  **Function Signature**: `function bet(spinHistory, bankroll, config, state, utils)`
-3.  **Output**: Return an array of bet objects: `[{ type: '...', value: ..., amount: ... }]` or `null` / `[]` for no bets.
-4.  **Logging**: You generally do **NOT** need to generate external log files (using `utils.saveFile`) unless specifically requested for complex debugging or data export. The simulator handles internal logging of spin results and bankroll.
-    *   If you *must* log for debugging, use `console.log()` sparingly.
-5.  **Respect Bet Limits**: You **MUST** use the limits defined in `config.betLimits` for all bet amounts. Do not hardcode bet amounts if possible, or ensure they are clamped to these limits.
-    *   `config.betLimits.min` (Minimum for Inside bets like numbers)
-    *   `config.betLimits.minOutside` (Minimum for Outside bets like Red/Black, Dozens)
-    *   `config.betLimits.max` (Maximum bet allowed)
-6.  **State Persistence**: Use the `state` object to store variables between spins (e.g., progression levels, triggers). Do not use global variables.
-7.  **History Access**: `spinHistory` is an array of past results. The last result is `spinHistory[spinHistory.length - 1]`.
-    *   Access the number via `.winningNumber` (0-36).
-    *   Access the color via `.winningColor` ('red', 'black', 'green').
+
+1. **Documentation (Crucial)**: You **MUST** include a block comment at the very top of the function explaining the strategy logic in natural language. It must include:
+   - **Source**: URL of source video and YouTube channel name.
+   - **The Full Logic in details**: What triggers a bet? What are the conditions?
+   - **The Full Bet Progression in details**: How are the initial bets placed? How does the bet size change after wins/losses? (e.g., "Martingale: Double after loss, reset after win").
+   - **The Goal**: What is the target profit or stop-loss condition?
+2. **Function Signature**: `function bet(spinHistory, bankroll, config, state, utils)`
+3. **Output**: Return an array of bet objects: `[{ type: '...', value: ..., amount: ... }]` or `null` / `[]` for no bets.
+4. **Logging**: You generally do **NOT** need to generate external log files (using `utils.saveFile`) unless specifically requested for complex debugging or data export. The simulator handles internal logging of spin results and bankroll.
+   - If you *must* log for debugging, use `console.log()` sparingly.
+5. **Respect Bet Limits**: You **MUST** use the limits defined in `config.betLimits` for all bet amounts. Do not hardcode bet amounts if possible, or ensure they are clamped to these limits.
+   - `config.betLimits.min` (Minimum for Inside bets like numbers)
+   - `config.betLimits.minOutside` (Minimum for Outside bets like Red/Black, Dozens)
+   - `config.betLimits.max` (Maximum bet allowed)
+6. **State Persistence**: Use the `state` object to store variables between spins (e.g., progression levels, triggers). Do not use global variables.
+7. **History Access**: `spinHistory` is an array of past results. The last result is `spinHistory[spinHistory.length - 1]`.
+   - Access the number via `.winningNumber` (0-36).
+   - Access the color via `.winningColor` ('red', 'black', 'green').
 
 **Reference Data Structures:**
 
@@ -105,5 +106,4 @@ function bet(spinHistory, bankroll, config, state, utils) {
 ```
 
 **My Strategy Description:**
-[INSERT YOUR STRATEGY DESCRIPTION HERE]
-
+\[INSERT YOUR STRATEGY DESCRIPTION HERE]
