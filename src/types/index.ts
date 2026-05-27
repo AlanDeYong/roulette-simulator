@@ -102,4 +102,3 @@ export interface SimulationState {
   results: SimulationResults;
   status: 'idle' | 'running' | 'paused' | 'completed';
 }
-

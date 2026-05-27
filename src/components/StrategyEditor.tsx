@@ -179,7 +179,6 @@ export const StrategyEditor: React.FC = () => {
                   setFSNodes(fs.serialize());
                   showFeedback('success', 'File saved successfully');
                   setIsDirty(false);
-
               } catch (e: any) {
                   console.error("Save Error (Overwrite):", e);
                   showFeedback('error', `Save failed: ${e.message}`);
@@ -330,5 +329,4 @@ export const StrategyEditor: React.FC = () => {
     </Card>
   );
 };
-
 
