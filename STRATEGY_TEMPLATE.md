@@ -39,6 +39,13 @@ config = {
     max: 500        // Absolute max for any single bet
   },
   startingBankroll: 2000,
+  tableType: 'european',      // 'european' or 'american'
+  useImportedData: false,
+  dataRange: {
+    start: 1,                 // 1-based
+    end: null,                // null means end of data
+    fromEnd: false            // If true: imported data runs in reverse order (end → start)
+  },
   minIncrementalBet: 1,      // New: Minimum amount to increase a bet by (default 1 unit)
   incrementMode: 'fixed'     // New: 'fixed' (increase by minIncrementalBet) or 'base' (increase by initial bet on that position)
 };

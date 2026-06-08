@@ -1,5 +1,5 @@
 /**
- * Strategy: The "Elite 8" Strategy
+ * Strategy: The "Elite 8" Strategy (Corrected)
  * * Source: 
  * YouTube Channel: WillVegas
  * Video URL: https://www.youtube.com/watch?v=8JvBEQBiuj4
@@ -8,7 +8,7 @@
  * This is a "Coverage" strategy targeting 20 numbers (approx 52% of the wheel).
  * It relies on overlapping bets to create "Jackpot Numbers" that pay out heavily.
  * * 1. Corner Bets (5 Total): 
- * - Covers: 1,2,4,5 | 8,9,11,12 | 17,18,20,21 | 26,27,29,30 | 32,33,35,36
+ * - Covers: 1,2,4,5 | 8,9,11,12 | 16,17,19,20 | 26,27,29,30 | 31,32,34,35
  * - Pays: 8:1
  * 2. Split Bets (3 Total - The "Jackpots"):
  * - Covers: 8/11 | 17/20 | 26/29
@@ -16,26 +16,23 @@
  * * "Jackpot Numbers" (8, 11, 17, 20, 26, 29) are covered by BOTH a Corner and a Split.
  * If one hits, you win both bets.
  * * The Progression (Negative Progression / Recovery):
- * - Base Unit: Defined by table minimum (e.g., $1 or $2).
- * - Win (Recovered): If Bankroll >= Session Start Bankroll, RESET all bets to 1 unit.
- * - Win (Not Recovered): If a win occurs but bankroll < Session Start, MAINTAIN current bet levels (do not increase or decrease).
- * - Loss:
- * - Every Loss: Increase Corner Bets by 1 unit.
- * - Every 2nd Loss (Alternating): Increase Split Bets by 1 unit.
+ * - Base Unit: Corner bets are 2 units, Split bets are 1 unit.
+ * - Win: If Bankroll >= Session Peak Profit, RESET all bets to base units. Otherwise, rebet.
+ * - Loss: Increase all corner bets by 1 unit. If corner bet is even after increase, increase split bets by 1 unit. If odd, do not increase split bets.
  * * The Goal:
- * Aim for a session profit (Bankroll > Start), then reset immediately to protect gains.
+ * Aim for a session peak profit, then reset immediately to protect gains.
  */
 function bet(spinHistory, bankroll, config, state, utils) {
     // 1. Initialize State on first run
     if (!state.initialized) {
         state.initialized = true;
         state.sessionStartBankroll = bankroll;
+        state.peakBankroll = bankroll;
         state.lastBankroll = bankroll;
         
-        // Progression tracking
-        state.cornerLevel = 1;
+        // Progression tracking (Base units: 2 for corners, 1 for splits)
+        state.cornerLevel = 2;
         state.splitLevel = 1;
-        state.consecutiveLossCount = 0; // Tracks losses to determine split increases
     }
 
     // 2. Define Base Unit based on Inside Bet Minimum
@@ -43,34 +40,32 @@ function bet(spinHistory, bankroll, config, state, utils) {
 
     // 3. Analyze Previous Spin (if history exists)
     if (spinHistory.length > 0) {
-        const lastSpin = spinHistory[spinHistory.length - 1];
         const currentBankroll = bankroll;
         const previousBankroll = state.lastBankroll;
         const wonLastSpin = currentBankroll > previousBankroll;
 
         // --- PROGRESSION LOGIC ---
         
-        // Condition A: We are in profit or fully recovered -> RESET
-        if (currentBankroll >= state.sessionStartBankroll) {
-            state.cornerLevel = 1;
+        // Condition A: We reached a new or equal session peak profit -> RESET
+        if (currentBankroll >= state.peakBankroll) {
+            state.peakBankroll = currentBankroll; // Update peak profit watermark
+            state.cornerLevel = 2;
             state.splitLevel = 1;
-            state.consecutiveLossCount = 0;
         } 
         // Condition B: We Lost -> INCREASE
         else if (!wonLastSpin) {
-            state.consecutiveLossCount++;
-            
-            // Always increase corners on a loss
+            // Increase corners by 1 unit
             state.cornerLevel++;
             
-            // Increase splits only on every 2nd loss (2, 4, 6...)
-            if (state.consecutiveLossCount % 2 === 0) {
+            // If each corner bet is even after increase, increase all split bets by 1 unit
+            if (state.cornerLevel % 2 === 0) {
                 state.splitLevel++;
             }
+            // If odd, split bets are not increased
         }
-        // Condition C: We Won but are not yet recovered -> STAY PUT
+        // Condition C: We Won but have not reached peak profit -> REBET
         else {
-            // Do not change levels
+            // Do not change levels (rebet)
         }
     }
 
@@ -93,13 +88,13 @@ function bet(spinHistory, bankroll, config, state, utils) {
         // --- 5 Corner Bets ---
         { type: 'corner', value: 1, amount: cornerAmt },  // Covers 1, 2, 4, 5
         { type: 'corner', value: 8, amount: cornerAmt },  // Covers 8, 9, 11, 12
-        { type: 'corner', value: 17, amount: cornerAmt }, // Covers 17, 18, 20, 21
+        { type: 'corner', value: 16, amount: cornerAmt }, // Covers 16, 17, 19, 20
         { type: 'corner', value: 26, amount: cornerAmt }, // Covers 26, 27, 29, 30
-        { type: 'corner', value: 32, amount: cornerAmt }, // Covers 32, 33, 35, 36
+        { type: 'corner', value: 31, amount: cornerAmt }, // Covers 31, 32, 34, 35
 
         // --- 3 Split Bets (The "Jackpot" Overlaps) ---
         { type: 'split', value: [8, 11], amount: splitAmt },   // Overlaps corner 8
-        { type: 'split', value: [17, 20], amount: splitAmt },  // Overlaps corner 17
+        { type: 'split', value: [17, 20], amount: splitAmt },  // Overlaps corner 16
         { type: 'split', value: [26, 29], amount: splitAmt }   // Overlaps corner 26
     ];
 
@@ -107,7 +102,6 @@ function bet(spinHistory, bankroll, config, state, utils) {
     const totalBet = bets.reduce((sum, b) => sum + b.amount, 0);
     if (totalBet > bankroll) {
         // Not enough money to place full spread - return empty to stop or implement 'all_in' logic
-        // Returning empty array stops the simulator usually
         return []; 
     }
 

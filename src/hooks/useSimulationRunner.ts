@@ -48,17 +48,11 @@ export const useSimulationRunner = () => {
         const dataToUse = currentImportedData;
         
         // Use config from fresh state
-        let start = (currentConfig.dataRange.start || 1) - 1; 
-        let end = currentConfig.dataRange.end ? currentConfig.dataRange.end : dataToUse.length;
-        
-        let startIndex = Math.max(0, currentConfig.dataRange.start - 1);
-        let endIndex = currentConfig.dataRange.end || dataToUse.length;
-        
-        if (currentConfig.dataRange.fromEnd) {
-             startIndex = Math.max(0, dataToUse.length - currentConfig.dataRange.start);
-        }
+        const orderedData = currentConfig.dataRange.fromEnd ? [...dataToUse].reverse() : dataToUse;
+        const startIndex = Math.max(0, (currentConfig.dataRange.start || 1) - 1);
+        const endIndex = Math.min(currentConfig.dataRange.end || orderedData.length, orderedData.length);
 
-        numbersToProcess = dataToUse.slice(startIndex, endIndex);
+        numbersToProcess = orderedData.slice(startIndex, endIndex);
         
         if (currentConfig.maxSpins && numbersToProcess.length > currentConfig.maxSpins) {
             numbersToProcess = numbersToProcess.slice(0, currentConfig.maxSpins);

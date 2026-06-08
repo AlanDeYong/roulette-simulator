@@ -169,11 +169,19 @@ app.get('/api/files', async (req, res) => {
 // POST /api/save - Save a file
 app.post('/api/save', async (req, res) => {
     try {
-        const { id, content } = req.body;
+        const { id, content, createOnly } = req.body;
         // ID is relative path: "MyFolder/MyStrat.js"
         if (!id || content === undefined) return res.status(400).json({ error: 'Missing id or content' });
 
         const fullPath = path.join(STRATEGIES_DIR, id);
+
+        if (createOnly) {
+            try {
+                await fs.access(fullPath);
+                return res.status(409).json({ error: `A file named "${id}" already exists.` });
+            } catch {
+            }
+        }
         
         // Ensure parent dir exists
         await fs.mkdir(path.dirname(fullPath), { recursive: true });
@@ -215,6 +223,16 @@ app.post('/api/rename', async (req, res) => {
 
         const oldPath = path.join(STRATEGIES_DIR, oldId);
         const newPath = path.join(STRATEGIES_DIR, newId);
+        const oldResolved = path.resolve(oldPath);
+        const newResolved = path.resolve(newPath);
+
+        if (oldResolved !== newResolved) {
+            try {
+                await fs.access(newPath);
+                return res.status(409).json({ error: `A file or folder named "${newId}" already exists.` });
+            } catch {
+            }
+        }
 
         // Ensure new parent dir exists
         await fs.mkdir(path.dirname(newPath), { recursive: true });
@@ -232,6 +250,11 @@ app.post('/api/create-dir', async (req, res) => {
     try {
         const { id } = req.body; // Relative path
         const fullPath = path.join(STRATEGIES_DIR, id);
+        try {
+            await fs.access(fullPath);
+            return res.status(409).json({ error: `A folder named "${id}" already exists.` });
+        } catch {
+        }
         await fs.mkdir(fullPath, { recursive: true });
         res.json({ success: true });
     } catch (err) {

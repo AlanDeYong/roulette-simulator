@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 import { useSimulationStore } from '../store/useSimulationStore';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
@@ -46,7 +46,9 @@ export const StrategyEditor: React.FC = () => {
     fsNodes, 
     setFSNodes, 
     currentFileId, 
-    setCurrentFileId 
+    setCurrentFileId,
+    layout,
+    setLayout
   } = useSimulationStore();
   
   const isRunning = status === 'running';
@@ -54,6 +56,11 @@ export const StrategyEditor: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const startWidthRef = useRef(0);
+  const [explorerWidth, setExplorerWidth] = useState(layout.explorerPanelWidth || 256);
 
   // Dialog State
   const [dialog, setDialog] = useState<{
@@ -83,6 +90,50 @@ export const StrategyEditor: React.FC = () => {
         setIsDirty(strategy.code.length > 0);
     }
   }, [strategy.code, currentFileId, fsNodes]);
+
+  useEffect(() => {
+      setExplorerWidth(layout.explorerPanelWidth || 256);
+  }, [layout.explorerPanelWidth]);
+
+  useEffect(() => {
+      const handlePointerMove = (e: PointerEvent) => {
+          if (!isDraggingRef.current) return;
+          const containerWidth = containerRef.current?.getBoundingClientRect().width ?? 0;
+          const minExplorerWidth = 200;
+          const minEditorWidth = 320;
+          const handleWidth = 8;
+          const maxExplorerWidth = containerWidth > 0 ? Math.max(minExplorerWidth, containerWidth - minEditorWidth - handleWidth) : 520;
+          const deltaX = e.clientX - startXRef.current;
+          const nextWidth = startWidthRef.current + deltaX;
+          const clamped = Math.max(minExplorerWidth, Math.min(maxExplorerWidth, nextWidth));
+          setExplorerWidth(clamped);
+      };
+
+      const handlePointerUp = () => {
+          if (!isDraggingRef.current) return;
+          isDraggingRef.current = false;
+          document.body.style.userSelect = '';
+          document.body.style.cursor = '';
+          setLayout({ explorerPanelWidth: explorerWidth });
+      };
+
+      window.addEventListener('pointermove', handlePointerMove);
+      window.addEventListener('pointerup', handlePointerUp);
+      return () => {
+          window.removeEventListener('pointermove', handlePointerMove);
+          window.removeEventListener('pointerup', handlePointerUp);
+      };
+  }, [explorerWidth, setLayout]);
+
+  const handleResizePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      isDraggingRef.current = true;
+      startXRef.current = e.clientX;
+      startWidthRef.current = explorerWidth;
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = 'col-resize';
+      e.currentTarget.setPointerCapture(e.pointerId);
+  };
 
   const showFeedback = (type: 'success' | 'error', message: string) => {
       setFeedback({ type, message });
@@ -300,14 +351,24 @@ export const StrategyEditor: React.FC = () => {
         </div>
       </CardHeader>
 
-      <CardContent className="flex-1 p-0 min-h-0 flex overflow-hidden">
+      <CardContent ref={containerRef} className="flex-1 p-0 min-h-0 flex overflow-hidden">
         {/* File Manager Sidebar */}
-        <div className="w-64 border-r border-white/10 bg-black/10 flex flex-col">
+        <div style={{ width: explorerWidth }} className="shrink-0 border-r border-white/10 bg-black/10 flex flex-col">
             <FileManager onOpenFile={handleOpenFile} />
         </div>
 
+        <div
+            onPointerDown={handleResizePointerDown}
+            className="w-2 flex-none cursor-col-resize select-none relative hover:bg-primary/10 transition-colors"
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="Resize explorer panel"
+        >
+            <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px bg-primary/20" />
+        </div>
+
         {/* Editor Area */}
-        <div className="flex-1 relative">
+        <div className="min-w-0 flex-1 relative">
             <Editor
                 height="100%"
                 defaultLanguage="javascript"

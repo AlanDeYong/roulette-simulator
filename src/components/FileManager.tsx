@@ -23,6 +23,8 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     const [creatingType, setCreatingType] = useState<'file' | 'directory' | null>(null);
     const [newItemName, setNewItemName] = useState('');
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const renameInputRef = useRef<HTMLInputElement>(null);
+    const renameValueRef = useRef('');
 
     const postJson = async (url: string, payload: any) => {
         const res = await fetch(url, {
@@ -116,6 +118,11 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     };
 
     const handleSelect = (id: string) => {
+        if (editingId && editingId !== id) {
+            setEditingId(null);
+            renameValueRef.current = '';
+            setRenameValue('');
+        }
         setSelectedId(id);
         const node = fs.getNode(id);
         if (node.type === 'file') {
@@ -189,20 +196,31 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
             }
             
             if (creatingType === 'file') {
-                const fileName = newItemName.endsWith('.js') ? newItemName : `${newItemName}.js`;
+                const trimmed = newItemName.trim();
+                const fileName = trimmed.endsWith('.js') ? trimmed : `${trimmed}.js`;
                 const dirPath = parentId === fs.getRootId() ? '' : parentId;
                 const fullPath = dirPath ? `${dirPath}/${fileName}` : fileName;
+                if (hasSiblingNameConflict(parentId, fileName, '')) {
+                    setError(`A strategy named "${fileName}" already exists in this folder. Please choose a different name.`);
+                    setTimeout(() => setError(null), 3000);
+                    return;
+                }
 
-                await postJson('/api/save', { id: fullPath, content: "// New Strategy" });
+                await postJson('/api/save', { id: fullPath, content: "// New Strategy", createOnly: true });
                 await useSimulationStore.getState().syncWithServer();
 
                 setSelectedId(fullPath);
                 onOpenFile(fullPath, "// New Strategy");
                 setCurrentFileId(fullPath);
             } else {
-                const dirName = newItemName;
+                const dirName = newItemName.trim();
                 const dirPath = parentId === fs.getRootId() ? '' : parentId;
                 const fullPath = dirPath ? `${dirPath}/${dirName}` : dirName;
+                if (hasSiblingNameConflict(parentId, dirName, '')) {
+                    setError(`A folder named "${dirName}" already exists in this folder. Please choose a different name.`);
+                    setTimeout(() => setError(null), 3000);
+                    return;
+                }
 
                 await postJson('/api/create-dir', { id: fullPath });
                 await useSimulationStore.getState().syncWithServer();
@@ -271,38 +289,77 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     const handleStartRename = () => {
         if (!selectedId) return;
         setEditingId(selectedId);
-        setRenameValue(fs.getNode(selectedId).name);
+        const name = fs.getNode(selectedId).name;
+        renameValueRef.current = name;
+        setRenameValue(name);
+    };
+
+    const hasSiblingNameConflict = (parentId: string | null | undefined, nextName: string, excludeId: string) => {
+        const parent = parentId ? fs.getNode(parentId) : fs.getNode(fs.getRootId());
+        if (!parent || parent.type !== 'directory') return false;
+        const normalized = nextName.trim().toLowerCase();
+        if (!normalized) return false;
+        return (parent as DirectoryNode).children.some((childId) => {
+            if (childId === excludeId) return false;
+            try {
+                return fs.getNode(childId).name.trim().toLowerCase() === normalized;
+            } catch {
+                return false;
+            }
+        });
+    };
+
+    const hasGlobalNameConflict = (nextName: string, excludeId: string) => {
+        const normalized = nextName.trim().toLowerCase();
+        if (!normalized) return false;
+        const allNodes = Object.values(fs.serialize());
+        return allNodes.some((n) => n.id !== excludeId && n.id !== fs.getRootId() && n.name.trim().toLowerCase() === normalized);
     };
 
     const handleFinishRename = async () => {
         if (!editingId) return;
         try {
-            if (renameValue !== fs.getNode(editingId).name) {
-                const node = fs.getNode(editingId);
-                const parentId = node.parentId;
-                
-                const newName = renameValue + (node.type === 'file' && !renameValue.endsWith('.js') ? '.js' : '');
-                const dirPath = parentId === fs.getRootId() ? '' : (parentId || '');
-                const newPath = dirPath ? `${dirPath}/${newName}` : newName;
-                
-                setEditingId(null);
-                await postJson('/api/rename', { oldId: editingId, newId: newPath });
-
-                if (selectedId === editingId) {
-                    setSelectedId(newPath);
-                }
-                if (currentFileId === editingId) {
-                    setCurrentFileId(newPath);
-                }
-
-                await useSimulationStore.getState().syncWithServer();
-            } else {
-                setEditingId(null);
+            const node = fs.getNode(editingId);
+            const raw = renameValueRef.current.trim();
+            if (!raw) {
+                setError('Name cannot be empty. Please choose a different name.');
+                setTimeout(() => setError(null), 3000);
+                requestAnimationFrame(() => renameInputRef.current?.focus());
+                return;
             }
+
+            const nextName = raw + (node.type === 'file' && !raw.endsWith('.js') ? '.js' : '');
+            if (nextName === node.name) {
+                setEditingId(null);
+                return;
+            }
+
+            if (hasGlobalNameConflict(nextName, editingId)) {
+                setError(`An item named "${nextName}" already exists. Please choose a different name.`);
+                setTimeout(() => setError(null), 3000);
+                requestAnimationFrame(() => renameInputRef.current?.focus());
+                return;
+            }
+
+            const parentId = node.parentId;
+            const dirPath = parentId === fs.getRootId() ? '' : (parentId || '');
+            const newPath = dirPath ? `${dirPath}/${nextName}` : nextName;
+
+            await postJson('/api/rename', { oldId: editingId, newId: newPath });
+
+            if (selectedId === editingId) {
+                setSelectedId(newPath);
+            }
+            if (currentFileId === editingId) {
+                setCurrentFileId(newPath);
+            }
+
+            await useSimulationStore.getState().syncWithServer();
+            setEditingId(null);
         } catch (e: any) {
             setError(e.message);
             setTimeout(() => setError(null), 3000);
-            setEditingId(null);
+            requestAnimationFrame(() => renameInputRef.current?.focus());
         }
     };
 
@@ -340,6 +397,12 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
             let newPath = draggedNode.name;
             if (!isRoot) {
                 newPath = `${newParentId}/${draggedNode.name}`;
+            }
+
+            if (hasSiblingNameConflict(isRoot ? fs.getRootId() : newParentId, draggedNode.name, draggedId)) {
+                setError(`${draggedNode.type === 'directory' ? 'A folder' : 'A file'} named "${draggedNode.name}" already exists in this folder. Please rename it before moving.`);
+                setTimeout(() => setError(null), 3000);
+                return;
             }
             
             await postJson('/api/rename', { oldId: draggedId, newId: newPath });
@@ -474,10 +537,27 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
 
                     {isEditing ? (
                         <Input 
+                            ref={renameInputRef}
                             value={renameValue}
-                            onChange={(e) => setRenameValue(e.target.value)}
-                            onBlur={handleFinishRename}
-                            onKeyDown={(e) => e.key === 'Enter' && handleFinishRename()}
+                            onChange={(e) => {
+                                renameValueRef.current = e.target.value;
+                                setRenameValue(e.target.value);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    renameValueRef.current = e.currentTarget.value;
+                                    handleFinishRename();
+                                }
+                                if (e.key === 'Escape') {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setEditingId(null);
+                                    renameValueRef.current = '';
+                                    setRenameValue('');
+                                }
+                            }}
                             className="h-6 text-xs py-0 px-1 w-full"
                             autoFocus
                             onClick={(e) => e.stopPropagation()}

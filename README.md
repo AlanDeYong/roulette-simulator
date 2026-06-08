@@ -27,6 +27,15 @@ Payout calculation is centralized in `src/utils/roulette.ts`:
 - `trio`: supports 3-number arrays like `[0, 2, 3]` and pays 11:1 on hit.
 - `00` is represented internally as `37` (American table only).
 
+## Imported Data Range & Order
+
+When **Use Imported Data** is enabled, the simulator can run a subset of the imported spins:
+
+- **Start / End**: Select a 1-based slice of the spins (End = All uses the full length).
+- **Run from end (reverse order)**: Processes the imported spins in reverse order (end → start) before applying Start/End.
+  - Example: Start = 1, End = All runs the entire dataset in reverse.
+  - Example: Start = 1, End = 10 runs the last 10 spins (most recent → oldest).
+
 ## 🚀 Development Server Stability Guidelines
 
 ### Running the App

@@ -7,9 +7,9 @@ export interface BetLimits {
 }
 
 export interface DataRange {
-  start: number; // Start index (1-based or 0-based, depending on implementation)
+  start: number; // Start index (1-based)
   end: number | null; // End index, null means end of data
-  fromEnd: boolean; // If true, start counting from the end
+  fromEnd: boolean; // If true, process imported data in reverse order (end → start)
 }
 
 export interface SimulationConfig {
@@ -90,6 +90,7 @@ export interface LayoutConfig {
     chartHeight: number; // Pixels
     logHeight: number; // Pixels
     configPanelWidth: number; // Pixels
+    explorerPanelWidth: number; // Pixels
 }
 
 export interface SimulationState {

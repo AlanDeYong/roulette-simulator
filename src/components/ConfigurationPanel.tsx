@@ -337,7 +337,7 @@ export const ConfigurationPanel: React.FC = () => {
                                 disabled={isRunning}
                                 className="accent-primary h-3 w-3"
                             />
-                            <Label htmlFor="fromEnd" className="text-[10px] font-normal cursor-pointer">Start from end</Label>
+                            <Label htmlFor="fromEnd" className="text-[10px] font-normal cursor-pointer">Run from end (reverse order)</Label>
                         </div>
                     </div>
                 </CollapsibleSection>
@@ -345,4 +345,3 @@ export const ConfigurationPanel: React.FC = () => {
         </Card>
     );
 };
-
