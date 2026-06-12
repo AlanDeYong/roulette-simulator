@@ -74,7 +74,7 @@ function bet(spinHistory, bankroll, config, state, utils) {
     }
 
     // 4. Calculate customized bet sizes scaled by progression level multiplier
-    let redAmount = outsideUnit * state.progressionLevel;
+    let redAmount = outsideUnit * 3 * state.progressionLevel;
     let line10Amount = insideUnit * state.progressionLevel;
     let line28Amount = insideUnit * state.progressionLevel;
 
