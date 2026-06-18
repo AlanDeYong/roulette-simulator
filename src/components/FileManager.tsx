@@ -50,7 +50,6 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
 
         return data;
     };
-
     // Dialog State
     const [dialog, setDialog] = useState<{
         isOpen: boolean;
@@ -670,4 +669,3 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
         </div>
     );
 };
-
