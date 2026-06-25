@@ -37,7 +37,11 @@ const CollapsibleSection: React.FC<{
     );
 };
 
-export const ConfigurationPanel: React.FC = () => {
+interface ConfigurationPanelProps {
+    onImportComplete?: () => void;
+}
+
+export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({ onImportComplete }) => {
     const { config, setConfig, status, setImportedData, importedData, importedFileName, setImportedFileName } = useSimulationStore();
     const isRunning = status === 'running' || status === 'paused';
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -73,8 +77,11 @@ export const ConfigurationPanel: React.FC = () => {
              const reader = new FileReader();
              reader.onload = (e) => {
                  const text = e.target?.result as string;
-                 parseAndSetData(text);
+                 const importedCount = parseAndSetData(text);
                  setIsLoadingFile(false);
+                 if (importedCount > 0) {
+                     onImportComplete?.();
+                 }
              };
              reader.onerror = (e) => {
                  console.error("File reading failed", e);
@@ -91,6 +98,9 @@ export const ConfigurationPanel: React.FC = () => {
                 (data) => {
                     setImportedData(data);
                     setIsLoadingFile(false);
+                    if (data.length > 0) {
+                        onImportComplete?.();
+                    }
                 },
                 (error) => {
                     console.error("File reading failed", error);
@@ -116,8 +126,10 @@ export const ConfigurationPanel: React.FC = () => {
             if (!config.useImportedData) {
                 setConfig({ useImportedData: true });
             }
+            return numbers.length;
         } else {
             setImportedData([]);
+            return 0;
         }
     };
 

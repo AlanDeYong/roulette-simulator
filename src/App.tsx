@@ -33,6 +33,10 @@ function App() {
      runSimulation();
   };
 
+  const handleImportComplete = () => {
+      runSimulation();
+  };
+
   useEffect(() => {
       const handleMouseMove = (e: MouseEvent) => {
           if (!isDraggingRef.current || !containerRef.current) return;
@@ -75,7 +79,7 @@ function App() {
         {/* Left Column: Config & Controls */}
         <div style={{ width: configWidth }} className="shrink-0 flex flex-col gap-4 h-full overflow-hidden pr-3">
             <div className="flex-1 min-h-0">
-                <ConfigurationPanel />
+                <ConfigurationPanel onImportComplete={handleImportComplete} />
             </div>
             
             <div className="flex-none grid grid-cols-2 gap-4 pb-2">
