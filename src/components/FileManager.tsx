@@ -25,6 +25,7 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const renameInputRef = useRef<HTMLInputElement>(null);
     const renameValueRef = useRef('');
+    const suppressAutoExpandForFileRef = useRef<string | null>(null);
 
     const postJson = async (url: string, payload: any) => {
         const res = await fetch(url, {
@@ -81,20 +82,31 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
         
     }, [fsNodes]);
 
-    // Update selection when current file changes externally
+    // Keep tree selection in sync with the externally opened file.
     useEffect(() => {
         if (currentFileId) {
             setSelectedId(currentFileId);
-            // Ensure parents are expanded
+        }
+    }, [currentFileId]);
+
+    // Only auto-expand when the opened file actually changes, not on every sync.
+    useEffect(() => {
+        if (!currentFileId) return;
+        if (suppressAutoExpandForFileRef.current === currentFileId) {
+            suppressAutoExpandForFileRef.current = null;
+            return;
+        }
+
+        setExpanded(prev => {
             let node = fsNodes[currentFileId];
-            const newExpanded = { ...expanded };
+            const nextExpanded = { ...prev };
             while (node && node.parentId) {
-                newExpanded[node.parentId] = true;
+                nextExpanded[node.parentId] = true;
                 node = fsNodes[node.parentId];
             }
-            setExpanded(newExpanded);
-        }
-    }, [currentFileId, fsNodes]);
+            return nextExpanded;
+        });
+    }, [currentFileId]);
 
     const handleToggle = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
@@ -407,6 +419,7 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
             await postJson('/api/rename', { oldId: draggedId, newId: newPath });
 
             if (currentFileId === draggedId) {
+                suppressAutoExpandForFileRef.current = newPath;
                 setCurrentFileId(newPath);
             }
             if (selectedId === draggedId) {
