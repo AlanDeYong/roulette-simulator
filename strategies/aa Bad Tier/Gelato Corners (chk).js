@@ -71,21 +71,14 @@ function bet(spinHistory, bankroll, config, state, utils) {
     }
 
     // 5. Calculate Bet Amounts
-    let curZeroBet, curFiveBet;
-    
-    if (config.incrementMode === 'base') {
-        // Enforce max config limits without breaking the ratio
-        let maxAllowedLevel = Math.floor(config.betLimits.max / baseFive);
-        let maxLevel = Math.min(state.level, Math.max(1, maxAllowedLevel));
-        
-        curZeroBet = baseZero * maxLevel;
-        curFiveBet = baseFive * maxLevel;
-    } else {
-        // 'fixed' increment mode
-        let increase = config.minIncrementalBet * (state.level - 1);
-        curZeroBet = Math.min(baseZero + increase, config.betLimits.max);
-        curFiveBet = Math.min(baseFive + increase, config.betLimits.max);
+    // Enforce max config limits without breaking the ratio and directly clamp state.level
+    let maxAllowedLevel = Math.floor(config.betLimits.max / baseFive);
+    if (maxAllowedLevel > 0) {
+        state.level = Math.min(state.level, maxAllowedLevel);
     }
+    
+    let curZeroBet = baseZero * state.level;
+    let curFiveBet = baseFive * state.level;
     
     // Ensure absolute minimum bounds are always respected
     curZeroBet = Math.max(curZeroBet, config.betLimits.min);
