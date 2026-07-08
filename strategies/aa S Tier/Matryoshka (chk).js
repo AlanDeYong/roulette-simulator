@@ -10,7 +10,7 @@
  * - Spin 2 (Step 1 - After Loss): Add 1 unit to the Line, add 1 unit to a Corner inside the Line.
  * - Spin 3 (Step 2 - After Loss): Add 1 unit to Line & Corner, add 1 unit to a Split inside the Corner.
  * - Spin 4 (Step 3 - After Loss): Add 1 unit to Line, Corner & Split, add 1 unit to a Single Straight-Up inside the Split.
- * - Reset on Win: If any win occurs, reset to Step 0 and change the target Line to the last winning number's Line.
+ * - Reset on Win: If any win occurs, reset to Step 0 and change the target Line to the most recent winning number outside the current Line.
  * - Reset on Loss (Hard Reset): If Step 3 loses (a cumulative ~25 unit loss), hard reset back to Step 0 on the same target.
  * *Note: Incremental increases scale according to `config.incrementMode`.*
  * * The Goal: 
@@ -35,11 +35,20 @@ function bet(spinHistory, bankroll, config, state, utils) {
         // Detect Win/Loss via Bankroll changes
         if (state.lastBankroll !== undefined) {
             if (bankroll > state.lastBankroll) {
-                // WIN: Reset step progression, change target to last hit (if not a zero)
+                // WIN: Reset step progression
                 state.step = 0;
-                if (lastNum !== 0 && lastNum !== '00') {
-                    lastNum = parseInt(lastNum, 10);
-                    state.targetL = Math.floor((lastNum - 1) / 6) * 6 + 1;
+                
+                // Change target to the most recent number in history that is NOT in the current double street
+                for (let i = spinHistory.length - 1; i >= 0; i--) {
+                    let pastNum = spinHistory[i].winningNumber;
+                    if (pastNum !== 0 && pastNum !== '00') {
+                        pastNum = parseInt(pastNum, 10);
+                        let pastL = Math.floor((pastNum - 1) / 6) * 6 + 1;
+                        if (pastL !== state.targetL) {
+                            state.targetL = pastL;
+                            break;
+                        }
+                    }
                 }
             } else {
                 // LOSS: Advance step to build inward
