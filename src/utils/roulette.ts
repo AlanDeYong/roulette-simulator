@@ -2,6 +2,17 @@ import { RouletteTableType, StrategyBet } from '../types';
 
 export const RED_NUMBERS = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
 export const BLACK_NUMBERS = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
+const VALID_TRIOS = [
+  [0, 1, 2],
+  [0, 2, 3]
+] as const;
+
+const isValidTrio = (value: StrategyBet['value']): value is number[] => {
+  if (!Array.isArray(value) || value.length !== 3) return false;
+
+  const normalized = [...value].map(Number).sort((a, b) => a - b);
+  return VALID_TRIOS.some((trio) => trio.every((n, index) => n === normalized[index]));
+};
 
 export const getNumberColor = (number: number): 'red' | 'black' | 'green' => {
   if (number === 0 || number === 37) return 'green'; // 37 represents 00
@@ -79,8 +90,8 @@ export const calculatePayout = (bet: StrategyBet, winningNumber: number): number
       if (winningNumber >= streetStart && winningNumber < streetStart + 3) return amount * 11;
       return -amount;
 
-    case 'trio': // 3 numbers (typically includes 0 or 00). Payout 11:1. value should be an array of 3 numbers (e.g. [0, 2, 3])
-      if (Array.isArray(value) && value.length === 3) {
+    case 'trio': // 3 numbers involving 0 only: 0/1/2 or 0/2/3. Payout 11:1.
+      if (isValidTrio(value)) {
         if (value.includes(winningNumber)) return amount * 11;
       }
       return -amount;

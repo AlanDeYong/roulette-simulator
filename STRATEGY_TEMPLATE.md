@@ -57,6 +57,7 @@ return [
   { type: 'red', amount: 10 },           // Outside bet
   { type: 'number', value: 17, amount: 5 }, // Inside bet on 17
   { type: 'split', value: [0, 2], amount: 5 }, // Split bet 0-2
+  { type: 'trio', value: [0, 1, 2], amount: 5 }, // Trio bet covering 0,1,2
   { type: 'corner', value: 1, amount: 5 }, // Corner bet covering 1,2,4,5 (value is top-left number)
   { type: 'street', value: 1, amount: 5 }, // Street bet covering 1,2,3
   { type: 'line', value: 1, amount: 5 }    // Six line bet covering 1-6
@@ -80,6 +81,7 @@ return [
 //   - 'corner' (value: top-left num, e.g. 1 covers 1,2,4,5)
 //   - 'split' (value: array [n1, n2] OR single number for horizontal split)
 //   - 'line' (value: start num of first row, e.g. 1 covers 1-6)
+//   - 'trio' (value: [0, 1, 2] OR [0, 2, 3])
 //   - 'basket' (value: 0 for 0,1,2,3 EU or 0,00,1,2,3 US)
 // - Outside: 
 //   - 'red', 'black', 'even', 'odd', 'low', 'high' (no value needed)

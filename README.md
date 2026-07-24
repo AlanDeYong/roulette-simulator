@@ -24,7 +24,7 @@ return [
 Payout calculation is centralized in `src/utils/roulette.ts`:
 
 - `split`: supports explicit arrays like `[0, 2]` (wins when 0 hits).
-- `trio`: supports 3-number arrays like `[0, 2, 3]` and pays 11:1 on hit.
+- `trio`: supports only the zero trios `[0, 1, 2]` and `[0, 2, 3]`, paying 11:1 on hit.
 - `00` is represented internally as `37` (American table only).
 
 ## Imported Data Range & Order

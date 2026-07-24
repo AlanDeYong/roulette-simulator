@@ -24,6 +24,9 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
       if (bet.type === 'split' && Array.isArray(bet.value)) {
           return `split (${bet.value.join(', ')})`;
       }
+      if (bet.type === 'trio' && Array.isArray(bet.value)) {
+          return `trio (${bet.value.join(', ')})`;
+      }
       return `${bet.type} ${bet.value !== undefined ? `(${bet.value})` : ''}`;
   };
 

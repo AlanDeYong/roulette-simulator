@@ -13365,3 +13365,698 @@ Source path: C:\AI\Projects\roulette-simulator\strategies\aa God Tier\Kinetic Qu
 [Dev Runner] [Backend] Duplicate request received: { id: 'Street Slayer (chk)(HC).js' }
 Source path: C:\AI\Projects\roulette-simulator\strategies\Street Slayer (chk)(HC).js
 Destination path: C:\AI\Projects\roulette-simulator\strategies\Street Slayer (chk)(HC) (1).js
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m2530[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.168:[1m5173[22m/[39m
+[Dev Runner] [Frontend ERR] Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[Dev Runner] [Backend] Duplicate request received: { id: 'Simple Simon.js' }
+Source path: C:\AI\Projects\roulette-simulator\strategies\Simple Simon.js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\Simple Simon (1).js
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m2131[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.170:[1m5173[22m/[39m
+[Dev Runner] [Frontend ERR] Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] [Frontend] Port 5173 is in use, trying another one...
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m2023[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5174[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5174[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.170:[1m5174[22m/[39m
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] [Frontend ERR] Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Backend ERR] Server error: Error: listen EADDRINUSE: address already in use 0.0.0.0:3001
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3001
+}
+[Dev Runner] [Backend] Process exiting with code: 0
+[Dev Runner] Backend exited with code 0
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] [Frontend ERR] ^C
+[Dev Runner] Frontend exited with code 3221225786
+[Dev Runner] Restarting Frontend in 1s...
+[Dev Runner] [Backend ERR] ^C
+[Dev Runner] Backend exited with code 3221225786
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m1882[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.171:[1m5173[22m/[39m
+[Dev Runner] [Frontend ERR] Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m2166[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.171:[1m5173[22m/[39m
+[Dev Runner] [Frontend ERR] Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[Dev Runner] [Backend] Duplicate request received: { id: "Jesse's Favorite (chk).js" }
+Source path: C:\AI\Projects\roulette-simulator\strategies\Jesse's Favorite (chk).js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\Jesse's Favorite (chk) (1).js
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m2469[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.172:[1m5173[22m/[39m
+[Dev Runner] [Frontend ERR] Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[Dev Runner] [Frontend] [2m1:08:01 am[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/index.css[22m
+[Dev Runner] [Frontend] [2m1:08:08 am[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/dashboard/ExecutionLog.tsx, /src/index.css[22m
