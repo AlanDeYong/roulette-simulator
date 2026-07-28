@@ -14069,3 +14069,18 @@ Destination path: C:\AI\Projects\roulette-simulator\strategies\7th METHOD (chk) 
 [Dev Runner] [Backend] Duplicate request received: { id: '6 Corner Sector (chk).js' }
 Source path: C:\AI\Projects\roulette-simulator\strategies\6 Corner Sector (chk).js
 [Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\6 Corner Sector (chk) (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'Smoke Show (chk)(LC).js' }
+Source path: C:\AI\Projects\roulette-simulator\strategies\Smoke Show (chk)(LC).js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\Smoke Show (chk)(LC) (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'Smoke Show (chk)(LC).js' }
+Source path: C:\AI\Projects\roulette-simulator\strategies\Smoke Show (chk)(LC).js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\Smoke Show (chk)(LC) (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'Smoke Show (chk)(LC).js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\Smoke Show (chk)(LC).js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\Smoke Show (chk)(LC) (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'aa God Tier/10 by 10 Pendulum (chk).js' }
+[Dev Runner] [Backend] Source path: C:\AI\Projects\roulette-simulator\strategies\aa God Tier\10 by 10 Pendulum (chk).js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\aa God Tier\10 by 10 Pendulum (chk) (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: '2nd Dozen & Corners.js' }
+Source path: C:\AI\Projects\roulette-simulator\strategies\2nd Dozen & Corners.js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\2nd Dozen & Corners (1).js
