@@ -15,7 +15,8 @@
  *   - 2nd Dozen = 2 * min (clamped to at least minOutside)
  * - Complete Loss (Misses Dozen and Corners / Zero): Progression level increases by 1 (+1 base unit to every bet position).
  * - Push (Second Dozen hit, Corners miss): Maintain current progression level.
- * - Win (Corner hit): Progression level decreases by 1. When returning to Level 1, new random non-overlapping corners are selected.
+ * - Win (Corner hit): Progression level decreases by 1.
+ * - Reset: Resets to Level 1 and selects new random corners ONLY when session peak profit (peak bankroll) is reached or exceeded.
  * 
  * Goal: Achieve target session profit and exit.
  */
@@ -35,12 +36,19 @@ function bet(spinHistory, bankroll, config, state, utils) {
     if (typeof state.level !== 'number') {
         state.level = 1;
     }
+    if (typeof state.peakBankroll !== 'number') {
+        state.peakBankroll = bankroll;
+    }
     if (!Array.isArray(state.corners) || state.corners.length !== 4) {
         state.corners = getRandomNonOverlappingCorners();
     }
 
-    // 2. Evaluate previous spin result
-    if (spinHistory && spinHistory.length > 0) {
+    // 2. Evaluate peak bankroll and reset condition
+    if (bankroll >= state.peakBankroll) {
+        state.peakBankroll = bankroll;
+        state.level = 1;
+        state.corners = getRandomNonOverlappingCorners();
+    } else if (spinHistory && spinHistory.length > 0) {
         const lastSpin = spinHistory[spinHistory.length - 1];
         const num = lastSpin.winningNumber;
 
@@ -51,13 +59,8 @@ function bet(spinHistory, bankroll, config, state, utils) {
         const inSecondDozen = (num >= 13 && num <= 24);
 
         if (hitCorner) {
-            // Win: Decrease progression level
-            state.level--;
-            if (state.level <= 1) {
-                state.level = 1;
-                // Full reset achieved: select new non-overlapping corners
-                state.corners = getRandomNonOverlappingCorners();
-            }
+            // Win: Decrease progression level (will not drop below 1)
+            state.level = Math.max(1, state.level - 1);
         } else if (inSecondDozen) {
             // Push: Dozen hit, corners missed -> maintain level and corners
         } else {

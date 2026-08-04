@@ -14084,3 +14084,52 @@ Destination path: C:\AI\Projects\roulette-simulator\strategies\aa God Tier\10 by
 [Dev Runner] [Backend] Duplicate request received: { id: '2nd Dozen & Corners.js' }
 Source path: C:\AI\Projects\roulette-simulator\strategies\2nd Dozen & Corners.js
 [Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\2nd Dozen & Corners (1).js
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m2405[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.173:[1m5173[22m/[39m
+[Dev Runner] [Frontend ERR] Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m3522[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.174:[1m5173[22m/[39m
+[Dev Runner] [Frontend ERR] Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[Dev Runner] [Frontend ERR] ^C
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m1949[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://100.96.0.1:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.174:[1m5173[22m/[39m
+[Dev Runner] [Frontend ERR] Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[Dev Runner] [Backend] Duplicate request received: { id: "Tony's Triple Play (chk)(mc).js" }
+Source path: C:\AI\Projects\roulette-simulator\strategies\Tony's Triple Play (chk)(mc).js
+Destination path: C:\AI\Projects\roulette-simulator\strategies\Tony's Triple Play (chk)(mc) (1).js
