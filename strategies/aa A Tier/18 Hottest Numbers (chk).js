@@ -53,7 +53,7 @@ function bet(spinHistory, bankroll, config, state, utils) {
   const TRIGGER_MISSES = 7;      // Virtual trigger threshold (7 consecutive misses)
   const MAX_LEVELS = 7;          // Maximum Martingale progression levels
   const TARGET_WINS = 14;        // Reset trigger after 14 active wins
-  const TARGET_PROFIT = 25;      // Stop win threshold ($25 profit)
+  const TARGET_PROFIT = 2500;      // Stop win threshold ($25 profit)
 
   // Session profit check
   if (bankroll - state.startBankroll >= TARGET_PROFIT) {
