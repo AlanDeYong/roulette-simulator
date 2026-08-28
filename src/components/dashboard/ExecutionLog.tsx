@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useSimulationStore } from '../../store/useSimulationStore';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Eye, Download } from 'lucide-react';
@@ -12,12 +13,25 @@ interface LogItemProps {
 const LogItem: React.FC<LogItemProps> = ({ spin }) => {
   const isWin = spin.totalProfit > 0;
   const [showTooltip, setShowTooltip] = useState(false);
-  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+  const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0, anchorTop: 0, anchorBottom: 0 });
+  const [viewportDims, setViewportDims] = useState({ w: 0, h: 0 });
+  const [compactMode, setCompactMode] = useState(false);
+  const [preferAbove, setPreferAbove] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const anchorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const updateDims = () => {
+      setViewportDims({ w: window.innerWidth, h: window.innerHeight });
+    };
+    updateDims();
+    window.addEventListener('resize', updateDims);
+    return () => window.removeEventListener('resize', updateDims);
+  }, []);
 
   const getBetDisplay = (bet: any) => {
       if (bet.type === 'corner') {
           const n = bet.value;
-          // Calculate numbers: n, n+1, n+3, n+4
           const numbers = [n, n+1, n+3, n+4].join(', ');
           return `corner (${numbers})`;
       }
@@ -30,9 +44,52 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
       return `${bet.type} ${bet.value !== undefined ? `(${bet.value})` : ''}`;
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    setTooltipPos({ x: e.clientX, y: e.clientY });
+  const repositionTooltip = () => {
+    if (!anchorRef.current || !showTooltip) return;
+    const anchorRect = anchorRef.current.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    const PAD = 12;
+    const TOOLTIP_MAX_W = 420;
+    const TOOLTIP_MIN_W = 260;
+
+    const spaceBelow = vh - anchorRect.bottom;
+    const spaceAbove = anchorRect.top;
+    const placeAbove = spaceBelow < 220 && spaceAbove > spaceBelow;
+
+    const top = placeAbove ? anchorRect.top : anchorRect.bottom + 8;
+    let left = anchorRect.left;
+
+    const rightEdge = left + TOOLTIP_MAX_W;
+    if (rightEdge > vw - PAD) {
+      left = Math.max(PAD, vw - TOOLTIP_MAX_W - PAD);
+    }
+    if (left < PAD) left = PAD;
+
+    const remainingRight = vw - (left + PAD);
+    const narrow = remainingRight < TOOLTIP_MIN_W + 40;
+    setCompactMode(narrow || spin.bets.length > 12);
+    setPreferAbove(placeAbove);
+
+    setTooltipPos({ top, left, anchorTop: anchorRect.top, anchorBottom: anchorRect.bottom });
   };
+
+  const handleMouseEnter = () => {
+    setShowTooltip(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
+  };
+
+  useEffect(() => {
+    if (showTooltip) {
+      requestAnimationFrame(() => {
+        repositionTooltip();
+      });
+    }
+  }, [showTooltip, spin.bets.length, viewportDims]);
 
   const totalBet = spin.bets.reduce((sum: number, b: any) => sum + b.amount, 0);
   const payout = spin.bets.reduce((sum: number, b: any) => sum + b.payout, 0);
@@ -91,47 +148,33 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
       {/* Bets (View) */}
       <div className="col-span-1 relative">
           <div 
+            ref={anchorRef}
             className="flex items-center space-x-1 cursor-help text-primary hover:text-primary/80 transition-colors"
-            onMouseEnter={() => setShowTooltip(true)}
-            onMouseLeave={() => setShowTooltip(false)}
-            onMouseMove={handleMouseMove}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
           >
               <Eye className="w-5 h-5" />
           </div>
-
-          {/* Tooltip Portal-like behavior (Fixed position) */}
-          {showTooltip && (
-              <div 
-                className="fixed z-50 p-4 bg-black/70 backdrop-blur-sm border border-primary/20 rounded shadow-xl text-sm min-w-[240px]"
-                style={{ 
-                    top: tooltipPos.y - 10, 
-                    left: tooltipPos.x - 10,
-                    transform: 'translate(-100%, -100%)',
-                    pointerEvents: 'none'
-                }}
-              >
-                  <div className="font-semibold mb-3 border-b border-white/10 pb-1 text-base">Bet Details</div>
-                  {spin.bets.length === 0 ? (
-                      <span className="text-text-muted italic">No bets placed</span>
-                  ) : (
-                      <div className="space-y-1.5">
-                          {spin.bets.map((bet: any, idx: number) => (
-                              <div key={idx} className="flex justify-between gap-4">
-                                  <span className="text-text-muted">
-                                      {getBetDisplay(bet)}
-                                  </span>
-                                  <span className="font-mono">${bet.amount}</span>
-                              </div>
-                          ))}
-                          <div className="border-t border-white/10 pt-2 mt-2 flex justify-between font-bold text-primary text-base">
-                              <span>Total</span>
-                              <span>${totalBet}</span>
-                          </div>
-                      </div>
-                  )}
-              </div>
-          )}
       </div>
+
+      {/* Viewport-safe tooltip, rendered via portal at the body level */}
+      {showTooltip && (
+        <BetDetailsTooltip
+          spin={spin}
+          bets={spin.bets}
+          totalBet={totalBet}
+          top={tooltipPos.top}
+          left={tooltipPos.left}
+          anchorTop={tooltipPos.anchorTop}
+          anchorBottom={tooltipPos.anchorBottom}
+          preferAbove={preferAbove}
+          compact={compactMode}
+          viewportH={viewportDims.h || window.innerHeight}
+          viewportW={viewportDims.w || window.innerWidth}
+          onRef={tooltipRef}
+          getBetDisplay={getBetDisplay}
+        />
+      )}
 
       {/* Total Bet */}
       <div className="col-span-1 text-right font-mono text-text-muted text-[15px]">
@@ -182,6 +225,149 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
       </div>
     </div>
   );
+};
+
+interface BetDetailsTooltipProps {
+  spin: any;
+  bets: any[];
+  totalBet: number;
+  top: number;
+  left: number;
+  anchorTop: number;
+  anchorBottom: number;
+  preferAbove: boolean;
+  compact: boolean;
+  viewportH: number;
+  viewportW: number;
+  onRef: React.MutableRefObject<HTMLDivElement | null>;
+  getBetDisplay: (bet: any) => string;
+}
+
+const BetDetailsTooltip: React.FC<BetDetailsTooltipProps> = ({
+  spin, bets, totalBet, top, left, anchorTop, anchorBottom, preferAbove, compact, viewportH, viewportW, onRef, getBetDisplay,
+}) => {
+  const [finalPos, setFinalPos] = useState<{ top: number; left: number }>({ top, left });
+  const measureInnerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    requestAnimationFrame(() => {
+      if (cancelled || !measureInnerRef.current) return;
+      const rect = measureInnerRef.current.getBoundingClientRect();
+      const PAD = 10;
+      const vh = viewportH || window.innerHeight;
+      const vw = viewportW || window.innerWidth;
+
+      let t = top;
+      let l = left;
+
+      if (preferAbove) {
+        t = anchorTop - rect.height - 8;
+        if (t < PAD) {
+          t = anchorBottom + 8;
+          if (t + rect.height > vh - PAD) {
+            t = Math.max(PAD, vh - rect.height - PAD);
+          }
+        }
+      } else {
+        if (t + rect.height > vh - PAD) {
+          const candidate = anchorTop - rect.height - 8;
+          if (candidate >= PAD) {
+            t = candidate;
+          } else {
+            t = Math.max(PAD, vh - rect.height - PAD);
+          }
+        }
+      }
+
+      const rightEdge = l + rect.width;
+      if (rightEdge > vw - PAD) {
+        l = Math.max(PAD, vw - rect.width - PAD);
+      }
+      if (l < PAD) l = PAD;
+
+      setFinalPos({ top: t, left: l });
+    });
+    return () => { cancelled = true; };
+  }, [top, left, bets.length, compact, preferAbove, anchorTop, anchorBottom, viewportH, viewportW]);
+
+  const empty = bets.length === 0;
+  const maxH = Math.min(520, Math.max(220, Math.floor(viewportH * 0.65) - 40));
+  const betsMaxH = Math.max(120, maxH - 90);
+
+  const header = (
+    <div className="font-semibold mb-2 border-b border-white/10 pb-1 text-sm shrink-0 flex items-center justify-between">
+      <span>Bet Details{spin.spinNumber !== undefined ? ` · Spin #${spin.spinNumber}` : ''}</span>
+      <span className="text-text-muted font-normal text-[11px]">{bets.length} bet{bets.length !== 1 ? 's' : ''}</span>
+    </div>
+  );
+
+  const betsContent = empty ? (
+    <span className="text-text-muted italic">No bets placed</span>
+  ) : compact ? (
+    <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[12px]">
+      {bets.map((bet: any, idx: number) => (
+        <div key={idx} className="flex justify-between gap-2 min-w-0">
+          <span className="text-text-muted truncate" title={getBetDisplay(bet)}>
+            {getBetDisplay(bet)}
+          </span>
+          <span className="font-mono shrink-0">${bet.amount}</span>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <div className="space-y-1 text-[13px]">
+      {bets.map((bet: any, idx: number) => (
+        <div key={idx} className="flex justify-between gap-4 min-w-0">
+          <span className="text-text-muted truncate" title={getBetDisplay(bet)}>
+            {getBetDisplay(bet)}
+          </span>
+          <span className="font-mono shrink-0">${bet.amount}</span>
+        </div>
+      ))}
+    </div>
+  );
+
+  const footer = !empty && (
+    <div className="border-t border-white/10 pt-2 mt-2 flex justify-between font-bold text-primary text-sm shrink-0">
+      <span>Total</span>
+      <span>${totalBet}</span>
+    </div>
+  );
+
+  const minW = compact ? 280 : 300;
+  const maxW = Math.max(360, Math.min(520, Math.floor((viewportW || 1280) * 0.45)));
+
+  const tooltip = (
+    <div
+      ref={(el) => { onRef.current = el; }}
+      className="fixed z-[9998] p-3 bg-black/85 backdrop-blur border border-primary/25 rounded-lg shadow-2xl pointer-events-none"
+      style={{
+        top: finalPos.top,
+        left: finalPos.left,
+        minWidth: minW,
+        maxWidth: maxW,
+      }}
+    >
+      <div
+        ref={measureInnerRef}
+        className="flex flex-col"
+        style={{ maxHeight: maxH }}
+      >
+        {header}
+        <div
+          className="overflow-y-auto overflow-x-hidden pr-1 custom-scrollbar"
+          style={{ maxHeight: betsMaxH }}
+        >
+          {betsContent}
+        </div>
+        {footer}
+      </div>
+    </div>
+  );
+
+  if (typeof document === 'undefined') return tooltip;
+  return createPortal(tooltip, document.body);
 };
 
 export const ExecutionLog: React.FC = () => {
