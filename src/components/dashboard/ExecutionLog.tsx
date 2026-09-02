@@ -51,28 +51,62 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
     const vh = window.innerHeight;
 
     const PAD = 12;
-    const TOOLTIP_MAX_W = 420;
-    const TOOLTIP_MIN_W = 260;
+    const spaceBelow = vh - anchorRect.bottom - PAD;
+    const spaceAbove = anchorRect.top - PAD;
+    const useAbove = spaceAbove > spaceBelow;
 
-    const spaceBelow = vh - anchorRect.bottom;
-    const spaceAbove = anchorRect.top;
-    const placeAbove = spaceBelow < 220 && spaceAbove > spaceBelow;
+    const availH = Math.max(spaceBelow, spaceAbove);
+    const availW = Math.max(240, vw - 2 * PAD);
 
-    const top = placeAbove ? anchorRect.top : anchorRect.bottom + 8;
+    const N = Math.max(1, spin.bets.length);
+    const cellW = 100;
+    const rowH = 16;
+    const chromeH = 56;
+
+    const targetSquareCols = Math.max(1, Math.round(Math.sqrt((N * cellW) / rowH)));
+    let cols: 1 | 2 | 3 | 4 | 5 = (targetSquareCols as any);
+    cols = Math.min(cols, Math.min(6, Math.max(1, Math.floor(availW / (cellW + 8))))) as any;
+    cols = Math.min(cols, N as any) as any;
+    cols = Math.max(1, cols as any) as any;
+    let useTiny = false;
+
+    {
+      let c = cols as number;
+      let rows = Math.ceil(N / c);
+      let fitsH = rows * rowH + chromeH <= availH;
+      let fitsW = c * (cellW + 4) + 24 <= availW;
+      let tries = 0;
+      while (((!fitsH && c < 6) || (!fitsW && c > 1)) && tries < 8) {
+        if (!fitsW && c > 1) c--;
+        else if (!fitsH && c < 6) c++;
+        else break;
+        rows = Math.ceil(N / c);
+        fitsH = rows * rowH + chromeH <= availH;
+        fitsW = c * (cellW + 4) + 24 <= availW;
+        tries++;
+      }
+      if (!fitsH && c >= 6) useTiny = true;
+      cols = c as any;
+    }
+
+    const narrow = availW < 280;
+    const forceCompact = narrow || N > 12 || (cols as number) >= 3;
+    setCompactMode(forceCompact);
+
+    const top = useAbove ? anchorRect.top : anchorRect.bottom + 8;
     let left = anchorRect.left;
-
-    const rightEdge = left + TOOLTIP_MAX_W;
-    if (rightEdge > vw - PAD) {
-      left = Math.max(PAD, vw - TOOLTIP_MAX_W - PAD);
+    const c = cols as number;
+    const estW = c === 1 ? 220 : c * (cellW + 4) + 22;
+    if (left + estW > vw - PAD) {
+      left = Math.max(PAD, vw - estW - PAD);
     }
     if (left < PAD) left = PAD;
+    setPreferAbove(useAbove);
 
-    const remainingRight = vw - (left + PAD);
-    const narrow = remainingRight < TOOLTIP_MIN_W + 40;
-    setCompactMode(narrow || spin.bets.length > 12);
-    setPreferAbove(placeAbove);
-
+    // Pass dynamic layout hints via state (encoded through compact + left + useAbove)
     setTooltipPos({ top, left, anchorTop: anchorRect.top, anchorBottom: anchorRect.bottom });
+    // Store column/tiny choice on the component instance so tooltip re-render picks it up
+    (anchorRef.current as any)._layoutHints = { cols, useTiny, useWide: false, availH, availW, useAbove };
   };
 
   const handleMouseEnter = () => {
@@ -173,6 +207,7 @@ const LogItem: React.FC<LogItemProps> = ({ spin }) => {
           viewportW={viewportDims.w || window.innerWidth}
           onRef={tooltipRef}
           getBetDisplay={getBetDisplay}
+          anchorRef={anchorRef}
         />
       )}
 
@@ -241,125 +276,192 @@ interface BetDetailsTooltipProps {
   viewportW: number;
   onRef: React.MutableRefObject<HTMLDivElement | null>;
   getBetDisplay: (bet: any) => string;
+  anchorRef: React.RefObject<HTMLDivElement>;
+}
+
+interface LayoutHints {
+  cols: 1 | 2 | 3 | 4 | 5;
+  useTiny: boolean;
+  useWide: boolean;
+  availH: number;
+  availW: number;
+  useAbove: boolean;
 }
 
 const BetDetailsTooltip: React.FC<BetDetailsTooltipProps> = ({
-  spin, bets, totalBet, top, left, anchorTop, anchorBottom, preferAbove, compact, viewportH, viewportW, onRef, getBetDisplay,
+  spin, bets, totalBet, top, left, anchorTop, anchorBottom, preferAbove, compact, viewportH, viewportW, onRef, getBetDisplay, anchorRef,
 }) => {
-  const [finalPos, setFinalPos] = useState<{ top: number; left: number }>({ top, left });
-  const measureInnerRef = useRef<HTMLDivElement>(null);
+  const PAD = 10;
+  const vh = viewportH || (typeof window !== 'undefined' ? window.innerHeight : 800);
+  const vw = viewportW || (typeof window !== 'undefined' ? window.innerWidth : 1280);
 
-  useEffect(() => {
-    let cancelled = false;
-    requestAnimationFrame(() => {
-      if (cancelled || !measureInnerRef.current) return;
-      const rect = measureInnerRef.current.getBoundingClientRect();
-      const PAD = 10;
-      const vh = viewportH || window.innerHeight;
-      const vw = viewportW || window.innerWidth;
+  const hints: LayoutHints = (anchorRef.current as any)?._layoutHints ?? {
+    cols: bets.length > 12 ? 3 : bets.length > 4 ? 2 : 1,
+    useTiny: bets.length > 40,
+    useWide: false,
+    availH: Math.max(vh - anchorBottom - PAD, anchorTop - PAD),
+    availW: vw - 2 * PAD,
+    useAbove: preferAbove,
+  };
 
-      let t = top;
-      let l = left;
+  let { cols, useTiny } = hints;
+  const { availW, availH, useAbove } = hints;
 
-      if (preferAbove) {
-        t = anchorTop - rect.height - 8;
-        if (t < PAD) {
-          t = anchorBottom + 8;
-          if (t + rect.height > vh - PAD) {
-            t = Math.max(PAD, vh - rect.height - PAD);
-          }
+  const N = bets.length;
+  const safeColsMax = Math.min(6, Math.max(1, Math.floor(availW / 105)));
+
+  if (N > 0) {
+    const chromeH = 48;
+    const rowH = useTiny ? 14 : 15;
+    const cellW = useTiny ? 88 : 96;
+
+    const targetSquareCols = Math.max(1, Math.round(Math.sqrt((N * cellW) / (rowH + 2))));
+    let c: number = targetSquareCols;
+    c = Math.min(c, safeColsMax);
+    c = Math.min(c, N);
+    c = Math.max(1, c);
+
+    if (c >= 1) {
+      let rows = Math.ceil(N / c);
+      let fitsH = rows * rowH + chromeH <= availH;
+      let fitsW = c * cellW + 24 <= availW;
+      let tries = 0;
+      while (((!fitsH && c < safeColsMax) || (!fitsW && c > 1)) && tries < 8) {
+        if (!fitsW && c > 1) {
+          c = c - 1;
+        } else if (!fitsH && c < safeColsMax) {
+          c = c + 1;
+        } else {
+          break;
         }
-      } else {
-        if (t + rect.height > vh - PAD) {
-          const candidate = anchorTop - rect.height - 8;
-          if (candidate >= PAD) {
-            t = candidate;
-          } else {
-            t = Math.max(PAD, vh - rect.height - PAD);
-          }
-        }
+        rows = Math.ceil(N / c);
+        fitsH = rows * rowH + chromeH <= availH;
+        fitsW = c * cellW + 24 <= availW;
+        tries++;
       }
-
-      const rightEdge = l + rect.width;
-      if (rightEdge > vw - PAD) {
-        l = Math.max(PAD, vw - rect.width - PAD);
+      if (!fitsH && c >= safeColsMax) {
+        useTiny = true;
       }
-      if (l < PAD) l = PAD;
+      cols = c as 1 | 2 | 3 | 4 | 5;
+    }
+  }
 
-      setFinalPos({ top: t, left: l });
-    });
-    return () => { cancelled = true; };
-  }, [top, left, bets.length, compact, preferAbove, anchorTop, anchorBottom, viewportH, viewportW]);
+  const padX = 9;
+  const padY = useTiny ? 6 : 7;
+  const headerFont = useTiny ? 'text-[11px]' : 'text-xs';
+  const headerMb = 'mb-1';
+  const headerPb = 'pb-0.5';
+  const betFont = useTiny ? 'text-[10px]' : 'text-[11px]';
+  const gapX = 2;
+  const gapY = 0;
+  const footerPt = 'pt-1';
+  const footerMt = 'mt-1';
+  const footerFont = useTiny ? 'text-[11px]' : 'text-xs';
 
-  const empty = bets.length === 0;
-  const maxH = Math.min(520, Math.max(220, Math.floor(viewportH * 0.65) - 40));
-  const betsMaxH = Math.max(120, maxH - 90);
+  const cellFixedW = useTiny ? 90 : 100;
+  const colsN = cols as number;
+  const totalInnerColW = colsN * cellFixedW + (colsN - 1) * (gapX * 4);
+  const contentMinW = Math.min(220, 180 + colsN * 10);
+  const contentMaxW = Math.min(vw - 2 * PAD, totalInnerColW + padX * 2 + 6);
+  const absoluteMaxH = Math.max(200, vh - 2 * PAD);
+
+  const rowsPerCol = Math.ceil(N / Math.max(1, colsN));
+  const colOrderCells: any[] = [];
+  if (N > 0) {
+    for (let r = 0; r < rowsPerCol; r++) {
+      for (let c = 0; c < colsN; c++) {
+        const idx = c * rowsPerCol + r;
+        if (idx < N) colOrderCells.push(bets[idx]);
+      }
+    }
+  }
+
+  const empty = N === 0;
+
+  const finalTop = useAbove
+    ? Math.max(PAD, Math.min(anchorTop - 8, vh - 80 - PAD))
+    : Math.max(PAD, Math.min(anchorBottom + 8, vh - 80 - PAD));
+
+  let finalLeft = left;
+  if (finalLeft + contentMaxW > vw - PAD) {
+    finalLeft = Math.max(PAD, vw - contentMaxW - PAD);
+  }
+  if (finalLeft < PAD) finalLeft = PAD;
 
   const header = (
-    <div className="font-semibold mb-2 border-b border-white/10 pb-1 text-sm shrink-0 flex items-center justify-between">
+    <div className={`font-semibold ${headerMb} border-b border-white/10 ${headerPb} shrink-0 flex items-center justify-between ${headerFont}`}>
       <span>Bet Details{spin.spinNumber !== undefined ? ` · Spin #${spin.spinNumber}` : ''}</span>
-      <span className="text-text-muted font-normal text-[11px]">{bets.length} bet{bets.length !== 1 ? 's' : ''}</span>
+      <span className="text-text-muted font-normal text-[11px]">{N} bet{N !== 1 ? 's' : ''}</span>
     </div>
   );
 
-  const betsContent = empty ? (
-    <span className="text-text-muted italic">No bets placed</span>
-  ) : compact ? (
-    <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[12px]">
-      {bets.map((bet: any, idx: number) => (
-        <div key={idx} className="flex justify-between gap-2 min-w-0">
-          <span className="text-text-muted truncate" title={getBetDisplay(bet)}>
-            {getBetDisplay(bet)}
-          </span>
-          <span className="font-mono shrink-0">${bet.amount}</span>
-        </div>
-      ))}
-    </div>
-  ) : (
-    <div className="space-y-1 text-[13px]">
-      {bets.map((bet: any, idx: number) => (
-        <div key={idx} className="flex justify-between gap-4 min-w-0">
-          <span className="text-text-muted truncate" title={getBetDisplay(bet)}>
-            {getBetDisplay(bet)}
-          </span>
-          <span className="font-mono shrink-0">${bet.amount}</span>
-        </div>
-      ))}
-    </div>
-  );
+  const betCellStyle = `flex items-center justify-start min-w-0`;
+  const betNameClass = `text-text-muted truncate ${betFont} leading-tight`;
+  const betAmtClass = `font-mono shrink-0 text-primary/90 ${betFont} leading-tight tabular-nums`;
+
+  const betsGrid = (() => {
+    if (empty) {
+      return <span className="text-text-muted italic text-xs">No bets placed</span>;
+    }
+    const displayCells = colOrderCells.length > 0 ? colOrderCells : bets;
+    const style: React.CSSProperties = {
+      display: 'grid',
+      gridTemplateColumns: `repeat(${colsN}, ${cellFixedW}px)`,
+      columnGap: `${Math.max(4, gapX * 4)}px`,
+      rowGap: `${Math.max(0, gapY * 4)}px`,
+      width: 'max-content',
+    };
+    return (
+      <div style={style} className="shrink-0">
+        {displayCells.map((bet: any, idx: number) => (
+          <div key={idx} className={betCellStyle} style={{ minWidth: 0, gap: '0.25rem', maxWidth: cellFixedW }}>
+            <span className={betNameClass} title={getBetDisplay(bet)}>
+              {getBetDisplay(bet)}
+            </span>
+            <span className={betAmtClass}>${bet.amount}</span>
+          </div>
+        ))}
+      </div>
+    );
+  })();
 
   const footer = !empty && (
-    <div className="border-t border-white/10 pt-2 mt-2 flex justify-between font-bold text-primary text-sm shrink-0">
+    <div className={`border-t border-white/10 ${footerPt} ${footerMt} flex justify-between font-bold text-primary shrink-0 ${footerFont}`}>
       <span>Total</span>
       <span>${totalBet}</span>
     </div>
   );
 
-  const minW = compact ? 280 : 300;
-  const maxW = Math.max(360, Math.min(520, Math.floor((viewportW || 1280) * 0.45)));
+  const innerStyle: React.CSSProperties = {
+    maxHeight: absoluteMaxH,
+    minHeight: 0,
+    width: 'fit-content',
+  };
 
   const tooltip = (
     <div
       ref={(el) => { onRef.current = el; }}
-      className="fixed z-[9998] p-3 bg-black/85 backdrop-blur border border-primary/25 rounded-lg shadow-2xl pointer-events-none"
+      className="fixed z-[9998] bg-black/90 backdrop-blur border border-primary/30 rounded-lg shadow-2xl pointer-events-none"
       style={{
-        top: finalPos.top,
-        left: finalPos.left,
-        minWidth: minW,
-        maxWidth: maxW,
+        top: finalTop,
+        left: finalLeft,
+        paddingTop: padY,
+        paddingBottom: padY,
+        paddingLeft: padX,
+        paddingRight: padX,
+        width: 'fit-content',
+        maxWidth: Math.min(vw - 2 * PAD, contentMaxW),
+        maxHeight: absoluteMaxH,
+        overflow: 'hidden',
       }}
     >
       <div
-        ref={measureInnerRef}
         className="flex flex-col"
-        style={{ maxHeight: maxH }}
+        style={innerStyle}
       >
         {header}
-        <div
-          className="overflow-y-auto overflow-x-hidden pr-1 custom-scrollbar"
-          style={{ maxHeight: betsMaxH }}
-        >
-          {betsContent}
+        <div className="shrink-0">
+          {betsGrid}
         </div>
         {footer}
       </div>
