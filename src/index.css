@@ -17,6 +17,14 @@ body {
   height: 8px;
 }
 
+/* Global cursor hide while bet-details tooltip is open */
+body.global-hide-cursor,
+html.global-hide-cursor,
+body.global-hide-cursor *,
+html.global-hide-cursor * {
+  cursor: none !important;
+}
+
 ::-webkit-scrollbar-track {
   @apply bg-surface;
 }
