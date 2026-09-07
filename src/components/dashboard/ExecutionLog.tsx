@@ -592,7 +592,7 @@ const BetDetailsTooltip: React.FC<BetDetailsTooltipProps> = ({
   const tooltip = (
     <div
       ref={(el) => { onRef.current = el; }}
-      className="fixed z-[9998] bg-black/90 backdrop-blur border border-primary/30 rounded-lg shadow-2xl pointer-events-none"
+      className="fixed z-[9998] rounded-lg pointer-events-none"
       style={{
         top: adjusted.top,
         left: adjusted.left,
@@ -600,11 +600,16 @@ const BetDetailsTooltip: React.FC<BetDetailsTooltipProps> = ({
         paddingBottom: padY,
         paddingLeft: padX,
         paddingRight: padX,
-        width: 'fit-content', // Hug content; no fixed / forced wide widths
+        width: 'fit-content',
         minWidth: finalMinW,
         maxWidth: finalMaxW,
         height: 'auto',
         overflow: 'visible',
+        backgroundColor: 'rgba(10, 12, 16, 0.24)',
+        backdropFilter: 'blur(20px) saturate(1.6)',
+        WebkitBackdropFilter: 'blur(20px) saturate(1.6)',
+        border: '1px solid rgba(255, 255, 255, 0.22)',
+        boxShadow: '0 24px 40px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 0 rgba(255, 255, 255, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.025)',
       }}
     >
       <div
