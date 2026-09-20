@@ -14518,3 +14518,12 @@ Source path: C:\AI\Projects\roulette-simulator\strategies\ROYAL LINK.js
 [Dev Runner] [Backend] Duplicate request received: { id: 'Six-Split Spread (chk).js' }
 Source path: C:\AI\Projects\roulette-simulator\strategies\Six-Split Spread (chk).js
 [Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\Six-Split Spread (chk) (1).js
+[Dev Runner] [Backend] Duplicate request received: { id: 'Five Split Streets (chk).js' }
+Source path: C:\AI\Projects\roulette-simulator\strategies\Five Split Streets (chk).js
+[Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\Five Split Streets (chk) (1).js
+[Dev Runner] [Frontend ERR] ^C
+[Dev Runner] Frontend exited with code 3221225786
+[Dev Runner] Restarting Frontend in 1s...
+[Dev Runner] [Backend ERR] ^C
+[Dev Runner] Backend exited with code 3221225786
+[Dev Runner] Restarting Backend in 1s...
