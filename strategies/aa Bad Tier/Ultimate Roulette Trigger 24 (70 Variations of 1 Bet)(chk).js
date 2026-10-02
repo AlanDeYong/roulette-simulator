@@ -17,11 +17,11 @@
  * @triggers_and_logic
  * 1. The strategy tracks the consecutive missed spins ("loss level") for all 70
  *    non-overlapping 4-line combinations.
- * 2. A trigger occurs when any 4-line set has reached a missed streak of at least
- *    4 spins (default TRIGGER_LOSS_LEVEL = 4).
+ * 2. Trigger condition: A set reaches a missed streak of at least 6 spins 
+ *    (TRIGGER_LOSS_LEVEL = 6).
  * 3. The set with the highest missed streak is selected. While in an active betting
  *    progression, the strategy remains locked onto that chosen set until a win or bust.
- * 4. If no set meets the trigger condition, no bet is placed (idle waiting).
+ * 4. If no set meets the trigger condition, no bet is placed (returns []).
  * 
  * @progression
  * - Payout for a line bet is 5:1. Covering 4 lines requires 4 units total; a win
@@ -42,7 +42,7 @@ function bet(spinHistory, bankroll, config, state, utils) {
     // -------------------------------------------------------------------------
     // 1. Configuration & Constants
     // -------------------------------------------------------------------------
-    const TRIGGER_LOSS_LEVEL = 4;
+    const TRIGGER_LOSS_LEVEL = 6;
     const PROGRESSION_MULTIPLIERS = [1, 3, 10, 30];
 
     // Inside bet limit applies to line bets

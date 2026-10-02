@@ -2,9 +2,8 @@
  * ============================================================================
  * ROULETTE STRATEGY: DUAL DOZEN PROGRESSION SYSTEM
  * ============================================================================
- * Source:
- *   - Video URL: https://youtu.be/L9It1DOlpKc
- *   - Channel: Casino Quest / CEG Roulette Strategies
+ * Source: Fluke
+ *   
  *
  * Full Logic in Details:
  *   - Coverage: The strategy covers 2 out of the 3 Dozens (24 numbers, ~64.8% on European Roulette).
