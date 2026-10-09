@@ -14582,3 +14582,37 @@ Source path: C:\AI\Projects\roulette-simulator\strategies\Roaring Twenties (chk)
 [Dev Runner] [Backend] Duplicate request received: { id: "Randall Pratt's 12 Jackpot.js" }
 Source path: C:\AI\Projects\roulette-simulator\strategies\Randall Pratt's 12 Jackpot.js
 [Dev Runner] [Backend] Destination path: C:\AI\Projects\roulette-simulator\strategies\Randall Pratt's 12 Jackpot (1).js
+[Dev Runner] Backend exited with code 1073807364
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] Backend exited with code 3221226091
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] Spawning Backend...
+[Dev Runner] Backend exited with code 3221226091
+[Dev Runner] Restarting Backend in 1s...
+[Dev Runner] [Frontend ERR] ^C
+[Dev Runner] Frontend exited with code 3221225786
+[Dev Runner] Restarting Frontend in 1s...
+[Dev Runner] Starting...
+[Dev Runner] Found free port for API: 3001
+[Dev Runner] Spawning Backend...
+[Dev Runner] Spawning Frontend...
+[Dev Runner] Setup complete, keeping alive...
+[Dev Runner] [Backend] Starting server script...
+[Dev Runner] [Backend] Server running on http://localhost:3001
+[Dev Runner] [Backend] Strategies directory: C:\AI\Projects\roulette-simulator\strategies
+[Dev Runner] [Frontend] [32m[1mVITE[22m v6.4.1[39m  [2mready in [0m[1m2129[22m[2m[0m ms[22m
+[Dev Runner] [Frontend] [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[Dev Runner] [Frontend] [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.18.68:[1m5173[22m/[39m
+[Dev Runner] [Frontend ERR] Browserslist: browsers data (caniuse-lite) is 10 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[Dev Runner] [Backend ERR] Error: ENOENT: no such file or directory, open 'C:\AI\Projects\roulette-simulator\strategies\D'Alembert Double Dozens ("Follow the Winner").js'
+    at async open (node:internal/fs/promises:639:25)
+    at async Object.writeFile (node:internal/fs/promises:1216:14)
+    at async file:///C:/AI/Projects/roulette-simulator/server/server.js:189:9 {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: `C:\\AI\\Projects\\roulette-simulator\\strategies\\D'Alembert Double Dozens ("Follow the Winner").js`
+}
