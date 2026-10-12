@@ -33,9 +33,9 @@
  */
 
 function bet(spinHistory, bankroll, config, state, utils) {
-    const minInside = config.betLimits.min || 2;
+    const minInside = config.betLimits.min || 1;
     const maxBet = config.betLimits.max || 500;
-    const baseUnit = Math.max(minInside, 2);
+    const baseUnit = Math.max(minInside, 1);
 
     // Define the 4 tactical groups of 4 splits each
     const groups = [
