@@ -3179,7 +3179,7 @@ vite.config.ts:1:285: ERROR: Unexpected "<<"
 [Dev Runner] Spawning Frontend...
 [Dev Runner] Setup complete, keeping alive...
 [Dev Runner] [Backend ERR] file:///C:/AI/Projects/roulette-simulator/server/server.js:1
-<<<<<<< HEAD
+[merge marker present in server/server.js]
 ^^
 
 SyntaxError: Unexpected token '<<'
@@ -3193,7 +3193,7 @@ SyntaxError: Unexpected token '<<'
 [Dev Runner] [Frontend ERR] X [ERROR] Unexpected "<<"
 
     vite.config.ts:1:285:
-[Dev Runner] [Frontend ERR] 1 │ ...e:///C:/AI/Projects/roulette-simulator/vite.config.ts";<<<<<<< HEAD
+[Dev Runner] [Frontend ERR] 1 │ ...e:///C:/AI/Projects/roulette-simulator/vite.config.ts";[merge marker present]
         ╵                                                           ~~
 [Dev Runner] [Frontend ERR] [31mfailed to load config from C:\AI\Projects\roulette-simulator\vite.config.ts[39m
 [Dev Runner] [Frontend ERR] [31merror when starting dev server:
