@@ -504,7 +504,7 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
             <div key={nodeId}>
                 <div 
                     className={cn(
-                        "flex items-center py-1 px-2 cursor-pointer hover:bg-white/5 transition-colors text-sm rounded",
+                        "flex items-center py-0.5 px-2 cursor-pointer hover:bg-white/5 transition-colors text-xs rounded",
                         isSelected && "bg-primary/20 text-primary"
                     )}
                     style={{ paddingLeft: `${depth * 12 + 4}px` }}
@@ -543,8 +543,8 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
                     )}
                     {!isDir && <div className="w-4 mr-1" />} {/* Spacer */}
                     
-                    <span className="mr-2 text-muted-foreground">
-                        {isDir ? <Folder className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
+                    <span className="mr-1.5 text-muted-foreground">
+                        {isDir ? <Folder className="w-3.5 h-3.5" /> : <FileText className="w-3.5 h-3.5" />}
                     </span>
 
                     {isEditing ? (
@@ -618,7 +618,7 @@ export const FileManager: React.FC<FileManagerProps> = ({ onOpenFile }) => {
 
             {/* Toolbar */}
             <div className="flex items-center justify-between p-2 border-b border-white/5 bg-white/5">
-                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Explorer</span>
+                <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Explorer</span>
                 <div className="flex gap-1">
                     <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={handleCreateFile} title="New File">
                         <FilePlus className="w-3 h-3" />

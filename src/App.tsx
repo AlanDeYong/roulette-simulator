@@ -40,7 +40,7 @@ function App() {
   useEffect(() => {
       const handleMouseMove = (e: MouseEvent) => {
           if (!isDraggingRef.current || !containerRef.current) return;
-          const minWidth = 280;
+          const minWidth = 180;
           const maxWidth = 720;
           const deltaX = e.clientX - startXRef.current;
           const nextWidth = startWidthRef.current + deltaX;

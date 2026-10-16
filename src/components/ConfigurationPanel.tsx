@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useSimulationStore } from '../store/useSimulationStore';
 import { parseFileInChunks } from '../utils/fileParser';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/Card';
@@ -45,6 +45,20 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({ onImport
     const { config, setConfig, status, setImportedData, importedData, importedFileName, setImportedFileName } = useSimulationStore();
     const isRunning = status === 'running' || status === 'paused';
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
+    const [narrow, setNarrow] = useState(false);
+
+    // Track the panel's own width so we can switch between 1 and 2 column layouts.
+    // Tailwind breakpoints are viewport-based and won't help here.
+    useEffect(() => {
+        const el = panelRef.current;
+        if (!el) return;
+        const update = () => setNarrow(el.getBoundingClientRect().width < 280);
+        update();
+        const ro = new ResizeObserver(update);
+        ro.observe(el);
+        return () => ro.disconnect();
+    }, []);
 
     const handleChange = (field: string, value: any) => {
         if (field.startsWith('betLimits.')) {
@@ -134,7 +148,7 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({ onImport
     };
 
     return (
-        <Card className="h-full border-t-4 border-t-primary flex flex-col overflow-hidden">
+        <Card ref={panelRef} className="h-full border-t-4 border-t-primary flex flex-col overflow-hidden">
             <CardHeader className="flex-none pb-3 pt-4 px-4">
                 <div className="flex items-center space-x-2">
                     <Settings className="w-5 h-5 text-primary" />
@@ -142,114 +156,6 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({ onImport
                 </div>
             </CardHeader>
             <CardContent className="space-y-3 flex-1 overflow-y-auto min-h-0 pr-1 pl-3 pb-2">
-                {/* Bankroll & Spins */}
-                <div className="grid grid-cols-2 gap-2 items-start">
-                    <div className="space-y-1">
-                        <Label className="h-4 block text-[10px] text-muted-foreground">Starting Bankroll ($)</Label>
-                        <Input
-                            type="number"
-                            value={config.startingBankroll}
-                            onChange={(e) => handleChange('startingBankroll', Number(e.target.value))}
-                            disabled={isRunning}
-                            min={1}
-                            className="h-7 px-2 text-xs"
-                        />
-                    </div>
-                    <div className="space-y-1">
-                        <Label className="h-4 block text-[10px] text-muted-foreground">Max Spins</Label>
-                        <Input
-                            type="number"
-                            value={config.maxSpins}
-                            onChange={(e) => handleChange('maxSpins', Number(e.target.value))}
-                            disabled={isRunning}
-                            min={1}
-                            className="h-7 px-2 text-xs"
-                        />
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 items-start">
-                    {/* Table Type */}
-                    <div className="space-y-1">
-                        <Label className="text-[10px] text-muted-foreground">Table Type</Label>
-                        <select
-                            className="flex h-7 w-full rounded-md border border-primary/20 bg-background px-1 py-1 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 text-text"
-                            value={config.tableType}
-                            onChange={(e) => handleChange('tableType', e.target.value)}
-                            disabled={isRunning}
-                        >
-                            <option value="european">European (Single)</option>
-                            <option value="american">American (Double)</option>
-                        </select>
-                    </div>
-
-                    {/* Minimum Incremental Bet */}
-                    <div className="space-y-1">
-                         <Label className="text-[10px] text-muted-foreground">Min Incr. Bet</Label>
-                         <Input
-                            type="number"
-                            value={config.minIncrementalBet ?? 1}
-                            onChange={(e) => handleChange('minIncrementalBet', Number(e.target.value))}
-                            disabled={isRunning}
-                            min={0.1}
-                            step={0.1}
-                            className="h-7 px-2 text-xs"
-                         />
-                    </div>
-                </div>
-
-                {/* Bet Limits */}
-                <div className="space-y-1 pt-1">
-                    <Label className="text-xs font-semibold">Bets Size & Increment</Label>
-                    <div className="grid grid-cols-2 gap-2 bg-black/20 p-2 rounded-md border border-white/5">
-                        <div>
-                            <span className="text-[10px] text-muted-foreground block mb-0.5">Min (Inside)</span>
-                            <Input
-                                type="number"
-                                value={config.betLimits.min}
-                                onChange={(e) => handleChange('betLimits.min', Number(e.target.value))}
-                                disabled={isRunning}
-                                min={0}
-                                className="h-6 px-2 text-xs"
-                            />
-                        </div>
-                        <div>
-                            <span className="text-[10px] text-muted-foreground block mb-0.5">Min (Outside)</span>
-                            <Input
-                                type="number"
-                                value={config.betLimits.minOutside}
-                                onChange={(e) => handleChange('betLimits.minOutside', Number(e.target.value))}
-                                disabled={isRunning}
-                                min={0}
-                                className="h-6 px-2 text-xs"
-                            />
-                        </div>
-                        <div>
-                           <span className="text-[10px] text-muted-foreground block mb-0.5">Max Bet</span>
-                           <Input
-                               type="number"
-                               value={config.betLimits.max}
-                               onChange={(e) => handleChange('betLimits.max', Number(e.target.value))}
-                               disabled={isRunning}
-                               min={1}
-                                className="h-6 px-2 text-xs"
-                           />
-                        </div>
-                        <div>
-                             <span className="text-[10px] text-muted-foreground block mb-0.5">Increment Mode</span>
-                             <select
-                                 className="flex h-6 w-full rounded-md border border-primary/20 bg-background px-1 py-0 text-[10px] shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 text-text"
-                                 value={config.incrementMode || 'fixed'}
-                                 onChange={(e) => handleChange('incrementMode', e.target.value)}
-                                 disabled={isRunning}
-                             >
-                                 <option value="fixed">Fixed</option>
-                                 <option value="base">Base Bet</option>
-                             </select>
-                        </div>
-                    </div>
-                </div>
-
                 {/* Data Import Section (Collapsible) */}
                 <CollapsibleSection 
                     title="Data Import" 
@@ -315,7 +221,7 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({ onImport
                     {/* Data Range */}
                     <div className="space-y-1">
                         <Label className="text-[10px] text-muted-foreground">Data Range</Label>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className={`grid ${narrow ? 'grid-cols-1' : 'grid-cols-2'} gap-2`}>
                             <div>
                                 <span className="text-[10px] text-muted-foreground block mb-0.5">Start</span>
                                 <Input
@@ -353,6 +259,114 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({ onImport
                         </div>
                     </div>
                 </CollapsibleSection>
+
+                {/* Bankroll & Spins */}
+                <div className={`grid ${narrow ? 'grid-cols-1' : 'grid-cols-2'} gap-2 items-start`}>
+                    <div className="space-y-1">
+                        <Label className="h-4 block text-[10px] text-muted-foreground">Starting Bankroll ($)</Label>
+                        <Input
+                            type="number"
+                            value={config.startingBankroll}
+                            onChange={(e) => handleChange('startingBankroll', Number(e.target.value))}
+                            disabled={isRunning}
+                            min={1}
+                            className="h-7 px-2 text-xs"
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <Label className="h-4 block text-[10px] text-muted-foreground">Max Spins</Label>
+                        <Input
+                            type="number"
+                            value={config.maxSpins}
+                            onChange={(e) => handleChange('maxSpins', Number(e.target.value))}
+                            disabled={isRunning}
+                            min={1}
+                            className="h-7 px-2 text-xs"
+                        />
+                    </div>
+                </div>
+
+                <div className={`grid ${narrow ? 'grid-cols-1' : 'grid-cols-2'} gap-2 items-start`}>
+                    {/* Table Type */}
+                    <div className="space-y-1">
+                        <Label className="text-[10px] text-muted-foreground">Table Type</Label>
+                        <select
+                            className="flex h-7 w-full rounded-md border border-primary/20 bg-background px-1 py-1 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 text-text"
+                            value={config.tableType}
+                            onChange={(e) => handleChange('tableType', e.target.value)}
+                            disabled={isRunning}
+                        >
+                            <option value="european">European (Single)</option>
+                            <option value="american">American (Double)</option>
+                        </select>
+                    </div>
+
+                    {/* Minimum Incremental Bet */}
+                    <div className="space-y-1">
+                         <Label className="text-[10px] text-muted-foreground">Min Incr. Bet</Label>
+                         <Input
+                            type="number"
+                            value={config.minIncrementalBet ?? 1}
+                            onChange={(e) => handleChange('minIncrementalBet', Number(e.target.value))}
+                            disabled={isRunning}
+                            min={0.1}
+                            step={0.1}
+                            className="h-7 px-2 text-xs"
+                         />
+                    </div>
+                </div>
+
+                {/* Bet Limits */}
+                <div className="space-y-1 pt-1">
+                    <Label className="text-xs font-semibold">Bets Size & Increment</Label>
+                    <div className={`grid ${narrow ? 'grid-cols-1' : 'grid-cols-2'} gap-2 bg-black/20 p-2 rounded-md border border-white/5`}>
+                        <div>
+                            <span className="text-[10px] text-muted-foreground block mb-0.5">Min (Inside)</span>
+                            <Input
+                                type="number"
+                                value={config.betLimits.min}
+                                onChange={(e) => handleChange('betLimits.min', Number(e.target.value))}
+                                disabled={isRunning}
+                                min={0}
+                                className="h-6 px-2 text-xs"
+                            />
+                        </div>
+                        <div>
+                            <span className="text-[10px] text-muted-foreground block mb-0.5">Min (Outside)</span>
+                            <Input
+                                type="number"
+                                value={config.betLimits.minOutside}
+                                onChange={(e) => handleChange('betLimits.minOutside', Number(e.target.value))}
+                                disabled={isRunning}
+                                min={0}
+                                className="h-6 px-2 text-xs"
+                            />
+                        </div>
+                        <div>
+                           <span className="text-[10px] text-muted-foreground block mb-0.5">Max Bet</span>
+                           <Input
+                               type="number"
+                               value={config.betLimits.max}
+                               onChange={(e) => handleChange('betLimits.max', Number(e.target.value))}
+                               disabled={isRunning}
+                               min={1}
+                                className="h-6 px-2 text-xs"
+                           />
+                        </div>
+                        <div>
+                             <span className="text-[10px] text-muted-foreground block mb-0.5">Increment Mode</span>
+                             <select
+                                 className="flex h-6 w-full rounded-md border border-primary/20 bg-background px-1 py-0 text-[10px] shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 text-text"
+                                 value={config.incrementMode || 'fixed'}
+                                 onChange={(e) => handleChange('incrementMode', e.target.value)}
+                                 disabled={isRunning}
+                             >
+                                 <option value="fixed">Fixed</option>
+                                 <option value="base">Base Bet</option>
+                             </select>
+                        </div>
+                    </div>
+                </div>
             </CardContent>
         </Card>
     );

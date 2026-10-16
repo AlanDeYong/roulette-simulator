@@ -289,15 +289,15 @@ export const StrategyEditor: React.FC = () => {
           onCancel={() => setDialog(prev => ({ ...prev, isOpen: false }))}
       />
       
-      <CardHeader className="py-3 border-b border-white/10">
+      <CardHeader className="py-2 border-b border-white/10">
         <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-                <Code className="w-5 h-5 text-primary" />
+                <Code className="w-4 h-4 text-primary" />
                 <CardTitle className="flex items-center gap-2">
-                    <span className="font-bold">Strategy Editor</span>
+                    <span className="font-bold text-sm">Strategy Editor</span>
                     <span className="text-muted-foreground font-normal mx-1">|</span>
-                    <span className="text-sm font-normal text-muted-foreground">{currentFileName}</span>
-                    {isDirty && <span className="text-yellow-500 text-xs font-normal ml-2">● Modified</span>}
+                    <span className="text-xs font-normal text-muted-foreground">{currentFileName}</span>
+                    {isDirty && <span className="text-yellow-500 text-[10px] font-normal ml-2">● Modified</span>}
                 </CardTitle>
             </div>
             
@@ -377,12 +377,13 @@ export const StrategyEditor: React.FC = () => {
                 onChange={handleEditorChange}
                 options={{
                     minimap: { enabled: false },
-                    fontSize: 14,
+                    fontSize: 11,
+                    lineHeight: 16,
                     scrollBeyondLastLine: false,
                     readOnly: isRunning,
                     automaticLayout: true,
                     fontFamily: "'Fira Code', 'Consolas', monospace",
-                    padding: { top: 16, bottom: 16 },
+                    padding: { top: 8, bottom: 8 },
                 }}
             />
         </div>
